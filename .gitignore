@@ -1,0 +1,11 @@
+# OS / OneDrive junk
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# Office temp/lock files
+~$*
+
+# Editor
+.vscode/
+*.swp
