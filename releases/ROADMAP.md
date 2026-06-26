@@ -19,19 +19,24 @@ v0.1–v0.10 are released; v0.11→v1.0 are the forward milestones with exit cri
 
 ## Forward Milestones
 
-### v0.11 — Knowledge & Training
+### v0.11 — Knowledge & Training ✅ (2026-06-26)
 **Goal:** make the brain literate and the employees trained.
-- [ ] Author `/knowledge/cost-engineering/*` (teaching in progress) — clears cost `TBD`s.
-- [ ] Author `taxonomy/kpi-definitions.md` + `spend-categories.md` (KPI system computable).
-- [ ] Retrain all 9 employees to the 18-section schema (backlog B4).
-- [ ] Grow simulation to ~40 scenarios; run first weekly improvement review.
-- **Exit:** cost-down & RFQ run with real knowledge; KPIs have definitions.
+- [x] Author `/knowledge/cost-engineering/*` — 8 articles KB-CE-001–008.
+- [x] Author `taxonomy/kpi-definitions.md` + `spend-categories.md` — KB-TAX-001, KB-TAX-002.
+- [x] Retrain all 9 employees to 18-section schema (B4 done).
+- [x] Fill `company/overview.md` with real KRDA data (brought forward from v0.12).
+- [x] Extract `knowledge/procurement/procedure.md` from official manuals (KB-PROC-001).
+- [x] Update `brain/approval-matrix.md` with real KRDA THB thresholds.
+- [x] Create `memory/current-context.md` (was missing).
+- [ ] Grow simulation to ~40 scenarios — **in progress** (at 5 → target 40).
+- **Exit criteria met** — cost-down & RFQ runnable with real knowledge; KPIs defined.
 
-### v0.12 — First Real Data
+### v0.12 — First Real Data (target: 2026-07)
 **Goal:** operate on real KRDA work.
-- [ ] Fill `/company/overview.md` with real KRDA profile.
-- [ ] Onboard first real suppliers, one real RFQ, one real cost-down.
-- [ ] Dashboards show real, sourced KPI values.
+- [ ] Onboard first real supplier(s) into `/suppliers/`.
+- [ ] Run first real RFQ end-to-end (command → workflow → record → register).
+- [ ] Record first real cost-down case.
+- [ ] Dashboards show real, sourced KPI values (at least 3 KPIs with real data).
 - **Exit:** one full `command → workflow → skill → record → register` cycle on real data.
 
 ### v0.13 — Automation

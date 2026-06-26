@@ -19,10 +19,19 @@ Newest on top. `Type`: **system** (refactor brain/workflow/knowledge) or **conte
 
 ## Standing Backlog (from Phase 2 build)
 
-| # | Action | Type | Notes |
-|---|--------|------|-------|
-| B1 | Author `/knowledge/cost-engineering/*` | content | Teaching in progress; clears cost `TBD`s |
-| B2 | Author `taxonomy/kpi-definitions.md` | content | Makes KPI system computable |
-| B3 | Generate simulation set to 100 | content | Per [simulation/index](../simulation/index.md) plan |
-| B4 | Retrain 9 employees to expanded schema | system | Per [agents/_TEMPLATE](../agents/_TEMPLATE.md) |
-| B5 | Automate Memory Engine register updates | system | Per [memory/engine](../memory/engine.md) |
+| # | Action | Type | Notes | Status |
+|---|--------|------|-------|--------|
+| B1 | Author `/knowledge/cost-engineering/*` | content | 8 articles KB-CE-001–008 authored v0.11 | ✅ done 2026-06-26 |
+| B2 | Author `taxonomy/kpi-definitions.md` + `spend-categories.md` | content | 10 KPIs + CMD taxonomy done v0.11 | ✅ done 2026-06-26 |
+| B3 | Grow simulation to ≥40 scenarios | content | At 5; growing toward 40 | 🔄 in progress |
+| B4 | Retrain 9 employees to 18-section schema | system | All 9 agents done v0.11 | ✅ done 2026-06-26 |
+| B5 | Automate Memory Engine register updates | system | Per [memory/engine](../memory/engine.md) | ⏳ v0.13 target |
+
+## v0.11 Actions (completed 2026-06-26)
+
+| # | Date | Action | Type | Owner | Status |
+|---|------|--------|------|-------|--------|
+| 1 | 2026-06-26 | Create `memory/current-context.md` (was missing; referenced everywhere) | system | Proc Lead | ✅ done |
+| 2 | 2026-06-26 | Update `brain/approval-matrix.md` with real KRDA THB thresholds | system | Proc Lead | ✅ done |
+| 3 | 2026-06-26 | Fill `company/overview.md` with real KRDA data | content | Proc Lead | ✅ done |
+| 4 | 2026-06-26 | Extract `knowledge/procurement/procedure.md` from official manuals | content | Proc Lead | ✅ done |
