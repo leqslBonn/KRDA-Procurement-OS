@@ -9,15 +9,17 @@ machine rates, labor, overhead/SG&A, tooling amortization, yield/scrap, cost dri
 [negotiation-framework](../../brain/negotiation-framework.md), [cost_breakdown](../../skills/cost_breakdown.md);
 clears the `TBD` rate references in [cost_down](../../workflows/cost_down.md) / [price_negotiation](../../workflows/price_negotiation.md).
 
-## Planned Articles (v0.10 — teaching in progress)
-- [ ] `should-cost-method.md` — the bottom-up model
-- [ ] `material-rates.md` — steel/alloy/plastic rates (source + date)
-- [ ] `process-rates.md` — machine-hour rates by process
-- [ ] `labor-rates.md`
-- [ ] `overhead-sga-profit.md`
-- [ ] `tooling-amortization.md`
-- [ ] `yield-scrap.md`
-- [ ] `cost-drivers.md`
+## Articles (v0.11 — active)
 
-> **Rates must carry a source and date.** Estimates marked `EST`. One concept per
-> file. Add each to [../index.md](../index.md). Status: being taught by the Human Owner.
+- [x] `should-cost-method.md` — KB-CE-001 — bottom-up model, 8-step process
+- [x] `material-rates.md` — KB-CE-002 — steel/alloy/rubber/plastic rates (TBD to fill)
+- [x] `process-rates.md` — KB-CE-003 — machine-hour rates by process (TBD to fill)
+- [x] `labor-rates.md` — KB-CE-004 — Thailand direct labor + burden (TBD to fill)
+- [x] `overhead-sga-profit.md` — KB-CE-005 — overhead %, SGA %, profit % benchmarks
+- [x] `tooling-amortization.md` — KB-CE-006 — NRE/tooling cost per unit
+- [x] `yield-scrap.md` — KB-CE-007 — scrap factors by process
+- [x] `cost-drivers.md` — KB-CE-008 — what makes parts expensive + levers
+
+> **Rates must carry a source and date.** Estimates marked `EST`.
+> TBD fields in material/process/labor-rates → fill from supplier quotes or market sources.
+> See [../index.md](../index.md) for KB-CE-001 through KB-CE-008.
