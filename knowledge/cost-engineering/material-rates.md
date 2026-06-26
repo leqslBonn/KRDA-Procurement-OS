@@ -20,21 +20,24 @@ links: [should-cost-method.md, yield-scrap.md]
 
 | Material | Grade / Spec | Form | Rate (THB/kg) | Source | Date | Notes |
 |---|---|---|---|---|---|---|
-| Mild steel | SS400 / A36 | Plate ≥3mm | `TBD` | — | — | Common implement frame material |
-| Mild steel | SPHC | Hot-rolled coil | `TBD` | — | — | Sheet metal stamping |
-| Mild steel | SPCC | Cold-rolled sheet | `TBD` | — | — | Cover/guard panels |
-| Carbon steel | S45C | Round bar | `TBD` | — | — | Shaft, pivot pin |
-| Carbon steel | S55C | Flat bar / plate | `TBD` | — | — | Blade, cutting edge |
-| Alloy steel | SCM440 | Round bar | `TBD` | — | — | High-stress rotating parts |
-| Stainless | SUS304 | Sheet / plate | `TBD` | — | — | Corrosion-exposed parts |
-| Aluminium | A6061-T6 | Plate / bar | `TBD` | — | — | Weight-critical brackets |
-| Aluminium | A5052 | Sheet | `TBD` | — | — | Non-structural covers |
-| Natural rubber | NR | Sheet / roll | `TBD` | — | — | Vibration isolation, seal |
-| NBR rubber | 70 Shore | Sheet | `TBD` | — | — | Oil-resistant seals |
-| HDPE | GP | Sheet / rod | `TBD` | — | — | Wear liner, guide |
-| PA66 (Nylon) | — | Rod / tube | `TBD` | — | — | Low-friction bushing |
+| Mild steel | SS400 / A36 | Plate ≥3mm | 30 `EST` | Market benchmark | 2026-06 | Range 28–32; implement frame |
+| Mild steel | SPHC | Hot-rolled coil | 28 `EST` | Market benchmark | 2026-06 | Range 26–30; stamping |
+| Mild steel | SPCC | Cold-rolled sheet | 35 `EST` | Market benchmark | 2026-06 | Range 32–38; covers/guards |
+| Carbon steel | S45C | Round bar | 42 `EST` | Market benchmark | 2026-06 | Range 38–46; shaft, pin |
+| Carbon steel | S55C | Flat bar / plate | 46 `EST` | Market benchmark | 2026-06 | Range 42–50; blade |
+| Alloy steel | SCM440 | Round bar | 80 `EST` | Market benchmark | 2026-06 | Range 70–90; high-stress |
+| Stainless | SUS304 | Sheet / plate | 170 `EST` | Market benchmark | 2026-06 | Range 150–190; volatile (Ni) |
+| Aluminium | A6061-T6 | Plate / bar | 210 `EST` | Market benchmark | 2026-06 | Range 190–240; LME-linked |
+| Aluminium | A5052 | Sheet | 200 `EST` | Market benchmark | 2026-06 | Range 180–220 |
+| Natural rubber | NR | Sheet / roll | 100 `EST` | Market benchmark | 2026-06 | Range 80–120; TRA-linked |
+| NBR rubber | 70 Shore | Sheet | 220 `EST` | Market benchmark | 2026-06 | Range 180–260 |
+| HDPE | GP | Sheet / rod | 85 `EST` | Market benchmark | 2026-06 | Range 70–95 |
+| PA66 (Nylon) | — | Rod / tube | 240 `EST` | Market benchmark | 2026-06 | Range 190–280 |
 
-> **Fill TBD:** Get current prices from: NS BlueScope Thailand / SSI / local steel service center. Or request supplier cost breakdown.
+> ⚠️ **All rates above are `EST` indicative market benchmarks (mid-2026), NOT KRDA
+> contract prices.** Use for first-pass should-cost only. **Before any negotiation or
+> binding decision, replace with a real quote** from NS BlueScope Thailand / SSI /
+> local service center, or a supplier cost breakdown — then update Source/Date.
 
 ---
 
@@ -63,9 +66,9 @@ links: [should-cost-method.md, yield-scrap.md]
 
 | Currency pair | Rate | Date | Source |
 |---|---|---|---|
-| USD/THB | `TBD` | — | Bank of Thailand (BOT) |
-| JPY/THB | `TBD` | — | BOT |
-| EUR/THB | `TBD` | — | BOT |
+| USD/THB | 34.5 `EST` | 2026-06 | BOT (indicative — confirm daily) |
+| JPY/THB | 0.235 `EST` | 2026-06 | BOT (indicative) |
+| EUR/THB | 37.5 `EST` | 2026-06 | BOT (indicative) |
 
 Import duty rates (Thai Customs) vary by HS code — confirm before using for import materials.
 

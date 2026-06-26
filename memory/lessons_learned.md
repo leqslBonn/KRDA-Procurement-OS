@@ -21,9 +21,9 @@ A real company gets smarter by recording what worked and what didn't. The
 
 | Date | Source | What happened | Worked / Failed | Gap (framework/knowledge) | Action | Reusable lesson |
 |------|--------|---------------|-----------------|---------------------------|--------|-----------------|
-| _2026-06-25_ | _link_ | _..._ | _..._ | _..._ | _→ /improvement_ | _..._ |
+| 2026-06-26 | [PRJ-2026-001](../projects/PRJ-2026-001-dryrun-bracket/) | Dry-run bracket through full pipeline | Pipeline + frameworks worked end-to-end ✅ | approval-matrix: annual-vs-PO band rule unclear; rates are EST; no real suppliers | → [ACTIONS](../improvement/ACTIONS.md) A2026-01..03 | System structure is sound; binding gaps before go-live = real rates + real suppliers + annual/PO approval rule |
 
-> No lessons logged yet.
+> 1 lesson logged (dry-run readiness test).
 
 ## Conventions
 - One row per completion (project / RFQ / cost-down / audit / negotiation / simulation).

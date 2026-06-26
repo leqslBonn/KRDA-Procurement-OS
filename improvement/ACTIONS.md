@@ -13,9 +13,9 @@ Newest on top. `Type`: **system** (refactor brain/workflow/knowledge) or **conte
 
 | # | Date | Action | Type | Source | Owner | Due | Status |
 |---|------|--------|------|--------|-------|-----|--------|
-| _1_ | _2026-06-25_ | _example_ | _system_ | _review/sim_ | _..._ | _..._ | _open_ |
-
-> No actions yet. Populated by the first weekly review (v0.10+).
+| A2026-01 | 2026-06-26 | Clarify approval-matrix: annual/blanket value vs per-PO band (which triggers bidding & President) — confirm with KRDA | system | [PRJ-2026-001](../projects/PRJ-2026-001-dryrun-bracket/) | Proc Lead + Human Owner | v0.12 | open |
+| A2026-02 | 2026-06-26 | Calibrate KB-CE rates (material/process/labor) from 2–3 real supplier quotes; replace `EST` | content | dry-run | Cost Reduction | v0.12 | open |
+| A2026-03 | 2026-06-26 | Onboard real qualified suppliers into `/suppliers` (dry-run used synthetic A/B/C) | content | dry-run | Supplier Dev | v0.12 | open |
 
 ## Standing Backlog (from Phase 2 build)
 
@@ -23,7 +23,7 @@ Newest on top. `Type`: **system** (refactor brain/workflow/knowledge) or **conte
 |---|--------|------|-------|--------|
 | B1 | Author `/knowledge/cost-engineering/*` | content | 8 articles KB-CE-001–008 authored v0.11 | ✅ done 2026-06-26 |
 | B2 | Author `taxonomy/kpi-definitions.md` + `spend-categories.md` | content | 10 KPIs + CMD taxonomy done v0.11 | ✅ done 2026-06-26 |
-| B3 | Grow simulation to ≥40 scenarios | content | At 15; growing toward 40 | 🔄 in progress |
+| B3 | Grow simulation to ≥40 scenarios | content | At 20; growing toward 40 | 🔄 in progress |
 | B4 | Retrain 9 employees to 18-section schema | system | All 9 agents done v0.11 | ✅ done 2026-06-26 |
 | B5 | Automate Memory Engine register updates | system | Per [memory/engine](../memory/engine.md) | ⏳ v0.13 target |
 

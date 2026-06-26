@@ -12,9 +12,9 @@ clears the `TBD` rate references in [cost_down](../../workflows/cost_down.md) / 
 ## Articles (v0.11 — active)
 
 - [x] `should-cost-method.md` — KB-CE-001 — bottom-up model, 8-step process
-- [x] `material-rates.md` — KB-CE-002 — steel/alloy/rubber/plastic rates (TBD to fill)
-- [x] `process-rates.md` — KB-CE-003 — machine-hour rates by process (TBD to fill)
-- [x] `labor-rates.md` — KB-CE-004 — Thailand direct labor + burden (TBD to fill)
+- [x] `material-rates.md` — KB-CE-002 — steel/alloy/rubber/plastic rates (EST benchmarks; confirm w/ quotes)
+- [x] `process-rates.md` — KB-CE-003 — machine-hour rates by process (EST benchmarks; calibrate w/ quotes)
+- [x] `labor-rates.md` — KB-CE-004 — Thailand direct labor + burden (EST; confirm min wage)
 - [x] `overhead-sga-profit.md` — KB-CE-005 — overhead %, SGA %, profit % benchmarks
 - [x] `tooling-amortization.md` — KB-CE-006 — NRE/tooling cost per unit
 - [x] `yield-scrap.md` — KB-CE-007 — scrap factors by process

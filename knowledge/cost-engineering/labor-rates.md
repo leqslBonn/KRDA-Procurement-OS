@@ -18,11 +18,12 @@ links: [should-cost-method.md, process-rates.md, overhead-sga-profit.md]
 
 | Region | Min. wage (THB/day) | THB/hr (8-hr day) | Source | Date |
 |---|---|---|---|---|
-| Bangkok & vicinity | `TBD` | `TBD` | Ministry of Labour | `TBD` |
-| Pathumthani | `TBD` | `TBD` | Ministry of Labour | `TBD` |
-| General provincial | `TBD` | `TBD` | Ministry of Labour | `TBD` |
+| Bangkok & vicinity | 370 `EST` | 46 `EST` | Ministry of Labour | 2026 (indicative) |
+| Pathumthani | 370 `EST` | 46 `EST` | Ministry of Labour | 2026 (indicative) |
+| General provincial | 345 `EST` | 43 `EST` | Ministry of Labour | 2026 (indicative) |
 
-> Ministry of Labour (mol.go.th) announces minimum wage annually. Confirm current rate.
+> ⚠️ `EST` indicative — Ministry of Labour (mol.go.th) announces minimum wage
+> annually (effective Jan/Apr). **Confirm the current official rate** before binding use.
 
 ---
 
@@ -60,12 +61,15 @@ Effective rate (THB/hr) = Min. wage rate × (1 + burden factor)
 
 ## Rate Table (fill when confirmed)
 
-| Skill level | THB/hr (base) | THB/hr (with burden) | Date | Source |
+| Skill level | THB/hr (base) | THB/hr (with burden ~20%) | Date | Source |
 |---|---|---|---|---|
-| Unskilled | `TBD` | `TBD` | — | — |
-| Semi-skilled | `TBD` | `TBD` | — | — |
-| Skilled welder / CNC op. | `TBD` | `TBD` | — | — |
-| TIG welder / senior machinist | `TBD` | `TBD` | — | — |
+| Unskilled | 46 `EST` | 55 `EST` | 2026 | Min wage × 1.0, +burden |
+| Semi-skilled | 55 `EST` | 66 `EST` | 2026 | × ~1.2 |
+| Skilled welder / CNC op. | 79 `EST` | 95 `EST` | 2026 | × ~1.7 |
+| TIG welder / senior machinist | 116 `EST` | 139 `EST` | 2026 | × ~2.5 |
+
+> ⚠️ `EST` from min-wage × skill multiplier + 20% burden. **Calibrate against real
+> supplier payroll / quotes**; foreign-labor shops may run lower (see Thai Labor Context).
 
 ---
 

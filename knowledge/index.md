@@ -19,10 +19,10 @@ Master search index for the knowledge base. Add a row when you add an article.
 | 3 | Hydraulics | `hydraulics/` | Technical Purchasing | 0 |
 | 4 | Manufacturing | `manufacturing/` | Tech Purchasing / Cost Reduction | 0 |
 | 5 | Cost Engineering | `cost-engineering/` | Cost Reduction | 8 |
-| 6 | Supplier Management | `supplier-management/` | Supplier Development | 0 |
+| 6 | Supplier Management | `supplier-management/` | Supplier Development | 1 |
 | 7 | Strategic Sourcing | `strategic-sourcing/` | Strategic Sourcing | 0 |
 | 8 | Negotiation | `negotiation/` | RFQ Mgmt / Cost Reduction | 0 |
-| 9 | SAP | `sap/` | SAP Purchasing | 0 |
+| 9 | SAP | `sap/` | SAP Purchasing | 1 |
 | 10 | Procurement | `procurement/` | all | 1 |
 | 11 | AI Automation | `ai-automation/` | Procurement Automation | 0 |
 | 12 | Power Automate | `power-automate/` | Procurement Automation | 0 |
@@ -32,7 +32,7 @@ Master search index for the knowledge base. Add a row when you add an article.
 
 ## Article Registry
 
-> One row per article. 11 articles (v0.11). Add a row when you author one.
+> One row per article. 13 articles (v0.11–v0.12). Add a row when you author one.
 
 | Article ID | Title | Domain | Source/date | Used by |
 |-----------|-------|--------|-------------|---------|
@@ -47,6 +47,8 @@ Master search index for the knowledge base. Add a row when you add an article.
 | KB-CE-006 | Tooling & NRE Amortization | Cost Engineering | KRDA v0.11 2026-06-26 | KB-CE-001 |
 | KB-CE-007 | Yield & Scrap Factors | Cost Engineering | KRDA v0.11 2026-06-26 | KB-CE-001, KB-CE-002 |
 | KB-CE-008 | Cost Drivers | Cost Engineering | KRDA v0.11 2026-06-26 | KB-CE-001, cost-down-framework |
+| KB-SAP-001 | SAP PR/PO Field Map (KRDA) | SAP | KRDA v0.12 2026-06-26 | workflows/sap, approval-matrix |
+| KB-SM-001 | Supplier Audit Checklist | Supplier Management | KRDA v0.12 2026-06-26 | workflows/supplier_audit, supplier-risk-framework |
 
 ## Priority Articles
 

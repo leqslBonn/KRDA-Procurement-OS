@@ -21,56 +21,60 @@ links: [should-cost-method.md, labor-rates.md, overhead-sga-profit.md]
 
 | Process | Equipment type | Rate (THB/hr) | Basis | Source | Date | Notes |
 |---|---|---|---|---|---|---|
-| Laser cutting | CO₂ / fiber 2kW | `TBD` | Machine-hr | — | — | Mild steel ≤12mm; rate varies by power |
-| Laser cutting | Fiber 4–6kW | `TBD` | Machine-hr | — | — | Thicker plate, faster |
-| Plasma cutting | CNC plasma | `TBD` | Machine-hr | — | — | Lower tolerance, thick plate |
-| Oxy-fuel cutting | Manual / CNC | `TBD` | Machine-hr | — | — | Thick section >25mm |
-| Press brake bending | CNC press brake | `TBD` | Machine-hr | — | — | Up to 3m bend length |
-| Punching | CNC turret punch | `TBD` | Machine-hr | — | — | Sheet metal holes/cutouts |
-| Roll forming | Plate roll | `TBD` | Machine-hr | — | — | Cylindrical/conical shapes |
+| Laser cutting | CO₂ / fiber 2kW | 1,200 `EST` | Machine-hr | Market benchmark | 2026-06 | Mild steel ≤12mm |
+| Laser cutting | Fiber 4–6kW | 1,800 `EST` | Machine-hr | Market benchmark | 2026-06 | Thicker plate, faster |
+| Plasma cutting | CNC plasma | 900 `EST` | Machine-hr | Market benchmark | 2026-06 | Lower tolerance, thick plate |
+| Oxy-fuel cutting | Manual / CNC | 600 `EST` | Machine-hr | Market benchmark | 2026-06 | Thick section >25mm |
+| Press brake bending | CNC press brake | 900 `EST` | Machine-hr | Market benchmark | 2026-06 | Up to 3m bend length |
+| Punching | CNC turret punch | 1,000 `EST` | Machine-hr | Market benchmark | 2026-06 | Sheet metal holes/cutouts |
+| Roll forming | Plate roll | 800 `EST` | Machine-hr | Market benchmark | 2026-06 | Cylindrical/conical |
 
 ### Machining
 
 | Process | Equipment type | Rate (THB/hr) | Basis | Source | Date | Notes |
 |---|---|---|---|---|---|---|
-| CNC turning | Lathe (small <500mm) | `TBD` | Machine-hr | — | — | Shaft, bushing, pin |
-| CNC turning | Lathe (large >500mm) | `TBD` | Machine-hr | — | — | Large flange, drum |
-| CNC milling | VMC 3-axis | `TBD` | Machine-hr | — | — | Bracket, housing |
-| CNC milling | HMC / 4-axis | `TBD` | Machine-hr | — | — | Complex geometry |
-| Grinding | Surface grinder | `TBD` | Machine-hr | — | — | Flat ground surface |
-| Grinding | Cylindrical grinder | `TBD` | Machine-hr | — | — | Precision shaft |
-| Drilling | Radial drill | `TBD` | Machine-hr | — | — | Large holes, manual |
-| Tapping | CNC or manual | `TBD` | Machine-hr | — | — | Threaded holes |
+| CNC turning | Lathe (small <500mm) | 700 `EST` | Machine-hr | Market benchmark | 2026-06 | Shaft, bushing, pin |
+| CNC turning | Lathe (large >500mm) | 1,100 `EST` | Machine-hr | Market benchmark | 2026-06 | Large flange, drum |
+| CNC milling | VMC 3-axis | 900 `EST` | Machine-hr | Market benchmark | 2026-06 | Bracket, housing |
+| CNC milling | HMC / 4-axis | 1,400 `EST` | Machine-hr | Market benchmark | 2026-06 | Complex geometry |
+| Grinding | Surface grinder | 700 `EST` | Machine-hr | Market benchmark | 2026-06 | Flat ground surface |
+| Grinding | Cylindrical grinder | 900 `EST` | Machine-hr | Market benchmark | 2026-06 | Precision shaft |
+| Drilling | Radial drill | 450 `EST` | Machine-hr | Market benchmark | 2026-06 | Large holes, manual |
+| Tapping | CNC or manual | 450 `EST` | Machine-hr | Market benchmark | 2026-06 | Threaded holes |
 
 ### Welding & Fabrication
 
 | Process | Rate (THB/hr) | Basis | Source | Date | Notes |
 |---|---|---|---|---|---|
-| MIG welding (manual) | `TBD` | Labor-hr | — | — | Most common for frames |
-| TIG welding (manual) | `TBD` | Labor-hr | — | — | Precision/thin wall |
-| Robotic MIG | `TBD` | Machine-hr | — | — | High-volume repeat weld |
-| Spot welding | `TBD` | Machine-hr | — | — | Sheet metal assembly |
-| Submerged arc | `TBD` | Machine-hr | — | — | Heavy plate buildup |
+| MIG welding (manual) | 450 `EST` | Labor-hr | Market benchmark | 2026-06 | Most common for frames |
+| TIG welding (manual) | 550 `EST` | Labor-hr | Market benchmark | 2026-06 | Precision/thin wall |
+| Robotic MIG | 1,200 `EST` | Machine-hr | Market benchmark | 2026-06 | High-volume repeat weld |
+| Spot welding | 600 `EST` | Machine-hr | Market benchmark | 2026-06 | Sheet metal assembly |
+| Submerged arc | 900 `EST` | Machine-hr | Market benchmark | 2026-06 | Heavy plate buildup |
 
 ### Surface Treatment
 
 | Process | Rate | Unit | Source | Date | Notes |
 |---|---|---|---|---|---|
-| Powder coating | `TBD` | THB/m² | — | — | Standard implement finish |
-| Zinc electroplating | `TBD` | THB/m² | — | — | Corrosion protection small parts |
-| Hot-dip galvanizing | `TBD` | THB/kg | — | — | Structural outdoor parts |
-| Nickel plating | `TBD` | THB/m² | — | — | Wear/corrosion |
-| Shot blasting | `TBD` | THB/m² | — | — | Surface prep before coat |
-| Heat treatment (CH) | `TBD` | THB/kg | — | — | Carburize + harden |
-| Annealing | `TBD` | THB/kg | — | — | Stress relief |
+| Powder coating | 250 `EST` | THB/m² | Market benchmark | 2026-06 | Standard implement finish |
+| Zinc electroplating | 180 `EST` | THB/m² | Market benchmark | 2026-06 | Corrosion protection |
+| Hot-dip galvanizing | 35 `EST` | THB/kg | Market benchmark | 2026-06 | Structural outdoor parts |
+| Nickel plating | 400 `EST` | THB/m² | Market benchmark | 2026-06 | Wear/corrosion |
+| Shot blasting | 120 `EST` | THB/m² | Market benchmark | 2026-06 | Surface prep before coat |
+| Heat treatment (CH) | 45 `EST` | THB/kg | Market benchmark | 2026-06 | Carburize + harden |
+| Annealing | 25 `EST` | THB/kg | Market benchmark | 2026-06 | Stress relief |
 
 ### Casting & Forging
 
 | Process | Rate | Unit | Source | Date | Notes |
 |---|---|---|---|---|---|
-| Sand casting (grey iron) | `TBD` | THB/kg | — | — | Housing, bracket |
-| Die casting (aluminium) | `TBD` | THB/kg | — | — | Complex near-net shape |
-| Drop forging (steel) | `TBD` | THB/kg | — | — | Sprocket, link, crank |
+| Sand casting (grey iron) | 75 `EST` | THB/kg | Market benchmark | 2026-06 | Housing, bracket (excl. pattern) |
+| Die casting (aluminium) | 180 `EST` | THB/kg | Market benchmark | 2026-06 | Complex near-net shape |
+| Drop forging (steel) | 90 `EST` | THB/kg | Market benchmark | 2026-06 | Sprocket, link, crank |
+
+> ⚠️ **All rates above are `EST` indicative Thailand job-shop benchmarks (mid-2026),
+> NOT KRDA quotes.** Use for first-pass should-cost only. **Calibrate by back-calculating
+> from 2–3 real supplier quotes** (see Rate Sources below), then update Source/Date.
 
 ---
 

@@ -19,9 +19,9 @@ indexes them for recall — status, dates, outcome, and a link.
 
 | Project ID | Title | Owner agent | Status | Started | Closed | Outcome | Record |
 |------------|-------|-------------|--------|---------|--------|---------|--------|
-| _PRJ-2026-001_ | _example_ | _Strat Sourcing_ | _active_ | _2026-06-25_ | _—_ | _TBD_ | _`../projects/PRJ-2026-001-.../`_ |
+| PRJ-2026-001 | DRY-RUN — Machined bracket (pipeline readiness test) | Chief of Staff | active | 2026-06-26 | — | Pipeline OK; gaps logged | [link](../projects/PRJ-2026-001-dryrun-bracket/) |
 
-> No projects yet.
+> 1 project (dry-run / synthetic). Real projects begin v0.12.
 
 ## Conventions
 - One row per project; `Record` links to `../projects/<id>/`.
