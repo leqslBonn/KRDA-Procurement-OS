@@ -32,6 +32,9 @@ use. Templates are referenced by agents, skills, and workflows — keep IDs stab
 | Template | File | Used by |
 |----------|------|---------|
 | Vendor pitch scorecard | [vendor-pitch-scorecard.md](vendor-pitch-scorecard.md) | IoT/software vendor evaluation |
+| SOW / requirement | [sow-requirement.md](sow-requirement.md) | Owner — define outsourced job |
+| Milestone acceptance | [acceptance-checklist.md](acceptance-checklist.md) | Owner — inspect/accept vendor work |
+| Contract terms checklist | [contract-terms-checklist.md](contract-terms-checklist.md) | Owner — secure IP/data/escrow/terms |
 | Bid tabulation | [bid-tab.md](bid-tab.md) | RFQ Management |
 | Supplier scorecard | [supplier-scorecard.md](supplier-scorecard.md) | Supplier Development |
 | Savings case | [savings-case.md](savings-case.md) | Cost Reduction |

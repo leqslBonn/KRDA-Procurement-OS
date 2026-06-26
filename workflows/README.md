@@ -59,6 +59,7 @@ Canonical legend used by every workflow's **Flow** section:
 | [nda.md](nda.md) | Procurement Lead (OPL) | Confidentiality before sharing info. |
 | [sap.md](sap.md) | SAP Purchasing (TS) | PR/PO prep & authorized posting. |
 | [engineering_change.md](engineering_change.md) | Technical Purchasing (SE) | ECN purchasing impact & cut-in. |
+| [vendor_project_control.md](vendor_project_control.md) | Procurement Lead + Tech Purchasing | Owner-side control of outsourced dev/IoT (SOW→select→contract→accept→pay). |
 
 ## How They Connect (orientation)
 

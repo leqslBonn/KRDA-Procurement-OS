@@ -21,7 +21,7 @@ Master search index for the knowledge base. Add a row when you add an article.
 | 5 | Cost Engineering | `cost-engineering/` | Cost Reduction | 8 |
 | 6 | Supplier Management | `supplier-management/` | Supplier Development | 1 |
 | 7 | Strategic Sourcing | `strategic-sourcing/` | Strategic Sourcing | 0 |
-| 8 | Negotiation | `negotiation/` | RFQ Mgmt / Cost Reduction | 0 |
+| 8 | Negotiation | `negotiation/` | RFQ Mgmt / Cost Reduction | 1 |
 | 9 | SAP | `sap/` | SAP Purchasing | 1 |
 | 10 | Procurement | `procurement/` | all | 3 |
 | 11 | AI Automation | `ai-automation/` | Procurement Automation | 0 |
@@ -32,7 +32,7 @@ Master search index for the knowledge base. Add a row when you add an article.
 
 ## Article Registry
 
-> One row per article. 15 articles (v0.11–v0.12). Add a row when you author one.
+> One row per article. 16 articles (v0.11–v0.12). Add a row when you author one.
 
 | Article ID | Title | Domain | Source/date | Used by |
 |-----------|-------|--------|-------------|---------|
@@ -51,6 +51,7 @@ Master search index for the knowledge base. Add a row when you add an article.
 | KB-SM-001 | Supplier Audit Checklist | Supplier Management | KRDA v0.12 2026-06-26 | workflows/supplier_audit, supplier-risk-framework |
 | KB-PROC-002 | Software / SaaS TCO Method | Procurement | v0.12 2026-06-26 | startup-vendor-evaluation-framework, vendor scorecard |
 | KB-PROC-003 | POC / Pilot Evaluation Method | Procurement | v0.12 2026-06-26 | startup-vendor-evaluation-framework |
+| KB-NEG-001 | Owner-Side Negotiation Playbook (outsourced dev/IoT) | Negotiation | v0.12 2026-06-26 | negotiation-framework, vendor_project_control |
 
 ## Priority Articles
 
