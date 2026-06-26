@@ -13,7 +13,7 @@ Newest on top. `Type`: **system** (refactor brain/workflow/knowledge) or **conte
 
 | # | Date | Action | Type | Source | Owner | Due | Status |
 |---|------|--------|------|--------|-------|-----|--------|
-| A2026-01 | 2026-06-26 | Clarify approval-matrix: annual/blanket value vs per-PO band (which triggers bidding & President) — confirm with KRDA | system | [PRJ-2026-001](../projects/PRJ-2026-001-dryrun-bracket/) | Proc Lead + Human Owner | v0.12 | open |
+| A2026-01 | 2026-06-26 | Approval band per-PO vs annual/blanket — **default set to per-PO** in approval-matrix; confirm with KRDA before go-live | system | [PRJ-2026-001](../projects/PRJ-2026-001-dryrun-bracket/) | Proc Lead + Human Owner | v0.12 | ⏳ default set, pending KRDA confirm |
 | A2026-02 | 2026-06-26 | Calibrate KB-CE rates (material/process/labor) from 2–3 real supplier quotes; replace `EST` | content | dry-run | Cost Reduction | v0.12 | open |
 | A2026-03 | 2026-06-26 | Onboard real qualified suppliers into `/suppliers` (dry-run used synthetic A/B/C) | content | dry-run | Supplier Dev | v0.12 | open |
 

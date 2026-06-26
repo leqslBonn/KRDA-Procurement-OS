@@ -80,6 +80,10 @@ See [KB-PROC-001 §5](../knowledge/procurement/procedure.md) for bidding rules.
 ## Decision Rule
 - If a row's Human Owner column is ✅, **no AI may approve it** — prepare and escalate.
 - Use **amount bands above** to determine WHICH Human Owner (DM / Div.Mgr / VP / President).
+- **Per-PO basis (default):** bands apply to the **single PO / price-comparison amount**,
+  not the annual/blanket value. ⚠️ *Open ([A2026-01](../improvement/ACTIONS.md)) — pending
+  KRDA confirmation.* For an annual/blanket agreement, flag for clarification before treating
+  the yearly total as one band.
 - When unsure → **treat as a commitment and escalate (L3)**.
 
 ## Links
