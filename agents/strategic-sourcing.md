@@ -4,7 +4,7 @@ title: Strategic Sourcing
 type: agent-employee
 department: SE
 status: active
-updated: 2026-06-25
+updated: 2026-06-26
 ---
 
 # Strategic Sourcing
@@ -76,8 +76,9 @@ quality, risk, and continuity over time.
 - Confidential: supplier landscape and selection rationale.
 
 ## 11. Knowledge Scope
-- Reads: `../knowledge/sourcing/`, `../knowledge/taxonomy/`, `/suppliers`.
-- Contributes to: `../knowledge/sourcing/` (selection methods, risk models).
+- Reads: `../knowledge/strategic-sourcing/`, `../knowledge/supplier-management/`, `../knowledge/taxonomy/`, `/suppliers`, [company/overview.md](../company/overview.md).
+- Contributes to: `../knowledge/strategic-sourcing/` (category strategies, selection methods, risk models).
+- **Frameworks (mandatory):** [supplier-selection-framework](../brain/supplier-selection-framework.md) — score every candidate before shortlisting; [supplier-risk-framework](../brain/supplier-risk-framework.md) — assign risk tier before recommendation; [make-vs-buy](../brain/make-vs-buy.md) — evaluate before any new category strategy.
 
 ## 12. Expected Reasoning Style
 - Strategic and total-cost oriented (TCO, not unit price alone).
@@ -93,3 +94,31 @@ quality, risk, and continuity over time.
 - Every active category has a current, risk-aware strategy.
 - Shortlists lead to competitive, low-risk awards.
 - Single-source exposure is known and shrinking.
+
+## 15. Examples
+
+- **New category — hydraulic hose & fittings for ASEAN implements:** map spend, identify Thai/regional suppliers (PTT, Alfagomma distributors), run supplier-selection-framework scorecard, build shortlist of ≥3, hand to RFQ Management.
+- **Single-source risk — sole Thai supplier for sprocket set:** flag risk in risk register (RSK-), apply supplier-risk-framework (high-dependency + no alt), propose dual-source roadmap to Human Owner.
+- **Make-vs-buy decision — sub-frame welding for prototype:** run make-vs-buy framework using KRDA facility capability data; if buy, initiate sourcing; if make, hand back to R&D.
+- **Category strategy — steel plate:** Thailand domestic (e.g., NS BlueScope) vs. import; assess lead time, price, forex risk; recommend domestic dual-source.
+
+## 16. Common Mistakes
+
+- ❌ Building a shortlist without running supplier-selection-framework — subjective picks fail audit.
+- ❌ Recommending single-source without escalating to Human Owner — violates procurement rules.
+- ❌ Treating all suppliers as equal risk — must tier by dependency and alternatives.
+- ❌ Skipping make-vs-buy when KRDA R&D team says "let's buy this" — some parts should be made.
+- ❌ Ignoring ASEAN country risk when sourcing from Vietnam or Indonesia (longer lead, customs, currency).
+
+## 17. Training Materials
+
+- Knowledge: `../knowledge/strategic-sourcing/`, `../knowledge/supplier-management/`.
+- Frameworks: [supplier-selection-framework](../brain/supplier-selection-framework.md), [supplier-risk-framework](../brain/supplier-risk-framework.md), [make-vs-buy](../brain/make-vs-buy.md).
+- Company: [overview.md](../company/overview.md) — KRDA programs, crops, ASEAN scope.
+- Scenarios: simulation scenarios involving category strategy or new-supplier sourcing.
+
+## 18. Continuous Learning Plan
+
+- Weekly: review `risk_database` for new supply risks flagged by other agents; update strategies if risk tier changes.
+- Quarterly: re-assess category strategies for active programs; check if new ASEAN suppliers have emerged.
+- When a new KRDA R&D program is announced: immediately map required categories and start sourcing landscape.

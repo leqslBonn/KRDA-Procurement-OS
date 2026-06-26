@@ -23,7 +23,7 @@ Master search index for the knowledge base. Add a row when you add an article.
 | 7 | Strategic Sourcing | `strategic-sourcing/` | Strategic Sourcing | 0 |
 | 8 | Negotiation | `negotiation/` | RFQ Mgmt / Cost Reduction | 0 |
 | 9 | SAP | `sap/` | SAP Purchasing | 0 |
-| 10 | Procurement | `procurement/` | all | 0 |
+| 10 | Procurement | `procurement/` | all | 1 |
 | 11 | AI Automation | `ai-automation/` | Procurement Automation | 0 |
 | 12 | Power Automate | `power-automate/` | Procurement Automation | 0 |
 | 13 | Excel | `excel/` | Analytics / Automation | 0 |
@@ -37,6 +37,7 @@ Master search index for the knowledge base. Add a row when you add an article.
 | Article ID | Title | Domain | Source/date | Used by |
 |-----------|-------|--------|-------------|---------|
 | _KB-example_ | _..._ | _..._ | _..._ | _framework/skill_ |
+| KB-PROC-001 | KRDA Procurement Procedure Manual | Procurement | Official manual v1 May 2021 | approval-matrix, workflows/rfq, workflows/price_negotiation |
 
 ## Priority Articles (v0.10)
 

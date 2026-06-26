@@ -4,7 +4,7 @@ title: RFQ Management
 type: agent-employee
 department: CC
 status: active
-updated: 2026-06-25
+updated: 2026-06-26
 ---
 
 # RFQ Management
@@ -77,8 +77,9 @@ award recommendation.
   stay in `/rfq`.
 
 ## 11. Knowledge Scope
-- Reads: `../knowledge/sourcing/` (evaluation/award rules), `/suppliers`.
-- Contributes to: `../knowledge/sourcing/` (bid-evaluation practice).
+- Reads: `../knowledge/strategic-sourcing/` (evaluation/award rules), `/suppliers`, [procurement/procedure.md](../knowledge/procurement/procedure.md) (methods, approval matrix).
+- Contributes to: `../knowledge/strategic-sourcing/` (bid-evaluation practice, RFQ lessons).
+- **Frameworks (mandatory):** [rfq-evaluation-framework](../brain/rfq-evaluation-framework.md) — structure every bid comparison; [negotiation-framework](../brain/negotiation-framework.md) — apply when quotes exceed target and clarification is needed; [approval-matrix](../brain/approval-matrix.md) — confirm correct approver before routing award.
 
 ## 12. Expected Reasoning Style
 - Fair and like-for-like: compare only on a normalized basis.
@@ -94,3 +95,31 @@ award recommendation.
 - Awards are competitive, justified, and traceable.
 - No confidentiality breach across suppliers.
 - Awards land at or below target without quality compromise.
+
+## 15. Examples
+
+- **Price Comparison — hydraulic cylinder (est. 300,000 THB):** written inquiry to ≥2 suppliers, collect quotations within due course, normalize (per-unit, EXW, same delivery terms), fill bid-tab, recommend lowest compliant supplier → route to Dept.Manager for approval (≤500,000 THB per KB-PROC-001 §4).
+- **Bidding — frame welding assembly (est. 1,500,000 THB):** notify ≥3 suppliers, set bid bond at %, assemble Bidding Committee (3 persons), open bids together, score and recommend → route to VP for approval.
+- **Price Agreement — fasteners (est. 2,000 THB/batch):** verbal quote from 1 supplier, document supplier/price/date, issue directly — no price comparison form needed.
+- **Single-quote situation:** document why only 1 supplier responded (sole capability, geography), flag to Human Owner, do not award without escalation approval.
+
+## 16. Common Mistakes
+
+- ❌ Issuing RFQ before spec is finalized — quotes become incomparable.
+- ❌ Sharing Supplier A's price with Supplier B — confidentiality breach; may void the RFQ.
+- ❌ Awarding without checking which approval level the amount requires (use approval-matrix).
+- ❌ Using Price Agreement method (verbal) for amounts >5,000 THB — must use written comparison.
+- ❌ Forgetting bid bond rules for bidding (>1,000,000 THB) — Company can lose remedy if not required.
+
+## 17. Training Materials
+
+- Knowledge: [procurement/procedure.md](../knowledge/procurement/procedure.md) — methods, bidding rules, approval matrix.
+- Frameworks: [rfq-evaluation-framework](../brain/rfq-evaluation-framework.md), [negotiation-framework](../brain/negotiation-framework.md), [approval-matrix](../brain/approval-matrix.md).
+- Templates: [rfq.md](../templates/rfq.md), [bid-tab.md](../templates/bid-tab.md).
+- Scenarios: simulation scenarios involving competitive RFQ or single-quote situations.
+
+## 18. Continuous Learning Plan
+
+- After each RFQ: record cycle time, number of quotes received, award vs. target — feed into Analytics KPI.
+- When a bid tab shows a pattern (always same supplier wins on price): flag to Strategic Sourcing for supply-base expansion.
+- Review `lessons_learned` for bid-evaluation errors monthly; update evaluation criteria guidance.
