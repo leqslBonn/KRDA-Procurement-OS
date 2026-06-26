@@ -23,7 +23,7 @@ Master search index for the knowledge base. Add a row when you add an article.
 | 7 | Strategic Sourcing | `strategic-sourcing/` | Strategic Sourcing | 0 |
 | 8 | Negotiation | `negotiation/` | RFQ Mgmt / Cost Reduction | 0 |
 | 9 | SAP | `sap/` | SAP Purchasing | 1 |
-| 10 | Procurement | `procurement/` | all | 1 |
+| 10 | Procurement | `procurement/` | all | 3 |
 | 11 | AI Automation | `ai-automation/` | Procurement Automation | 0 |
 | 12 | Power Automate | `power-automate/` | Procurement Automation | 0 |
 | 13 | Excel | `excel/` | Analytics / Automation | 0 |
@@ -32,7 +32,7 @@ Master search index for the knowledge base. Add a row when you add an article.
 
 ## Article Registry
 
-> One row per article. 13 articles (v0.11–v0.12). Add a row when you author one.
+> One row per article. 15 articles (v0.11–v0.12). Add a row when you author one.
 
 | Article ID | Title | Domain | Source/date | Used by |
 |-----------|-------|--------|-------------|---------|
@@ -49,6 +49,8 @@ Master search index for the knowledge base. Add a row when you add an article.
 | KB-CE-008 | Cost Drivers | Cost Engineering | KRDA v0.11 2026-06-26 | KB-CE-001, cost-down-framework |
 | KB-SAP-001 | SAP PR/PO Field Map (KRDA) | SAP | KRDA v0.12 2026-06-26 | workflows/sap, approval-matrix |
 | KB-SM-001 | Supplier Audit Checklist | Supplier Management | KRDA v0.12 2026-06-26 | workflows/supplier_audit, supplier-risk-framework |
+| KB-PROC-002 | Software / SaaS TCO Method | Procurement | v0.12 2026-06-26 | startup-vendor-evaluation-framework, vendor scorecard |
+| KB-PROC-003 | POC / Pilot Evaluation Method | Procurement | v0.12 2026-06-26 | startup-vendor-evaluation-framework |
 
 ## Priority Articles
 

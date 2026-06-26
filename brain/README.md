@@ -39,6 +39,7 @@ process (workflows) or format (templates).
 | [quality-escalation-framework.md](quality-escalation-framework.md) | How to escalate a quality issue | SM, Tech Purchasing |
 | [approval-matrix.md](approval-matrix.md) | Who approves what | all (commitment gate) |
 | [decision-matrix.md](decision-matrix.md) | Generic weighted multi-criteria decision | all |
+| [startup-vendor-evaluation-framework.md](startup-vendor-evaluation-framework.md) | Evaluate IoT/smart-farm/software startup vendors | vendor pitch eval |
 
 ## Conventions
 
