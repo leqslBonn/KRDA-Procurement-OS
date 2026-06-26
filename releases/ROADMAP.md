@@ -28,7 +28,7 @@ v0.1–v0.10 are released; v0.11→v1.0 are the forward milestones with exit cri
 - [x] Extract `knowledge/procurement/procedure.md` from official manuals (KB-PROC-001).
 - [x] Update `brain/approval-matrix.md` with real KRDA THB thresholds.
 - [x] Create `memory/current-context.md` (was missing).
-- [ ] Grow simulation to ~40 scenarios — **in progress** (at 5 → target 40).
+- [ ] Grow simulation to ~40 scenarios — **in progress** (at 15 → target 40).
 - **Exit criteria met** — cost-down & RFQ runnable with real knowledge; KPIs defined.
 
 ### v0.12 — First Real Data (target: 2026-07)

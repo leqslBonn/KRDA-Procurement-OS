@@ -9,7 +9,7 @@ a **Release Note** documenting its state across six dimensions:
 
 ## Current Version
 
-**v0.10** — see [VERSION](../VERSION). Status: pre-1.0 (Phase 2 — Intelligence Platform).
+**v0.11** — see [VERSION](../VERSION). Status: pre-1.0 (Knowledge & Training; real KRDA data).
 Full forward plan: [ROADMAP.md](ROADMAP.md).
 
 ## Versioning Policy
@@ -36,9 +36,9 @@ note records the **delta** under the six dimensions.
 | [v0.7](v0.7.md) | Memory system & architecture | ✅ released |
 | [v0.8](v0.8.md) | Skills | ✅ released |
 | [v0.9](v0.9.md) | Commands & standard templates | ✅ released |
-| [v0.10](v0.10.md) | Intelligence Platform (Phase 2) | ✅ released (current) |
-| v0.11 | Knowledge & training (Cost Engineering, retrain) | 🔜 next |
-| v0.12 | First real operational data | ⏳ planned |
+| [v0.10](v0.10.md) | Intelligence Platform (Phase 2) | ✅ released |
+| [v0.11](v0.11.md) | Knowledge & training (Cost Engineering, retrain, real data) | ✅ released (current) |
+| v0.12 | First real operational data | 🔜 next |
 | v0.13 | Automation; simulation to 100 | ⏳ planned |
 | [v1.0](v1.0.md) | Production-ready release | 🎯 target |
 

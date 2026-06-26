@@ -23,7 +23,7 @@ Newest on top. `Type`: **system** (refactor brain/workflow/knowledge) or **conte
 |---|--------|------|-------|--------|
 | B1 | Author `/knowledge/cost-engineering/*` | content | 8 articles KB-CE-001–008 authored v0.11 | ✅ done 2026-06-26 |
 | B2 | Author `taxonomy/kpi-definitions.md` + `spend-categories.md` | content | 10 KPIs + CMD taxonomy done v0.11 | ✅ done 2026-06-26 |
-| B3 | Grow simulation to ≥40 scenarios | content | At 5; growing toward 40 | 🔄 in progress |
+| B3 | Grow simulation to ≥40 scenarios | content | At 15; growing toward 40 | 🔄 in progress |
 | B4 | Retrain 9 employees to 18-section schema | system | All 9 agents done v0.11 | ✅ done 2026-06-26 |
 | B5 | Automate Memory Engine register updates | system | Per [memory/engine](../memory/engine.md) | ⏳ v0.13 target |
 

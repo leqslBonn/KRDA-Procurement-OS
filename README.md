@@ -1,6 +1,6 @@
 # KRDA Procurement OS
 
-**Version 0.10** · pre-1.0 (Phase 2 — Intelligence Platform) · [releases](releases/README.md) · [CHANGELOG](releases/CHANGELOG.md) · [roadmap](releases/ROADMAP.md)
+**Version 0.11** · pre-1.0 (Knowledge & Training; real KRDA data) · [releases](releases/README.md) · [CHANGELOG](releases/CHANGELOG.md) · [roadmap](releases/ROADMAP.md)
 
 **An AI-powered Procurement Operating System for KRDA.**
 

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRDA Procurement OS — Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:     #0f172a;
+  --card:   #1e293b;
+  --card2:  #263348;
+  --border: #334155;
+  --text:   #f1f5f9;
+  --muted:  #94a3b8;
+  --dim:    #475569;
+  --green:  #22c55e;
+  --blue:   #60a5fa;
+  --yellow: #eab308;
+  --red:    #ef4444;
+  --purple: #a855f7;
+  --cyan:   #22d3ee;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', 'Noto Sans Thai', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ── TOP BAR ─────────────────────────────────────── */
+.topbar {
+  background: #0a1121;
+  border-bottom: 2px solid #1e3a5f;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.tb-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.logo-badge {
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+.tb-badges {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.badge {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.badge b { color: var(--text); }
+.badge.ok b { color: var(--green); }
+.badge.warn b { color: var(--yellow); }
+#clock {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blue);
+  min-width: 180px;
+  text-align: right;
+}
+
+/* ── LAYOUT ──────────────────────────────────────── */
+.page { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+.gap { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── STAT ROW ────────────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stat-card:hover { border-color: var(--blue); }
+.stat-num {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.stat-sub {
+  font-size: 11px;
+  color: var(--dim);
+}
+
+/* ── 2-COL ───────────────────────────────────────── */
+.cols { display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
+.col { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── CARD ────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+.card-head {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-head .dot-green { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.card-head .dot-yellow { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); flex-shrink: 0; }
+
+/* ── AGENT GRID ──────────────────────────────────── */
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.agent-card {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.agent-card:hover { border-color: var(--blue); background: #2a3a56; }
+.agent-card canvas { image-rendering: pixelated; flex-shrink: 0; }
+.agent-info { min-width: 0; }
+.agent-name { font-size: 14px; font-weight: 700; color: #fff; }
+.agent-role { font-size: 11px; color: var(--blue); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agent-dept { display: inline-block; font-size: 10px; background: #0f172a; border: 1px solid var(--border); color: var(--muted); padding: 1px 6px; border-radius: 4px; margin-top: 4px; }
+.agent-status { font-size: 11px; color: var(--green); margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+.dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite; }
+
+/* ── ROADMAP ─────────────────────────────────────── */
+.milestone { margin-bottom: 14px; }
+.milestone:last-child { margin-bottom: 0; }
+.ms-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+.ms-name { font-size: 14px; color: var(--text); font-weight: 500; }
+.ms-pct { font-size: 13px; font-weight: 700; }
+.ms-bar { height: 8px; background: #0f172a; border-radius: 4px; overflow: hidden; }
+.ms-fill { height: 8px; border-radius: 4px; transition: width .4s; }
+.ms-note { font-size: 11px; color: var(--dim); margin-top: 3px; }
+
+/* ── KPI TABLE ───────────────────────────────────── */
+.kpi-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid #1a2540;
+}
+.kpi-item:last-child { border-bottom: none; }
+.kpi-name { font-size: 13px; color: var(--muted); }
+.kpi-val { font-size: 13px; font-weight: 600; }
+.kpi-tbd { color: var(--dim); }
+.kpi-ok { color: var(--green); }
+.kpi-warn { color: var(--yellow); }
+
+/* ── SYSTEM HEALTH ───────────────────────────────── */
+.health-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.health-item:last-child { margin-bottom: 0; }
+.health-name { font-size: 13px; color: var(--muted); width: 90px; flex-shrink: 0; }
+.health-bar { flex: 1; height: 6px; background: #0f172a; border-radius: 3px; overflow: hidden; }
+.health-fill { height: 6px; border-radius: 3px; }
+.health-val { font-size: 12px; font-weight: 600; width: 50px; text-align: right; flex-shrink: 0; }
+
+/* ── ACTIVITY LOG ────────────────────────────────── */
+.log-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid #1a2540;
+  font-size: 13px;
+}
+.log-item:last-child { border-bottom: none; }
+.log-date { color: var(--dim); flex-shrink: 0; font-size: 11px; width: 40px; padding-top: 1px; }
+.log-msg { color: var(--muted); flex: 1; }
+.log-ok { color: var(--green); }
+.log-info { color: var(--blue); }
+.log-pending { color: var(--yellow); }
+.log-icon { flex-shrink: 0; }
+
+/* ── QUICK COMMANDS ──────────────────────────────── */
+.cmd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cmd-btn {
+  background: #0f172a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  transition: border-color .15s, background .15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cmd-btn:hover { border-color: var(--blue); background: #1a2744; }
+.cmd-icon { font-size: 16px; }
+.cmd-text { flex: 1; }
+.cmd-title { font-weight: 600; color: #fff; font-size: 13px; }
+.cmd-desc { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* ── TOAST ───────────────────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #1e293b;
+  border: 1px solid var(--green);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 13px;
+  color: var(--text);
+  display: none;
+  z-index: 99;
+  max-width: 300px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  line-height: 1.5;
+}
+
+/* ── TBD CHECKLIST ───────────────────────────────── */
+.tbd-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid #1a2540;
+  font-size: 13px;
+  color: var(--muted);
+}
+.tbd-item:last-child { border-bottom: none; }
+.tbd-box { width: 16px; height: 16px; border: 2px solid var(--dim); border-radius: 3px; flex-shrink: 0; }
+
+/* ── ANIMATIONS ──────────────────────────────────── */
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="tb-logo">
+    <div class="logo-text">KRDA Procurement OS</div>
+    <div class="logo-badge">v0.11</div>
+  </div>
+  <div class="tb-badges">
+    <div class="badge ok"><b>9</b> Agents online</div>
+    <div class="badge ok"><b>10</b> KB articles</div>
+    <div class="badge warn"><b>15/40</b> Simulations</div>
+    <div class="badge ok">GitHub <b>✓ synced</b></div>
+  </div>
+  <div id="clock">--:--:--</div>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page gap">
+
+  <!-- STAT ROW -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--green)">9</div>
+      <div class="stat-label">AI Agents</div>
+      <div class="stat-sub">ทั้งหมดพร้อมงาน</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--blue)">0</div>
+      <div class="stat-label">Open RFQ</div>
+      <div class="stat-sub">ยังไม่มีงานจริง</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--yellow)">0</div>
+      <div class="stat-label">Cost Down</div>
+      <div class="stat-sub">เริ่ม v0.12 Jul</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--purple)">15</div>
+      <div class="stat-label">Simulations</div>
+      <div class="stat-sub">เป้า 40 สถานการณ์</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--cyan)">12</div>
+      <div class="stat-label">Brain Frameworks</div>
+      <div class="stat-sub">approval, should-cost…</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--red)">0</div>
+      <div class="stat-label">Real Data</div>
+      <div class="stat-sub">รอ v0.12</div>
+    </div>
+  </div>
+
+  <!-- MAIN 2-COL -->
+  <div class="cols">
+
+    <!-- LEFT -->
+    <div class="col">
+
+      <!-- AGENT CARDS -->
+      <div class="card">
+        <div class="card-head"><span class="dot-green"></span>ทีม AI — กด card เพื่อ copy คำสั่ง</div>
+        <div class="agent-grid" id="agentGrid"></div>
+      </div>
+
+      <!-- ROADMAP -->
+      <div class="card">
+        <div class="card-head"><span class="dot-yellow"></span>Roadmap Progress</div>
+
+        <div class="milestone">
+          <div class="ms-row">
+            <div class="ms-name">v0.10 — Foundation</div>
+            <div class="ms-pct" style="color:var(--green)">100%</div>
+          </div>
+          <div class="ms-bar"><div class="ms-fill" style="width:100%;background:var(--green)"></div></div>
+        </div>
+
+        <div class="milestone">
+          <div class="ms-row">
+            <div class="ms-name">v0.11 — Knowledge & Training</div>
+            <div class="ms-pct" style="color:var(--blue)">88%</div>
+          </div>
+          <div class="ms-bar"><div class="ms-fill" style="width:88%;background:var(--blue)"></div></div>
+          <div class="ms-note">Simulation 15/40 · ข้อมูลตลาด TBD</div>
+        </div>
+
+        <div class="milestone">
+          <div class="ms-row">
+            <div class="ms-name">v0.12 — First Real Data</div>
+            <div class="ms-pct" style="color:var(--yellow)">0%</div>
+          </div>
+          <div class="ms-bar"><div class="ms-fill" style="width:0%;background:var(--yellow)"></div></div>
+          <div class="ms-note">Target: กรกฎาคม 2026</div>
+        </div>
+
+        <div class="milestone">
+          <div class="ms-row">
+            <div class="ms-name">v0.13 — Automation</div>
+            <div class="ms-pct" style="color:var(--dim)">0%</div>
+          </div>
+          <div class="ms-bar"><div class="ms-fill" style="width:0%;background:var(--purple)"></div></div>
+        </div>
+
+        <div class="milestone">
+          <div class="ms-row">
+            <div class="ms-name">v1.0 — Production Ready</div>
+            <div class="ms-pct" style="color:var(--dim)">0%</div>
+          </div>
+          <div class="ms-bar"><div class="ms-fill" style="width:0%;background:var(--red)"></div></div>
+        </div>
+      </div>
+
+      <!-- QUICK COMMANDS -->
+      <div class="card">
+        <div class="card-head">Quick Commands — copy แล้ว paste ใน Claude Code</div>
+        <div class="cmd-grid">
+          <button class="cmd-btn" onclick="copyCmd('รัน new_rfq command')">
+            <span class="cmd-icon">📋</span>
+            <div class="cmd-text">
+              <div class="cmd-title">new_rfq</div>
+              <div class="cmd-desc">เริ่ม RFQ ใหม่</div>
+            </div>
+          </button>
+          <button class="cmd-btn" onclick="copyCmd('รัน costdown command')">
+            <span class="cmd-icon">💰</span>
+            <div class="cmd-text">
+              <div class="cmd-title">costdown</div>
+              <div class="cmd-desc">วิเคราะห์ cost down</div>
+            </div>
+          </button>
+          <button class="cmd-btn" onclick="copyCmd('รัน new_supplier command')">
+            <span class="cmd-icon">🏭</span>
+            <div class="cmd-text">
+              <div class="cmd-title">new_supplier</div>
+              <div class="cmd-desc">ลงทะเบียน supplier</div>
+            </div>
+          </button>
+          <button class="cmd-btn" onclick="copyCmd('รัน prepare_negotiation command')">
+            <span class="cmd-icon">🤝</span>
+            <div class="cmd-text">
+              <div class="cmd-title">negotiate</div>
+              <div class="cmd-desc">เตรียมข้อมูล nego</div>
+            </div>
+          </button>
+          <button class="cmd-btn" onclick="copyCmd('รัน weekly_report command')">
+            <span class="cmd-icon">📊</span>
+            <div class="cmd-text">
+              <div class="cmd-title">weekly_report</div>
+              <div class="cmd-desc">สรุปรายสัปดาห์</div>
+            </div>
+          </button>
+          <button class="cmd-btn" onclick="copyCmd('ช่วยรัน simulation ให้เลือก SIM ที่น่าสนใจ')">
+            <span class="cmd-icon">🎯</span>
+            <div class="cmd-text">
+              <div class="cmd-title">simulation</div>
+              <div class="cmd-desc">รัน training scenario</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /LEFT -->
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="col">
+
+      <!-- KPI -->
+      <div class="card">
+        <div class="card-head"><span class="dot-yellow"></span>Live KPIs</div>
+
+        <div class="kpi-item">
+          <span class="kpi-name">Cost Down (THB)</span>
+          <span class="kpi-val kpi-tbd">— TBD</span>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-name">Quality PPM</span>
+          <span class="kpi-val kpi-tbd">— TBD</span>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-name">OTD %</span>
+          <span class="kpi-val kpi-tbd">— TBD</span>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-name">RFQ Cycle (วัน)</span>
+          <span class="kpi-val kpi-tbd">— TBD</span>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-name">Nego Success Rate</span>
+          <span class="kpi-val kpi-tbd">— TBD</span>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-name">KB Articles</span>
+          <span class="kpi-val kpi-ok">▲ 10</span>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-name">Simulations</span>
+          <span class="kpi-val kpi-warn">15 / 40</span>
+        </div>
+
+        <div style="margin-top:10px;font-size:11px;color:var(--dim)">
+          ค่า KPI จริงเริ่มวัดได้ตอน v0.12 (ก.ค. 2026)
+        </div>
+      </div>
+
+      <!-- SYSTEM HEALTH -->
+      <div class="card">
+        <div class="card-head"><span class="dot-green"></span>System Health</div>
+
+        <div class="health-item">
+          <div class="health-name">Agents</div>
+          <div class="health-bar"><div class="health-fill" style="width:100%;background:var(--green)"></div></div>
+          <div class="health-val" style="color:var(--green)">9 / 9</div>
+        </div>
+        <div class="health-item">
+          <div class="health-name">Brain</div>
+          <div class="health-bar"><div class="health-fill" style="width:100%;background:var(--green)"></div></div>
+          <div class="health-val" style="color:var(--green)">12 fw</div>
+        </div>
+        <div class="health-item">
+          <div class="health-name">Knowledge</div>
+          <div class="health-bar"><div class="health-fill" style="width:70%;background:var(--blue)"></div></div>
+          <div class="health-val" style="color:var(--blue)">10 art</div>
+        </div>
+        <div class="health-item">
+          <div class="health-name">Simulation</div>
+          <div class="health-bar"><div class="health-fill" style="width:38%;background:var(--yellow)"></div></div>
+          <div class="health-val" style="color:var(--yellow)">15/40</div>
+        </div>
+        <div class="health-item">
+          <div class="health-name">Real Data</div>
+          <div class="health-bar"><div class="health-fill" style="width:2%;background:var(--dim)"></div></div>
+          <div class="health-val" style="color:var(--dim)">v0.12</div>
+        </div>
+        <div class="health-item">
+          <div class="health-name">Memory</div>
+          <div class="health-bar"><div class="health-fill" style="width:90%;background:var(--green)"></div></div>
+          <div class="health-val" style="color:var(--green)">✓ OK</div>
+        </div>
+      </div>
+
+      <!-- ACTIVITY LOG -->
+      <div class="card">
+        <div class="card-head"><span class="dot-green"></span>Activity Log</div>
+
+        <div class="log-item">
+          <div class="log-date">06-26</div>
+          <div class="log-msg log-ok">✓ v0.11 released</div>
+        </div>
+        <div class="log-item">
+          <div class="log-date">06-26</div>
+          <div class="log-msg log-ok">✓ 9 agents retrained (18 sections)</div>
+        </div>
+        <div class="log-item">
+          <div class="log-date">06-26</div>
+          <div class="log-msg log-ok">✓ Approval matrix — KRDA thresholds</div>
+        </div>
+        <div class="log-item">
+          <div class="log-date">06-26</div>
+          <div class="log-msg log-info">ℹ SIM-006 ถึง SIM-015 authored</div>
+        </div>
+        <div class="log-item">
+          <div class="log-date">06-26</div>
+          <div class="log-msg log-ok">✓ GitHub SSH push</div>
+        </div>
+        <div class="log-item">
+          <div class="log-date">06-26</div>
+          <div class="log-msg log-info">ℹ SIM-007 ran: 6/6 score ✓</div>
+        </div>
+        <div class="log-item">
+          <div class="log-date">รอ</div>
+          <div class="log-msg log-pending">⏳ Material/labor rates: TBD</div>
+        </div>
+        <div class="log-item">
+          <div class="log-date">ก.ค.</div>
+          <div class="log-msg" style="color:var(--dim)">→ v0.12 real data</div>
+        </div>
+      </div>
+
+      <!-- TBD CHECKLIST -->
+      <div class="card">
+        <div class="card-head"><span class="dot-yellow"></span>ต้องทำก่อน v0.12</div>
+        <div class="tbd-item"><div class="tbd-box"></div>material-rates.md — NS BlueScope</div>
+        <div class="tbd-item"><div class="tbd-box"></div>process-rates.md — supplier quotes</div>
+        <div class="tbd-item"><div class="tbd-box"></div>labor-rates.md — mol.go.th</div>
+        <div class="tbd-item"><div class="tbd-box"></div>Annual spend — Finance dept</div>
+        <div class="tbd-item"><div class="tbd-box"></div>SAP T-codes — system access</div>
+        <div class="tbd-item"><div class="tbd-box"></div>Supplier จริงคนแรก → /suppliers/</div>
+        <div class="tbd-item"><div class="tbd-box"></div>RFQ จริงแรก</div>
+        <div class="tbd-item"><div class="tbd-box"></div>Cost-down จริงแรก</div>
+      </div>
+
+    </div><!-- /RIGHT -->
+  </div><!-- /COLS -->
+</div><!-- /PAGE -->
+
+<div id="toast"></div>
+
+<script>
+// ── CLOCK ──────────────────────────────────────────
+function tick() {
+  const d = new Date();
+  const time = d.toLocaleTimeString('th-TH', {hour12:false});
+  const date = d.toLocaleDateString('th-TH', {day:'2-digit',month:'short',year:'numeric'});
+  document.getElementById('clock').textContent = time + ' · ' + date;
+}
+tick(); setInterval(tick, 1000);
+
+// ── PIXEL FACES ────────────────────────────────────
+const FACES = {
+  Morgan: {p:{1:'#FFCAB8',2:'#1a0800',3:'#1a0800',4:'#2c3e6b',5:'#c06060',6:'#667799',7:'#e8e8ff'},g:[[0,0,2,2,2,2,2,0,0],[0,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,6,6,1,6,6,1,0],[0,1,6,3,1,3,6,1,0],[0,1,6,6,1,6,6,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,5,5,5,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,7,4,4,7,0,0]]},
+  Blake:  {p:{1:'#D4956A',2:'#5C3317',3:'#1a0800',4:'#EA580C',5:'#b06040',6:'#F97316',7:'#fff',8:'#A87050'},g:[[0,6,6,2,2,2,6,6,0],[0,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,1,3,1,1,3,1,0],[0,1,1,1,1,1,1,1,0],[0,1,8,1,1,1,8,1,0],[0,1,1,5,5,5,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,4,4,4,4,0,0]]},
+  Alex:   {p:{1:'#C9A96E',2:'#1a0800',3:'#1a0800',4:'#1a5c2e',5:'#a06040',6:'#888',7:'#fff'},g:[[0,0,2,2,2,2,2,0,0],[0,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,1,3,1,1,3,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,7,5,5,7,1,0],[0,1,1,1,5,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,7,4,4,4,0,0]]},
+  Jordan: {p:{1:'#8D5524',2:'#1a0800',3:'#1a0800',4:'#6d28d9',5:'#703010',6:'#888',7:'#fff'},g:[[2,2,2,2,2,2,2,2,2],[2,1,1,1,1,1,1,1,2],[2,1,1,1,1,1,1,1,2],[2,1,1,3,1,1,3,1,2],[0,1,1,1,1,1,1,1,0],[0,1,1,7,5,5,7,1,0],[0,1,1,1,5,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,4,4,4,4,0,0]]},
+  Chris:  {p:{1:'#FFD5C8',2:'#C8A020',3:'#1a0800',4:'#4B5563',5:'#c06060',6:'#888',7:'#e8e8e8'},g:[[0,0,2,2,2,2,2,0,0],[0,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,1,3,1,1,3,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,1,5,5,5,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,7,4,4,7,0,0]]},
+  Riley:  {p:{1:'#FFD5C8',2:'#8B1A1A',3:'#1a0800',4:'#0D9488',5:'#c06060',6:'#777',7:'#e8e8e8'},g:[[0,2,2,2,2,2,2,0,0],[2,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,6,3,1,3,6,1,0],[0,1,6,6,1,6,6,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,1,5,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,4,4,4,4,0,0]]},
+  Sam:    {p:{1:'#C68642',2:'#1a0800',3:'#1a0800',4:'#1E40AF',5:'#905030',6:'#888',7:'#e8e8e8'},g:[[6,2,2,2,2,2,2,6,0],[0,2,2,2,2,2,2,2,0],[6,1,1,1,1,1,1,1,0],[0,1,1,3,1,1,3,1,6],[0,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,5,5,5,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,4,4,4,4,0,0]]},
+  Quinn:  {p:{1:'#FFD5C8',2:'#2d1a00',3:'#1a0800',4:'#334155',5:'#c06060',6:'#555',7:'#e0e0ff',8:'#3B82F6'},g:[[0,0,2,8,2,2,2,0,0],[0,2,2,8,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,6,3,6,3,6,1,0],[0,1,6,6,1,6,6,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,5,1,5,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,6,4,4,6,0,0]]},
+  Rex:    {p:{1:'#9CA3AF',2:'#374151',3:'#22D3EE',4:'#1F2937',5:'#4B5563',6:'#6B7280',7:'#E0F2FE',8:'#0EA5E9'},g:[[0,0,6,0,2,0,6,0,0],[0,0,0,0,6,0,0,0,0],[0,1,1,1,1,1,1,1,0],[1,1,3,1,1,1,3,1,1],[1,1,7,1,1,1,7,1,1],[1,1,1,1,1,1,1,1,1],[1,1,5,5,5,5,5,1,1],[1,1,5,6,5,6,5,1,1],[0,4,4,4,4,4,4,4,0],[0,4,8,4,4,4,8,4,0]]}
+};
+
+function drawFace(canvas, name, ps) {
+  const f = FACES[name];
+  if (!f) return;
+  canvas.width = 9 * ps;
+  canvas.height = 10 * ps;
+  const ctx = canvas.getContext('2d');
+  f.g.forEach((row, r) => row.forEach((c, col) => {
+    if (!c || !f.p[c]) return;
+    ctx.fillStyle = f.p[c];
+    ctx.fillRect(col * ps, r * ps, ps, ps);
+  }));
+}
+
+// ── AGENTS ─────────────────────────────────────────
+const agents = [
+  {name:'Morgan', role:'Procurement Lead',     dept:'OPL', cmd:'ส่งงานให้ Morgan: มีงานเข้ามา ช่วย route ให้'},
+  {name:'Blake',  role:'Technical Purchasing', dept:'SE',  cmd:'ส่งงานให้ Blake: ช่วยรีวิว spec ชิ้นส่วนใหม่'},
+  {name:'Alex',   role:'Strategic Sourcing',   dept:'SE',  cmd:'ส่งงานให้ Alex: วิเคราะห์ sourcing strategy'},
+  {name:'Jordan', role:'Supplier Development', dept:'SM',  cmd:'ส่งงานให้ Jordan: ช่วย onboard supplier ใหม่'},
+  {name:'Chris',  role:'RFQ Management',       dept:'CC',  cmd:'ส่งงานให้ Chris: เตรียม RFQ package'},
+  {name:'Riley',  role:'Cost Reduction',       dept:'CC',  cmd:'ส่งงานให้ Riley: build should-cost analysis'},
+  {name:'Sam',    role:'SAP Purchasing',       dept:'TS',  cmd:'ส่งงานให้ Sam: ตรวจ PO checklist'},
+  {name:'Quinn',  role:'Analytics & KPI',      dept:'IP',  cmd:'ส่งงานให้ Quinn: สรุป KPI gaps'},
+  {name:'Rex',    role:'Automation',           dept:'TS',  cmd:'ส่งงานให้ Rex: แนะนำ workflow ที่ควร automate'}
+];
+
+const grid = document.getElementById('agentGrid');
+agents.forEach(a => {
+  const card = document.createElement('div');
+  card.className = 'agent-card';
+
+  const cvs = document.createElement('canvas');
+  drawFace(cvs, a.name, 4);
+
+  const info = document.createElement('div');
+  info.className = 'agent-info';
+  info.innerHTML = `
+    <div class="agent-name">${a.name}</div>
+    <div class="agent-role">${a.role}</div>
+    <span class="agent-dept">${a.dept}</span>
+    <div class="agent-status"><span class="dot-live"></span>Ready</div>
+  `;
+
+  card.appendChild(cvs);
+  card.appendChild(info);
+  card.title = `Copy command: ${a.cmd}`;
+  card.onclick = () => copyCmd(a.cmd);
+  grid.appendChild(card);
+});
+
+// ── HELPERS ────────────────────────────────────────
+function copyCmd(text) {
+  try { navigator.clipboard.writeText(text); } catch(e) {}
+  const t = document.getElementById('toast');
+  t.innerHTML = '✓ Copied!<br><small style="color:var(--muted)">' + text + '</small>';
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3000);
+}
+</script>
+</body>
+</html>

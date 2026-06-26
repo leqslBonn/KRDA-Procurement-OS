@@ -18,7 +18,7 @@ Master search index for the knowledge base. Add a row when you add an article.
 | 2 | Electronics | `electronics/` | Technical Purchasing | 0 |
 | 3 | Hydraulics | `hydraulics/` | Technical Purchasing | 0 |
 | 4 | Manufacturing | `manufacturing/` | Tech Purchasing / Cost Reduction | 0 |
-| 5 | Cost Engineering | `cost-engineering/` | Cost Reduction | 7 |
+| 5 | Cost Engineering | `cost-engineering/` | Cost Reduction | 8 |
 | 6 | Supplier Management | `supplier-management/` | Supplier Development | 0 |
 | 7 | Strategic Sourcing | `strategic-sourcing/` | Strategic Sourcing | 0 |
 | 8 | Negotiation | `negotiation/` | RFQ Mgmt / Cost Reduction | 0 |
@@ -32,11 +32,10 @@ Master search index for the knowledge base. Add a row when you add an article.
 
 ## Article Registry
 
-> One row per article. (Empty — populated from v0.10.)
+> One row per article. 11 articles (v0.11). Add a row when you author one.
 
 | Article ID | Title | Domain | Source/date | Used by |
 |-----------|-------|--------|-------------|---------|
-| _KB-example_ | _..._ | _..._ | _..._ | _framework/skill_ |
 | KB-PROC-001 | KRDA Procurement Procedure Manual | Procurement | Official manual v1 May 2021 | approval-matrix, workflows/rfq, workflows/price_negotiation |
 | KB-TAX-001 | KPI Definitions | Taxonomy | KRDA v0.11 2026-06-26 | dashboard/kpis, all agents |
 | KB-TAX-002 | Spend Category Taxonomy (CMD codes) | Taxonomy | KRDA v0.11 2026-06-26 | commodity_database, rfq records, cost_down records |
@@ -49,12 +48,16 @@ Master search index for the knowledge base. Add a row when you add an article.
 | KB-CE-007 | Yield & Scrap Factors | Cost Engineering | KRDA v0.11 2026-06-26 | KB-CE-001, KB-CE-002 |
 | KB-CE-008 | Cost Drivers | Cost Engineering | KRDA v0.11 2026-06-26 | KB-CE-001, cost-down-framework |
 
-## Priority Articles (v0.10)
+## Priority Articles
 
-- [ ] `cost-engineering/should-cost-method.md`
-- [ ] `cost-engineering/material-rates.md`
-- [ ] `cost-engineering/process-rates.md`
-- [ ] `taxonomy/kpi-definitions.md`
-- [ ] `taxonomy/spend-categories.md`
+Done (v0.11):
+- [x] `cost-engineering/` — KB-CE-001 through KB-CE-008 (8 articles)
+- [x] `taxonomy/kpi-definitions.md` (KB-TAX-001), `taxonomy/spend-categories.md` (KB-TAX-002)
+- [x] `procurement/procedure.md` (KB-PROC-001)
+
+Next (v0.12+):
+- [ ] Fill `TBD` rates in `cost-engineering/material-rates.md`, `process-rates.md`, `labor-rates.md`
+- [ ] `supplier-management/audit-checklist.md`
+- [ ] `sap/field-map.md`
 - [ ] `quality`→`supplier-management/audit-checklist.md`
 - [ ] `sap/field-map.md`
