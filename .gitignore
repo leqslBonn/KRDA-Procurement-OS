@@ -12,3 +12,7 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/
+
+# KRDA source manuals — confidential, keep LOCAL only (extracted into knowledge/procurement/procedure.md)
+information company/
+*.pdf
