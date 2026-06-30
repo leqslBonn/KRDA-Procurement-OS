@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KRDA Procurement Console</title>
+<style>
+  :root{
+    --bg:#0f1419;--panel:#171e26;--panel2:#1d2731;--line:#2a3641;--txt:#e6edf3;--mut:#8b9aa7;
+    --grn:#2ea043;--grn2:#3fb950;--org:#f0883e;--red:#f85149;--amb:#d29922;--blue:#58a6ff;--chip:#21303d;--purp:#a371f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",Tahoma,system-ui,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;line-height:1.55}
+  a{color:var(--blue);text-decoration:none}
+  .app{display:flex;min-height:100vh}
+  /* header */
+  .top{position:fixed;top:0;left:0;right:0;height:54px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 18px;z-index:20}
+  .logo{width:38px;height:38px;border:1px dashed var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--mut);overflow:hidden;cursor:pointer;background:var(--panel2)}
+  .logo img{width:100%;height:100%;object-fit:contain}
+  .ttl{font-weight:700;font-size:16px}.ttl small{color:var(--mut);font-weight:400;font-size:11px;margin-left:6px}
+  .top .sp{flex:1}
+  .lang{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .lang button{background:var(--panel2);border:0;color:var(--mut);padding:6px 12px;cursor:pointer;font-size:13px}
+  .lang button.on{background:var(--grn);color:#fff;font-weight:700}
+  /* layout */
+  .side{width:212px;background:var(--panel);border-right:1px solid var(--line);padding:14px 10px;position:fixed;top:54px;bottom:0;overflow:auto}
+  .nav button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;color:var(--mut);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px}
+  .nav button:hover{background:var(--panel2);color:var(--txt)}
+  .nav button.on{background:var(--chip);color:var(--txt);font-weight:600}
+  .nav .ic{width:18px;text-align:center}
+  .side .foot{margin-top:14px;padding:10px;color:var(--mut);font-size:11px;border-top:1px solid var(--line)}
+  .main{margin-left:212px;margin-top:54px;padding:24px 28px;max-width:1080px}
+  h1{font-size:21px;margin:0 0 4px}
+  h2{font-size:16px;margin:24px 0 10px;border-left:3px solid var(--grn);padding-left:10px}
+  h3{font-size:13px;margin:14px 0 6px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+  .sub{color:var(--mut);margin:0 0 16px}
+  .sec{display:none}.sec.on{display:block;animation:f .2s ease}
+  @keyframes f{from{opacity:0;transform:translateY(5px)}to{opacity:1}}
+  .grid{display:grid;gap:14px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .card .k{color:var(--mut);font-size:12px}.card .v{font-size:22px;font-weight:700;margin-top:4px}.card .v small{font-size:12px;color:var(--mut);font-weight:400}
+  table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:middle}
+  th{background:var(--panel2);color:var(--mut);font-weight:600}
+  .num{text-align:center;font-variant-numeric:tabular-nums}
+  input,select,textarea{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:6px;padding:6px 8px;font-size:13px;font-family:inherit}
+  input[type=number]{width:64px;text-align:center}
+  input[type=text]{width:100%}
+  textarea{width:100%}
+  input[type=checkbox]{transform:scale(1.2)}
+  .btn{background:var(--grn);border:0;color:#fff;padding:9px 16px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600}
+  .btn:hover{background:var(--grn2)}.btn.sec2{background:var(--panel2);border:1px solid var(--line);color:var(--txt)}
+  .btn.org{background:var(--org)}
+  .badge{padding:2px 8px;border-radius:6px;font-size:12px;font-weight:600}
+  .b-grn{background:rgba(63,185,80,.15);color:var(--grn2)}.b-red{background:rgba(248,81,73,.15);color:var(--red)}.b-amb{background:rgba(210,153,34,.18);color:var(--amb)}
+  .note{background:var(--panel2);border-left:3px solid var(--org);padding:10px 14px;border-radius:6px;margin:10px 0}
+  .ok{color:var(--grn2)}.bad{color:var(--red)}.warn{color:var(--amb)}
+  .pill{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;border:1px solid var(--line);color:var(--mut)}
+  .help{color:var(--mut);font-size:12px;margin:4px 0 12px}
+  .row-actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;margin:8px 0}
+  summary{cursor:pointer;font-weight:600}
+  code{background:var(--panel2);padding:1px 6px;border-radius:4px;font-size:12px}
+  .org-l{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 16px;text-align:center;min-width:150px}
+  .box.owner{border-color:var(--org)}.box.cos{border-color:var(--grn)}.box small{color:var(--mut)}
+  .conn{width:2px;height:12px;background:var(--line)}.rowx{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .dept{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px;min-width:160px}.dept .h{font-weight:700;color:var(--grn2);font-size:13px;margin-bottom:5px}.dept .m{color:var(--mut);font-size:12px}
+  .turn{display:flex;gap:10px;margin:12px 0}.who{min-width:104px;font-weight:700;font-size:13px}.who small{display:block;color:var(--mut);font-weight:400}
+  .say{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:8px;padding:9px 13px;flex:1}
+  .say.tech{border-left-color:var(--blue)}.say.cost{border-left-color:var(--amb)}.say.risk{border-left-color:var(--red)}.say.rfq{border-left-color:var(--org)}.say.cos{border-left-color:var(--grn)}.say.src{border-left-color:var(--purp)}
+  .stage{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin:20px 0 4px;border-top:1px dashed var(--line);padding-top:12px}
+  /* print */
+  #report-out{background:#fff;color:#111;border-radius:10px;padding:26px;margin-top:14px}
+  #report-out h2{color:#111;border-color:#2ea043}#report-out h3{color:#555}
+  #report-out table th{background:#f0f3f6;color:#333}#report-out table td,#report-out table th{border-color:#ccd}
+  #report-out .badge{border:1px solid #ccc}
+  @media print{
+    .top,.side,.no-print{display:none!important}
+    .main{margin:0;padding:0;max-width:none}
+    .sec{display:none!important}.sec#report.on{display:block!important}
+    #report h1,#report .sub,#report .row-actions{display:none}
+    #report-out{box-shadow:none;border-radius:0;padding:0}
+    body{background:#fff}
+  }
+  @media(max-width:820px){.side{display:none}.main{margin-left:0}.g4,.g3,.g2{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="logo" id="logoBox" title="คลิกเพื่อใส่โลโก้ / click to set logo"><span id="logoTxt">LOGO</span></div>
+  <input type="file" id="logoFile" accept="image/*" style="display:none">
+  <div class="ttl">KRDA Procurement Console<small id="verTxt">v1.0 · offline</small></div>
+  <div class="sp"></div>
+  <div class="lang">
+    <button id="laTH" class="on" onclick="setLang('th')">ไทย</button>
+    <button id="laEN" onclick="setLang('en')">EN</button>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="side">
+    <nav class="nav" id="nav">
+      <button data-s="home" class="on"><span class="ic">🏠</span><span data-k="nav.home"></span></button>
+      <button data-s="evaluate"><span class="ic">🧮</span><span data-k="nav.eval"></span></button>
+      <button data-s="tco"><span class="ic">💵</span><span data-k="nav.tco"></span></button>
+      <button data-s="sc"><span class="ic">🔩</span><span data-k="nav.sc"></span></button>
+      <button data-s="accept"><span class="ic">✅</span><span data-k="nav.accept"></span></button>
+      <button data-s="report"><span class="ic">📄</span><span data-k="nav.report"></span></button>
+      <button data-s="history"><span class="ic">🗂️</span><span data-k="nav.history"></span></button>
+      <button data-s="minutes"><span class="ic">💬</span><span data-k="nav.minutes"></span></button>
+      <button data-s="manual"><span class="ic">📖</span><span data-k="nav.manual"></span></button>
+    </nav>
+    <div class="foot" data-k="foot"></div>
+  </aside>
+
+  <main class="main">
+
+    <!-- HOME -->
+    <section class="sec on" id="home">
+      <h1 data-k="home.title"></h1>
+      <p class="sub" data-k="home.sub"></p>
+      <div class="grid g4">
+        <div class="card"><div class="k" data-k="home.c1k"></div><div class="v">v0.11</div></div>
+        <div class="card"><div class="k" data-k="home.c2k"></div><div class="v">9 <small data-k="home.c2s"></small></div></div>
+        <div class="card"><div class="k" data-k="home.c3k"></div><div class="v">13</div></div>
+        <div class="card"><div class="k" data-k="home.c4k"></div><div class="v">40</div></div>
+      </div>
+      <h2 data-k="home.h2"></h2>
+      <div class="grid g3">
+        <div class="card"><h3>①</h3><span data-k="home.s1"></span></div>
+        <div class="card"><h3>②</h3><span data-k="home.s2"></span></div>
+        <div class="card"><h3>③</h3><span data-k="home.s3"></span></div>
+      </div>
+      <div class="note" data-k="home.rule"></div>
+    </section>
+
+    <!-- EVALUATE -->
+    <section class="sec" id="evaluate">
+      <h1 data-k="ev.title"></h1>
+      <p class="sub" data-k="ev.sub"></p>
+      <div class="grid g3" style="margin-bottom:12px">
+        <div><label class="help" data-k="ev.vA"></label><input type="text" id="nA" value="A · AgriSense"></div>
+        <div><label class="help" data-k="ev.vB"></label><input type="text" id="nB" value="B · FarmIQ"></div>
+        <div><label class="help" data-k="ev.vC"></label><input type="text" id="nC" value="C · GrowLink"></div>
+      </div>
+      <div id="wsum" class="note"></div>
+      <table id="evtab">
+        <thead><tr>
+          <th style="width:32%" data-k="ev.crit"></th><th class="num" style="width:80px" data-k="ev.wt"></th>
+          <th class="num" id="hA"></th><th class="num" id="hB"></th><th class="num" id="hC"></th>
+        </tr></thead>
+        <tbody id="evbody"></tbody>
+        <tfoot>
+          <tr><th data-k="ev.total"></th><th class="num" id="wtot"></th><th class="num" id="tA"></th><th class="num" id="tB"></th><th class="num" id="tC"></th></tr>
+          <tr><th data-k="ev.gate"></th><th></th><th class="num" id="gA"></th><th class="num" id="gB"></th><th class="num" id="gC"></th></tr>
+          <tr><th data-k="ev.verdict"></th><th></th><th class="num" id="rA"></th><th class="num" id="rB"></th><th class="num" id="rC"></th></tr>
+        </tfoot>
+      </table>
+      <div class="help" data-k="ev.gatehint"></div>
+      <div class="row-actions no-print">
+        <button class="btn" onclick="makeReport()" data-k="ev.btnReport"></button>
+        <button class="btn sec2" onclick="saveCase()" data-k="ev.btnSave"></button>
+        <button class="btn sec2" onclick="resetEval()" data-k="ev.btnReset"></button>
+      </div>
+      <div class="note" data-k="ev.tip"></div>
+    </section>
+
+    <!-- TCO -->
+    <section class="sec" id="tco">
+      <h1 data-k="tco.title"></h1>
+      <p class="sub" data-k="tco.sub"></p>
+      <label class="help" data-k="tco.horizon"></label> <input type="number" id="tcoYr" value="5" min="1" max="10" oninput="calcTCO()">
+      <table id="tcotab">
+        <thead><tr><th data-k="tco.elem"></th><th class="num" data-k="tco.type"></th><th class="num">A</th><th class="num">B</th><th class="num">C</th></tr></thead>
+        <tbody id="tcobody"></tbody>
+        <tfoot><tr><th data-k="tco.totalH"></th><th></th><th class="num" id="tcA"></th><th class="num" id="tcB"></th><th class="num" id="tcC"></th></tr>
+        <tr><th data-k="tco.best"></th><th></th><th class="num" id="tbA"></th><th class="num" id="tbB"></th><th class="num" id="tbC"></th></tr></tfoot>
+      </table>
+      <div class="help" data-k="tco.note"></div>
+    </section>
+
+    <!-- SHOULD-COST -->
+    <section class="sec" id="sc">
+      <h1 data-k="sc.title"></h1>
+      <p class="sub" data-k="sc.sub"></p>
+      <div class="grid g2">
+        <div class="card">
+          <h3 data-k="sc.material"></h3>
+          <label class="help" data-k="sc.matRate"></label> <input type="number" id="scRate" value="42" oninput="calcSC()"> THB/kg
+          <label class="help" data-k="sc.weight"></label> <input type="number" id="scWt" value="0.6" step="0.01" oninput="calcSC()"> kg
+          <label class="help" data-k="sc.scrap"></label> <input type="number" id="scScrap" value="15" oninput="calcSC()"> %
+        </div>
+        <div class="card">
+          <h3 data-k="sc.process"></h3>
+          <div id="scProc"></div>
+          <button class="btn sec2 no-print" style="margin-top:8px" onclick="addProc()" data-k="sc.addProc"></button>
+        </div>
+      </div>
+      <div class="grid g3" style="margin-top:12px">
+        <div class="card"><label class="help" data-k="sc.overhead"></label><input type="number" id="scOh" value="20" oninput="calcSC()"> %</div>
+        <div class="card"><label class="help" data-k="sc.profit"></label><input type="number" id="scPf" value="10" oninput="calcSC()"> %</div>
+        <div class="card"><label class="help" data-k="sc.quote"></label><input type="number" id="scQuote" value="55" oninput="calcSC()"> THB</div>
+      </div>
+      <table style="margin-top:14px"><tbody id="scOut"></tbody></table>
+      <div class="help" data-k="sc.note"></div>
+    </section>
+
+    <!-- ACCEPTANCE -->
+    <section class="sec" id="accept">
+      <h1 data-k="ac.title"></h1>
+      <p class="sub" data-k="ac.sub"></p>
+      <div class="grid g2">
+        <div><label class="help" data-k="ac.proj"></label><input type="text" id="acProj"></div>
+        <div><label class="help" data-k="ac.ms"></label><input type="text" id="acMs"></div>
+      </div>
+      <h3 data-k="ac.criteria"></h3>
+      <table><thead><tr><th data-k="ac.cName"></th><th class="num" data-k="ac.cPass"></th></tr></thead><tbody id="acCrit"></tbody></table>
+      <button class="btn sec2 no-print" onclick="addCrit()" data-k="ac.addCrit"></button>
+      <h3 data-k="ac.punch"></h3>
+      <table><thead><tr><th data-k="ac.pDef"></th><th data-k="ac.pSev"></th><th data-k="ac.pStat"></th></tr></thead><tbody id="acPunch"></tbody></table>
+      <button class="btn sec2 no-print" onclick="addPunch()" data-k="ac.addPunch"></button>
+      <div id="acVerdict" class="note" style="margin-top:14px"></div>
+      <button class="btn no-print" onclick="calcAccept()" data-k="ac.eval"></button>
+    </section>
+
+    <!-- REPORT -->
+    <section class="sec" id="report">
+      <h1 data-k="rp.title"></h1>
+      <p class="sub" data-k="rp.sub"></p>
+      <div class="row-actions no-print">
+        <button class="btn" onclick="makeReport()" data-k="rp.gen"></button>
+        <button class="btn org" onclick="window.print()" data-k="rp.print"></button>
+      </div>
+      <div id="report-out"><p style="color:#888" data-k="rp.empty"></p></div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="sec" id="history">
+      <h1 data-k="hi.title"></h1>
+      <p class="sub" data-k="hi.sub"></p>
+      <div id="hiList"></div>
+    </section>
+
+    <!-- MINUTES -->
+    <section class="sec" id="minutes">
+      <h1 data-k="mi.title"></h1>
+      <p class="sub" data-k="mi.sub"></p>
+      <div class="stage" data-k="mi.s1"></div>
+      <div class="turn"><div class="who">💰 Cost<small>CC</small></div><div class="say cost" data-k="mi.cost1"></div></div>
+      <div class="turn"><div class="who">🔧 Tech<small>SE</small></div><div class="say tech" data-k="mi.tech1"></div></div>
+      <div class="turn"><div class="who">🛡️ Risk<small>SM</small></div><div class="say risk" data-k="mi.risk1"></div></div>
+      <div class="turn"><div class="who">🤝 RFQ<small>CC</small></div><div class="say rfq" data-k="mi.rfq1"></div></div>
+      <div class="stage" data-k="mi.s2"></div>
+      <div class="turn"><div class="who">📊 Analytics<small>IP</small></div><div class="say" data-k="mi.ana1"></div></div>
+      <div class="stage" data-k="mi.s3"></div>
+      <div class="turn"><div class="who">🎩 Chief<small>OPL</small></div><div class="say cos" data-k="mi.cos1"></div></div>
+      <div class="note" data-k="mi.win"></div>
+    </section>
+
+    <!-- MANUAL -->
+    <section class="sec" id="manual">
+      <h1 data-k="ma.title"></h1>
+      <p class="sub" data-k="ma.sub"></p>
+      <h2 data-k="ma.h1"></h2>
+      <div class="note" data-k="ma.m1"></div>
+      <div class="note" data-k="ma.m2"></div>
+      <div class="note" data-k="ma.m3"></div>
+      <h2 data-k="ma.h2"></h2>
+      <div class="note" data-k="ma.cost50"></div>
+      <h2 data-k="ma.h3"></h2>
+      <table><tbody>
+        <tr><td>1</td><td data-k="ma.r1"></td></tr>
+        <tr><td>2</td><td data-k="ma.r2"></td></tr>
+        <tr><td>3</td><td data-k="ma.r3"></td></tr>
+        <tr><td>4</td><td data-k="ma.r4"></td></tr>
+      </tbody></table>
+      <h2 data-k="ma.h4"></h2>
+      <table><tr><th data-k="ma.fileWhat"></th><th data-k="ma.fileWhere"></th></tr>
+        <tr><td data-k="ma.f1"></td><td><code>brain/startup-vendor-evaluation-framework.md</code></td></tr>
+        <tr><td data-k="ma.f2"></td><td><code>brain/approval-matrix.md</code></td></tr>
+        <tr><td data-k="ma.f3"></td><td><code>brain/decision-matrix.md</code></td></tr>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ============ i18n ============ */
+const L={
+ th:{
+  "nav.home":"หน้าหลัก","nav.eval":"ประเมิน Vendor","nav.tco":"คิดต้นทุน TCO","nav.sc":"Should-cost ชิ้นส่วน","nav.accept":"ตรวจรับงาน","nav.report":"Report / พิมพ์","nav.history":"ประวัติเคส","nav.minutes":"ดูประชุม","nav.manual":"คู่มือ",
+  "foot":"Human Owner: Wongsakorn · เปิดด้วย double-click · ออฟไลน์ · เซฟในเครื่อง",
+  "home.title":"KRDA Procurement Console","home.sub":"เครื่องมือจัดซื้อพร้อมใช้ — เลือก vendor, คิดต้นทุน, ตรวจรับงาน, สร้าง report ส่งหัวหน้า",
+  "home.c1k":"เวอร์ชันระบบ","home.c2k":"พนักงาน AI","home.c2s":"+ Chief of Staff","home.c3k":"กรอบตัดสินใจ","home.c4k":"เคสฝึก",
+  "home.h2":"งานหลัก — เลือก & คุม Vendor (IoT / Smart Farm)",
+  "home.s1":"ก่อน pitch: เตรียมเกณฑ์ + คำถาม","home.s2":"ระหว่าง pitch: ให้คะแนนสด + เช็ค gate","home.s3":"หลัง pitch: เทียบ + TCO + report 1 หน้า",
+  "home.rule":"หลักเหล็ก: ราคาถูกไม่ชนะอัตโนมัติ — ต้องผ่าน gate (KRDA เป็นเจ้าของ data + startup ไม่เจ๊ง + ของมีจริง). จ่ายตามงานที่ตรวจรับ ไม่จ่ายล่วงหน้า.",
+  "ev.title":"🧮 ประเมิน Vendor","ev.sub":"ปรับ weight ได้สด · ใส่คะแนน 1–5 · ระบบคิด + เช็ค gate ให้ทันที",
+  "ev.vA":"ชื่อเจ้า A","ev.vB":"ชื่อเจ้า B","ev.vC":"ชื่อเจ้า C","ev.crit":"เกณฑ์","ev.wt":"น้ำหนัก %","ev.total":"คะแนนถ่วงน้ำหนัก (/5)","ev.gate":"ผล Gate","ev.verdict":"สรุป",
+  "ev.gatehint":"⛔ = gate (ของห้ามแลกกับราคา). คะแนน gate ≤ 2 → เจ้านั้นถูกตัด ไม่ว่าราคาถูกแค่ไหน",
+  "ev.btnReport":"สร้าง Report →","ev.btnSave":"เซฟเคสนี้","ev.btnReset":"ล้างค่า",
+  "ev.tip":"💡 ลองดัน weight TCO เป็น 50% → เจ้าที่ตก gate ก็ยังถูกตัด นั่นคือจุดที่ gate ปกป้องไม่ให้ราคาบิดการตัดสินใจ",
+  "tco.title":"💵 คิดต้นทุนรวม TCO","tco.sub":"ต้นทุนจริง = ทั้งอายุใช้งาน ไม่ใช่ราคาแรกเข้า (สำหรับ software/IoT)","tco.horizon":"จำนวนปี:","tco.elem":"รายการ","tco.type":"แบบ","tco.totalH":"TCO รวม (บาท)","tco.best":"ผล",
+  "tco.note":"แบบ: O = จ่ายครั้งเดียว · R = จ่ายทุกปี (คูณจำนวนปี). เจ้าที่ TCO ต่ำสุด = ถูกที่สุดจริง (แต่ต้องผ่าน gate ในแท็บประเมินก่อน)",
+  "sc.title":"🔩 Should-cost ชิ้นส่วนโลหะ","sc.sub":"คิดต้นทุนที่ควรจะเป็น ก่อนต่อรองกับ supplier","sc.material":"วัสดุ","sc.matRate":"ราคาวัสดุ","sc.weight":"น้ำหนักสุทธิ","sc.scrap":"เผื่อเศษ (scrap)","sc.process":"กระบวนการ (rate × เวลา)","sc.addProc":"+ เพิ่มกระบวนการ","sc.overhead":"Overhead","sc.profit":"กำไร supplier","sc.quote":"ราคาที่เสนอมา",
+  "sc.note":"should-cost = (วัสดุ + กระบวนการ) × (1+overhead) × (1+กำไร). ถ้าราคาเสนอ > should-cost มาก → มีช่องต่อรอง",
+  "ac.title":"✅ ตรวจรับงาน (Acceptance)","ac.sub":"ตรวจรับต่อ milestone — จ่ายเมื่อรับงานผ่าน ไม่จ่ายตามคำสัญญา","ac.proj":"ชื่อโครงการ","ac.ms":"Milestone","ac.criteria":"เกณฑ์รับงาน","ac.cName":"เกณฑ์","ac.cPass":"ผ่าน?","ac.addCrit":"+ เพิ่มเกณฑ์","ac.punch":"Punch list (ของที่ต้องแก้)","ac.pDef":"ปัญหา","ac.pSev":"ระดับ","ac.pStat":"สถานะ","ac.addPunch":"+ เพิ่มรายการ","ac.eval":"ประเมินผล",
+  "rp.title":"📄 Report ส่งหัวหน้า","rp.sub":"สร้างจากผลในแท็บประเมิน Vendor แล้วกดพิมพ์/บันทึก PDF","rp.gen":"สร้าง Report","rp.print":"🖨️ พิมพ์ / บันทึก PDF","rp.empty":"ยังไม่มี report — ไปแท็บ 'ประเมิน Vendor' แล้วกด 'สร้าง Report'",
+  "hi.title":"🗂️ ประวัติเคส","hi.sub":"เคสที่เซฟไว้ (เก็บในเครื่อง) — กดโหลดกลับมาดู/แก้",
+  "mi.title":"💬 ดูประชุม — เคส Smart Farm","mi.sub":"ตัวอย่างการประชุมของแผนก AI (synthetic)",
+  "mi.s1":"① เปิดจุดยืน","mi.cost1":"เอา B — ถูกสุด 2.08M ต่าง A เกือบ 920k งบโดนตัด จะจ่ายแพงทำไม","mi.tech1":"เอา A — ฟาร์มทดลองข้อมูลต้องแม่น A deploy จริงแล้ว เสี่ยงต่ำสุด","mi.risk1":"B ตกตั้งแต่ต้น — เงินทุนบาง เสี่ยงเจ๊ง ไม่มี escrow → veto","mi.rfq1":"A กับ B ยึดสิทธิ์ข้อมูล KRDA — เรื่องนี้จบเลย ไม่ใช่แค่ราคา",
+  "mi.s2":"② Analytics เบรกตัวเลข","mi.ana1":"Cost เทียบผิดคู่ — B ตก gate แล้ว ที่ควรเทียบคือ A vs C → C ถูกกว่า A 670k + ผ่าน data gate",
+  "mi.s3":"③ Chief of Staff ตัดสิน","mi.cos1":"B ตก gate (เสี่ยงเจ๊ง). A สำรอง (ติด data). C ผ่านทุก gate คะแนนสูงสุด — มติ: POC กับ C ก่อน แล้วเสนอ Human Owner อนุมัติ",
+  "mi.win":"ทำไมชนะทุกฝ่าย: Cost ได้ของถูกกว่า A · Tech ได้พิสูจน์ scale (POC) · Risk ตัดเจ้าเสี่ยง · RFQ ได้ data ownership · dissent บันทึกไว้",
+  "ma.title":"📖 คู่มือปรับ weight & กฎ","ma.sub":"ปรับเองได้มั่นใจ มีหลัก ไม่ตั้งมั่ว",
+  "ma.h1":"ตั้ง weight ยังไงให้มีหลัก","ma.m1":"1. Ranking → % : เรียงความสำคัญก่อน แล้วแจกน้ำหนัก (ง่ายสุด)","ma.m2":"2. Swing weighting : ถาม 'ถ้าเกณฑ์นี้ขยับจากแย่สุด→ดีสุด คุ้มแค่ไหน' อันคุ้มสุด = weight สูงสุด (แนะนำ)","ma.m3":"3. Pairwise / AHP : เทียบทีละคู่ว่าอันไหนสำคัญกว่ากี่เท่า (แม่นสุด แต่ช้า)",
+  "ma.h2":"cost 50% ได้ไหม?","ma.cost50":"ได้ — แต่ weight ≠ gate. ต่อให้ cost 70% ถ้าตก data/viability gate ก็ตกอยู่ดี. commodity เสี่ยงต่ำ → cost 50–60% โอเค · strategic/software → cost 50% อันตราย (เลือกของถูกที่เสี่ยง)",
+  "ma.h3":"4 กฎกันพลาด","ma.r1":"ตั้ง weight ก่อนเห็นราคา/คะแนน — กัน bias","ma.r2":"weight รวม = 100%","ma.r3":"บันทึกเหตุผล + วันที่ ทุกครั้งที่เปลี่ยน","ma.r4":"Sensitivity check — ขยับ weight ±10% ผลพลิกไหม? พลิกง่าย = เปราะ ต้องหาข้อมูลเพิ่ม",
+  "ma.h4":"weight/กฎ อยู่ไฟล์ไหน","ma.fileWhat":"อะไร","ma.fileWhere":"ไฟล์","ma.f1":"weight เลือก vendor","ma.f2":"เกณฑ์เงินใครเซ็น","ma.f3":"วิธีคิดคะแนนกลาง"
+ },
+ en:{
+  "nav.home":"Home","nav.eval":"Vendor Eval","nav.tco":"TCO Calc","nav.sc":"Should-cost","nav.accept":"Acceptance","nav.report":"Report / Print","nav.history":"Case History","nav.minutes":"Minutes","nav.manual":"Manual",
+  "foot":"Human Owner: Wongsakorn · double-click to open · offline · saves locally",
+  "home.title":"KRDA Procurement Console","home.sub":"Ready-to-use procurement tools — pick vendors, cost it, accept work, generate a report for your boss",
+  "home.c1k":"System version","home.c2k":"AI employees","home.c2s":"+ Chief of Staff","home.c3k":"Decision frameworks","home.c4k":"Training cases",
+  "home.h2":"Core work — Pick & control Vendors (IoT / Smart Farm)",
+  "home.s1":"Before pitch: prep criteria + questions","home.s2":"During pitch: live scoring + gate check","home.s3":"After pitch: compare + TCO + 1-page report",
+  "home.rule":"Iron rule: cheapest doesn't auto-win — must pass gates (KRDA owns data + startup won't fold + product is real). Pay for accepted work, never upfront.",
+  "ev.title":"🧮 Vendor Evaluation","ev.sub":"Adjust weights live · score 1–5 · auto weighted total + gate check",
+  "ev.vA":"Vendor A name","ev.vB":"Vendor B name","ev.vC":"Vendor C name","ev.crit":"Criterion","ev.wt":"Weight %","ev.total":"Weighted total (/5)","ev.gate":"Gate result","ev.verdict":"Verdict",
+  "ev.gatehint":"⛔ = gate (not tradeable for price). Gate score ≤ 2 → vendor excluded regardless of price",
+  "ev.btnReport":"Make Report →","ev.btnSave":"Save case","ev.btnReset":"Reset",
+  "ev.tip":"💡 Try pushing TCO weight to 50% → a gate-failing vendor is still excluded. That's the gate protecting against price bias.",
+  "tco.title":"💵 Total Cost of Ownership","tco.sub":"Real cost = whole lifetime, not the upfront price (for software/IoT)","tco.horizon":"Years:","tco.elem":"Element","tco.type":"Type","tco.totalH":"Total TCO (THB)","tco.best":"Result",
+  "tco.note":"Type: O = one-time · R = recurring/yr (× years). Lowest TCO = truly cheapest (but must pass gates in the Eval tab first)",
+  "sc.title":"🔩 Should-cost (metal parts)","sc.sub":"Model the fair cost before negotiating with a supplier","sc.material":"Material","sc.matRate":"Material rate","sc.weight":"Net weight","sc.scrap":"Scrap allowance","sc.process":"Process (rate × time)","sc.addProc":"+ Add process","sc.overhead":"Overhead","sc.profit":"Supplier profit","sc.quote":"Quoted price",
+  "sc.note":"should-cost = (material + process) × (1+overhead) × (1+profit). If quote >> should-cost → room to negotiate",
+  "ac.title":"✅ Acceptance","ac.sub":"Accept per milestone — pay when accepted, not on promises","ac.proj":"Project","ac.ms":"Milestone","ac.criteria":"Acceptance criteria","ac.cName":"Criterion","ac.cPass":"Pass?","ac.addCrit":"+ Add criterion","ac.punch":"Punch list (to fix)","ac.pDef":"Defect","ac.pSev":"Severity","ac.pStat":"Status","ac.addPunch":"+ Add item","ac.eval":"Evaluate",
+  "rp.title":"📄 Report for boss","rp.sub":"Built from the Vendor Eval tab — then print / save PDF","rp.gen":"Generate Report","rp.print":"🖨️ Print / Save PDF","rp.empty":"No report yet — go to 'Vendor Eval' and click 'Make Report'",
+  "hi.title":"🗂️ Case History","hi.sub":"Saved cases (stored locally) — load to view/edit",
+  "mi.title":"💬 Minutes — Smart Farm case","mi.sub":"Example AI-department meeting (synthetic)",
+  "mi.s1":"① Opening positions","mi.cost1":"Take B — cheapest 2.08M, ~920k below A. Budget's cut, why pay more?","mi.tech1":"Take A — trial-farm data must be accurate; A is proven, lowest risk","mi.risk1":"B fails at the start — thin funding, fold risk, no escrow → veto","mi.rfq1":"A and B claim KRDA's data ownership — that's a hard no, not just price",
+  "mi.s2":"② Analytics breaks the numbers","mi.ana1":"Cost compared the wrong pair — B failed the gate already. Compare A vs C → C is 670k cheaper than A AND passes the data gate",
+  "mi.s3":"③ Chief of Staff decides","mi.cos1":"B fails gate (fold risk). A backup (data issue). C passes all gates, top score — ruling: POC with C first, then to Human Owner for approval",
+  "mi.win":"Why everyone wins: Cost gets cheaper-than-A · Tech proves scale (POC) · Risk drops the risky one · RFQ gets data ownership · dissent recorded",
+  "ma.title":"📖 Tuning Manual — weights & rules","ma.sub":"Adjust with confidence — principled, not arbitrary",
+  "ma.h1":"How to set weights with principle","ma.m1":"1. Ranking → % : rank importance, then assign weights (simplest)","ma.m2":"2. Swing weighting : ask 'if this criterion swings worst→best, how much value?' — biggest swing = highest weight (recommended)","ma.m3":"3. Pairwise / AHP : compare pairs 'which matters more, how many times' (most precise, slowest)",
+  "ma.h2":"Can cost be 50%?","ma.cost50":"Yes — but weight ≠ gate. Even at cost 70%, failing a data/viability gate still excludes. Low-risk commodity → cost 50–60% ok · strategic/software → cost 50% is dangerous (picks cheap-but-risky)",
+  "ma.h3":"4 rules to avoid mistakes","ma.r1":"Set weights BEFORE seeing price/scores — avoid bias","ma.r2":"weights sum = 100%","ma.r3":"Record rationale + date on every change","ma.r4":"Sensitivity check — shift weights ±10%, does the result flip? Flips easily = fragile, get more data",
+  "ma.h4":"Where weights/rules live","ma.fileWhat":"What","ma.fileWhere":"File","ma.f1":"vendor weights","ma.f2":"who approves by THB","ma.f3":"core scoring method"
+ }
+};
+let lang=localStorage.getItem('krda_lang')||'th';
+function t(k){return (L[lang]&&L[lang][k])||(L.th[k])||k;}
+function applyI18n(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-k]').forEach(el=>{el.textContent=t(el.getAttribute('data-k'));});
+  document.getElementById('laTH').classList.toggle('on',lang==='th');
+  document.getElementById('laEN').classList.toggle('on',lang==='en');
+  // re-render dynamic
+  renderEvalHeads(); calc(); renderHistory();
+}
+function setLang(l){lang=l;localStorage.setItem('krda_lang',l);applyI18n();}
+
+/* ============ nav ============ */
+document.getElementById('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  [...document.querySelectorAll('#nav button')].forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById(b.dataset.s).classList.add('on');window.scrollTo(0,0);
+});
+
+/* ============ logo ============ */
+const logoBox=document.getElementById('logoBox'),logoFile=document.getElementById('logoFile');
+logoBox.onclick=()=>logoFile.click();
+logoFile.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{localStorage.setItem('krda_logo',r.result);drawLogo();};r.readAsDataURL(f);};
+function drawLogo(){const d=localStorage.getItem('krda_logo');if(d){logoBox.innerHTML=`<img src="${d}">`;}}
+drawLogo();
+
+/* ============ Vendor Eval ============ */
+const CRIT=[
+ {th:'ความเหมาะกับปัญหา',en:'Problem–solution fit',w:15},
+ {th:'ความพร้อมเทคโนโลยี (จริง/สไลด์)',en:'Technology & maturity',w:15},
+ {th:'ทีม & ความรู้เกษตร',en:'Team & domain capability',w:10},
+ {th:'ลูกค้าจริง / reference',en:'Traction & references',w:10},
+ {th:'ขยายขนาดได้',en:'Scalability',w:10},
+ {th:'เชื่อมระบบ / API',en:'Integration',w:10},
+ {th:'เจ้าของข้อมูล & ความปลอดภัย ⛔',en:'Data ownership & security ⛔',w:10,gate:true},
+ {th:'TCO (3–5 ปี)',en:'TCO (3–5 yr)',w:10},
+ {th:'ความอยู่รอดของบริษัท ⛔',en:'Startup viability ⛔',w:5,gate:true},
+ {th:'ผูกขาด / ย้ายออกได้',en:'Lock-in / portability',w:3},
+ {th:'บริการ & SLA',en:'Support & SLA',w:2}
+];
+const SC0={A:[4,5,4,5,4,3,2,2,4,2,4],B:[4,2,3,2,2,3,1,4,1,1,3],C:[4,4,4,3,4,5,5,4,4,5,4]};
+const VK=['A','B','C'];
+const body=document.getElementById('evbody');
+CRIT.forEach((c,i)=>{const tr=document.createElement('tr');
+  tr.innerHTML=`<td class="critName"></td>
+   <td class="num"><input type="number" min="0" max="100" data-w="${i}" value="${c.w}"></td>
+   ${VK.map(k=>`<td class="num"><input type="number" min="1" max="5" data-k2="${k}" data-i="${i}" value="${SC0[k][i]}"></td>`).join('')}`;
+  body.appendChild(tr);});
+function renderEvalHeads(){
+  ['A','B','C'].forEach(k=>{const el=document.getElementById('h'+k);if(el)el.textContent=document.getElementById('n'+k).value;});
+  document.querySelectorAll('#evbody tr').forEach((tr,i)=>{tr.querySelector('.critName').textContent=lang==='th'?CRIT[i].th:CRIT[i].en;});
+}
+const VKres={};
+function calc(){
+  let ws=CRIT.map((_,i)=>+document.querySelector(`input[data-w="${i}"]`).value||0);
+  let sum=ws.reduce((a,b)=>a+b,0);
+  document.getElementById('wtot').innerHTML=sum===100?`<span class="ok">100</span>`:`<span class="warn">${sum}</span>`;
+  document.getElementById('wsum').innerHTML=sum===100?(lang==='th'?'✅ weight รวม = 100% พร้อมตัดสิน':'✅ weights sum = 100%'):(lang==='th'?`⚠️ weight รวม = <b>${sum}%</b> ควรเป็น 100%`:`⚠️ weights sum = <b>${sum}%</b> should be 100%`);
+  VK.forEach(k=>{let tot=0,gf=[];CRIT.forEach((c,i)=>{const s=+document.querySelector(`input[data-k2="${k}"][data-i="${i}"]`).value||0;tot+=(ws[i]/100)*s;if(c.gate&&s<=2)gf.push(lang==='th'?c.th:c.en);});
+    document.getElementById('t'+k).innerHTML=`<b>${tot.toFixed(2)}</b>`;
+    document.getElementById('g'+k).innerHTML=gf.length?`<span class="bad">✗ ${gf.length}</span>`:`<span class="ok">✓</span>`;
+    VKres[k]={tot,fail:gf.length>0,name:document.getElementById('n'+k).value};});
+  const elig=VK.filter(k=>!VKres[k].fail);let best=null;elig.forEach(k=>{if(!best||VKres[k].tot>VKres[best].tot)best=k;});
+  VK.forEach(k=>{let h;if(VKres[k].fail)h=`<span class="badge b-red">${lang==='th'?'ตัด':'EXCLUDED'}</span>`;else if(k===best)h=`<span class="badge b-grn">${lang==='th'?'แนะนำ ★':'PICK ★'}</span>`;else h=`<span class="badge b-amb">${lang==='th'?'สำรอง':'backup'}</span>`;
+    document.getElementById('r'+k).innerHTML=h;document.getElementById('t'+k).style.outline=(k===best)?'2px solid var(--grn)':'none';});
+  window._best=best;
+}
+document.getElementById('evtab').addEventListener('input',()=>{renderEvalHeads();calc();});
+['nA','nB','nC'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{renderEvalHeads();calc();}));
+function resetEval(){document.querySelectorAll('#evbody input').forEach((inp)=>{const i=inp.getAttribute('data-i');const w=inp.getAttribute('data-w');const k=inp.getAttribute('data-k2');if(w!==null)inp.value=CRIT[+w].w;if(k)inp.value=SC0[k][+i];});calc();}
+
+/* ============ Report ============ */
+function makeReport(){calc();const b=window._best;
+  let rows=VK.map(k=>`<tr><td>${VKres[k].name}</td><td class="num">${VKres[k].tot.toFixed(2)}</td><td class="num">${VKres[k].fail?'✗':'✓'}</td><td class="num">${VKres[k].fail?(lang==='th'?'ตัด':'Excluded'):(k===b?(lang==='th'?'แนะนำ ★':'Recommended ★'):(lang==='th'?'สำรอง':'Backup'))}</td></tr>`).join('');
+  const recName=b?VKres[b].name:'-';
+  const today=new Date().toISOString().slice(0,10);
+  const T=lang==='th'?{h:'บันทึกข้อความ — ข้อเสนอเลือก Vendor',date:'วันที่',rec:'ข้อเสนอแนะ',recTxt:`เลือก <b>${recName}</b> (คะแนนสูงสุด + ผ่านทุกเงื่อนไขบังคับ) โดยเริ่มจากทดสอบ POC ก่อนทำสัญญาเต็ม`,tbl:'ผลการประเมิน',col:['Vendor','คะแนน /5','Gate','สรุป'],need:'ขออนุมัติ',needTxt:'1) อนุมัติ POC กับเจ้าที่แนะนำ · 2) เจรจาเงื่อนไข (เจ้าของข้อมูล/IP, แบ่งจ่ายตามงวด, กันเงินประกัน, source-code escrow) · 3) ยืนยันวงเงินอนุมัติ',sign:'ลงชื่อ',note:'ไม่มีการผูกมัดจนกว่าผู้มีอำนาจอนุมัติ'}
+    :{h:'Memo — Vendor Selection Recommendation',date:'Date',rec:'Recommendation',recTxt:`Select <b>${recName}</b> (top score + passes all mandatory gates), starting with a POC before full contract`,tbl:'Evaluation result',col:['Vendor','Score /5','Gate','Verdict'],need:'Decision required',needTxt:'1) Approve POC with the recommended vendor · 2) Negotiate terms (data/IP ownership, milestone payments, retention, source-code escrow) · 3) Confirm approval authority',sign:'Signed',note:'No commitment until the approver signs.'};
+  document.getElementById('report-out').innerHTML=`
+   <h2>${T.h}</h2>
+   <p><b>${T.date}:</b> ${today} &nbsp; | &nbsp; <b>KRDA</b></p>
+   <h3>${T.rec}</h3><p>${T.recTxt}</p>
+   <h3>${T.tbl}</h3>
+   <table><thead><tr>${T.col.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
+   <h3>${T.need}</h3><p>${T.needTxt}</p>
+   <p style="margin-top:24px">${T.sign}: _______________ &nbsp;&nbsp; ${T.date}: _______________</p>
+   <p style="color:#888;font-size:12px">${T.note}</p>`;
+  // jump to report tab
+  document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('on'));document.querySelector('#nav button[data-s="report"]').classList.add('on');
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));document.getElementById('report').classList.add('on');window.scrollTo(0,0);
+}
+
+/* ============ History (localStorage) ============ */
+function saveCase(){calc();const cases=JSON.parse(localStorage.getItem('krda_cases')||'[]');
+  cases.unshift({date:new Date().toLocaleString(),best:window._best?VKres[window._best].name:'-',vendors:VK.map(k=>({name:VKres[k].name,score:VKres[k].tot.toFixed(2),fail:VKres[k].fail}))});
+  localStorage.setItem('krda_cases',JSON.stringify(cases.slice(0,50)));renderHistory();
+  alert(lang==='th'?'เซฟเคสแล้ว ดูได้ที่แท็บ ประวัติเคส':'Saved. See Case History tab.');}
+function renderHistory(){const cases=JSON.parse(localStorage.getItem('krda_cases')||'[]');const el=document.getElementById('hiList');if(!el)return;
+  if(!cases.length){el.innerHTML=`<div class="card" style="color:var(--mut)">${lang==='th'?'ยังไม่มีเคสที่เซฟ':'No saved cases yet'}</div>`;return;}
+  el.innerHTML=cases.map((c,i)=>`<div class="card" style="margin-bottom:10px">
+     <div style="display:flex;justify-content:space-between"><b>${c.best}</b><span class="pill">${c.date}</span></div>
+     <div style="margin-top:6px">${c.vendors.map(v=>`<span class="pill">${v.name}: ${v.score}${v.fail?' ✗':''}</span>`).join(' ')}</div>
+     <button class="btn sec2 no-print" style="margin-top:8px;padding:5px 12px" onclick="delCase(${i})">${lang==='th'?'ลบ':'Delete'}</button></div>`).join('');}
+function delCase(i){const cases=JSON.parse(localStorage.getItem('krda_cases')||'[]');cases.splice(i,1);localStorage.setItem('krda_cases',JSON.stringify(cases));renderHistory();}
+
+/* ============ TCO ============ */
+const TCO=[{th:'อุปกรณ์/hardware',en:'Hardware',ty:'O',v:[550000,380000,480000]},
+ {th:'ติดตั้ง/integration',en:'Setup/integration',ty:'O',v:[250000,150000,200000]},
+ {th:'ค่าบริการรายปี',en:'Subscription /yr',ty:'R',v:[280000,180000,220000]},
+ {th:'ค่าซัพพอร์ตรายปี',en:'Support /yr',ty:'R',v:[120000,80000,100000]},
+ {th:'ค่าย้ายออก/เลิกใช้',en:'Exit/switching',ty:'O',v:[200000,250000,50000]}];
+const tb=document.getElementById('tcobody');
+TCO.forEach((r,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td class="tcoN"></td><td class="num">${r.ty}</td>${[0,1,2].map(j=>`<td class="num"><input type="number" data-t="${i}" data-j="${j}" value="${r.v[j]}" oninput="calcTCO()"></td>`).join('')}`;tb.appendChild(tr);});
+function calcTCO(){const yr=+document.getElementById('tcoYr').value||5;const tot=[0,0,0];
+  TCO.forEach((r,i)=>{[0,1,2].forEach(j=>{const v=+document.querySelector(`input[data-t="${i}"][data-j="${j}"]`).value||0;tot[j]+=(r.ty==='R'?v*yr:v);});});
+  ['A','B','C'].forEach((k,j)=>{document.getElementById('tc'+k).textContent=tot[j].toLocaleString();});
+  const min=Math.min(...tot);['A','B','C'].forEach((k,j)=>{document.getElementById('tb'+k).innerHTML=tot[j]===min?`<span class="badge b-grn">${lang==='th'?'ถูกสุด':'lowest'}</span>`:'';});
+  document.querySelectorAll('#tcobody tr').forEach((tr,i)=>{tr.querySelector('.tcoN').textContent=lang==='th'?TCO[i].th:TCO[i].en;});
+}
+
+/* ============ Should-cost ============ */
+let PROC=[{n:'Laser',rate:1200,time:0.008},{n:'Bend',rate:900,time:0.006},{n:'Coat',rate:250,time:0.04}];
+function renderProc(){const el=document.getElementById('scProc');el.innerHTML=PROC.map((p,i)=>`<div style="display:flex;gap:6px;align-items:center;margin:4px 0">
+  <input type="text" value="${p.n}" style="flex:1" oninput="PROC[${i}].n=this.value">
+  <input type="number" value="${p.rate}" oninput="PROC[${i}].rate=+this.value;calcSC()" title="rate">
+  <input type="number" value="${p.time}" step="0.001" oninput="PROC[${i}].time=+this.value;calcSC()" title="time">
+  <button class="btn sec2 no-print" style="padding:4px 8px" onclick="PROC.splice(${i},1);renderProc();calcSC()">✕</button></div>`).join('');}
+function addProc(){PROC.push({n:'Process',rate:500,time:0.01});renderProc();calcSC();}
+function calcSC(){const rate=+document.getElementById('scRate').value||0,wt=+document.getElementById('scWt').value||0,scrap=+document.getElementById('scScrap').value||0,oh=+document.getElementById('scOh').value||0,pf=+document.getElementById('scPf').value||0,q=+document.getElementById('scQuote').value||0;
+  const mat=wt*(1+scrap/100)*rate;let proc=0;PROC.forEach(p=>proc+=(p.rate||0)*(p.time||0));
+  const mfg=mat+proc;const should=mfg*(1+oh/100)*(1+pf/100);
+  const gap=q-should;const lbl=lang==='th'?{m:'วัสดุ',p:'กระบวนการ',mf:'ต้นทุนผลิต',s:'Should-cost/ชิ้น',q:'ราคาเสนอ',g:'ส่วนต่าง'}:{m:'Material',p:'Process',mf:'Mfg cost',s:'Should-cost/pc',q:'Quote',g:'Gap'};
+  document.getElementById('scOut').innerHTML=`
+   <tr><td>${lbl.m}</td><td class="num">${mat.toFixed(1)} THB</td></tr>
+   <tr><td>${lbl.p}</td><td class="num">${proc.toFixed(1)} THB</td></tr>
+   <tr><td>${lbl.mf}</td><td class="num">${mfg.toFixed(1)} THB</td></tr>
+   <tr><td><b>${lbl.s}</b></td><td class="num"><b>${should.toFixed(1)} THB</b></td></tr>
+   <tr><td>${lbl.q}</td><td class="num">${q.toFixed(1)} THB</td></tr>
+   <tr><td>${lbl.g}</td><td class="num ${gap>0?'bad':'ok'}">${gap>0?'+':''}${gap.toFixed(1)} THB (${should?((gap/should)*100).toFixed(0):0}%)</td></tr>`;}
+
+/* ============ Acceptance ============ */
+let CRITa=[{n:'',p:false}],PUNCH=[];
+function renderAccept(){
+  document.getElementById('acCrit').innerHTML=CRITa.map((c,i)=>`<tr><td><input type="text" value="${c.n}" oninput="CRITa[${i}].n=this.value"></td><td class="num"><input type="checkbox" ${c.p?'checked':''} onchange="CRITa[${i}].p=this.checked"></td></tr>`).join('');
+  document.getElementById('acPunch').innerHTML=PUNCH.map((p,i)=>`<tr><td><input type="text" value="${p.d}" oninput="PUNCH[${i}].d=this.value"></td><td><select onchange="PUNCH[${i}].s=this.value"><option ${p.s==='major'?'selected':''}>major</option><option ${p.s==='minor'?'selected':''}>minor</option></select></td><td><select onchange="PUNCH[${i}].st=this.value"><option ${p.st==='open'?'selected':''}>open</option><option ${p.st==='fixed'?'selected':''}>fixed</option></select></td></tr>`).join('');}
+function addCrit(){CRITa.push({n:'',p:false});renderAccept();}
+function addPunch(){PUNCH.push({d:'',s:'minor',st:'open'});renderAccept();}
+function calcAccept(){const pass=CRITa.filter(c=>c.p).length,tot=CRITa.length;const openMajor=PUNCH.filter(p=>p.st==='open'&&p.s==='major').length;
+  let v,cls;if(openMajor>0||pass<tot){v=lang==='th'?'❌ ยังรับไม่ได้ — ยังมีเกณฑ์ไม่ผ่าน/punch major ค้าง → ไม่จ่าย':'❌ Not accepted — criteria unmet / open major punch → no payment';cls='bad';}
+  else{v=lang==='th'?'✅ รับงานได้ — จ่าย milestone นี้ (กันเงินประกันไว้)':'✅ Accepted — release this milestone (hold retention)';cls='ok';}
+  document.getElementById('acVerdict').innerHTML=`<b class="${cls}">${v}</b><br>${lang==='th'?'ผ่านเกณฑ์':'Criteria passed'}: ${pass}/${tot} · ${lang==='th'?'punch major ค้าง':'open major'}: ${openMajor}`;}
+
+/* ============ init ============ */
+applyI18n();renderProc();calcSC();calcTCO();renderAccept();
+</script>
+</body>
+</html>
