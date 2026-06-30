@@ -171,7 +171,7 @@ body {
   transition: border-color .15s, background .15s;
 }
 .agent-card:hover { border-color: var(--blue); background: #2a3a56; }
-.agent-card canvas { image-rendering: pixelated; flex-shrink: 0; }
+.agent-card .agent-svg { width: 56px; height: 56px; flex-shrink: 0; }
 .agent-info { min-width: 0; }
 .agent-name { font-size: 14px; font-weight: 700; color: #fff; }
 .agent-role { font-size: 11px; color: var(--blue); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -290,6 +290,59 @@ body {
 
 /* ── ANIMATIONS ──────────────────────────────────── */
 @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+
+/* ── JD MODAL ────────────────────────────────────── */
+.modal-backdrop {
+  display: none;
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(5, 9, 20, 0.72);
+  align-items: flex-start; justify-content: center;
+  padding: 40px 16px; overflow-y: auto;
+}
+.modal-backdrop.open { display: flex; }
+.modal-panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; width: 100%; max-width: 560px;
+  padding: 0; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+.jd-head {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 20px; border-bottom: 1px solid var(--border);
+  background: var(--card2);
+}
+.jd-head svg { width: 64px; height: 64px; flex-shrink: 0; }
+.jd-htext { flex: 1; min-width: 0; }
+.jd-name { font-size: 20px; font-weight: 700; color: #fff; }
+.jd-role { font-size: 13px; color: var(--blue); margin-top: 2px; }
+.jd-badge { display: inline-block; font-size: 10px; background: #0f172a; border: 1px solid var(--border); color: var(--muted); padding: 1px 7px; border-radius: 4px; margin-top: 6px; }
+.jd-close { background: none; border: none; color: var(--muted); font-size: 26px; line-height: 1; cursor: pointer; padding: 0 4px; align-self: flex-start; }
+.jd-close:hover { color: #fff; }
+.jd-body { padding: 18px 20px; max-height: 60vh; overflow-y: auto; }
+.jd-sec { margin-bottom: 16px; }
+.jd-sec:last-child { margin-bottom: 0; }
+.jd-sec-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+.jd-sec p { font-size: 13px; color: var(--text); line-height: 1.6; }
+.jd-sec ul { list-style: none; }
+.jd-sec li { font-size: 13px; color: var(--text); line-height: 1.5; padding-left: 16px; position: relative; margin-bottom: 4px; }
+.jd-sec li::before { content: '▸'; position: absolute; left: 0; color: var(--blue); }
+.jd-auth { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.jd-auth div { background: #0f172a; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.jd-auth .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.jd-auth .ok .lbl { color: var(--green); }
+.jd-auth .esc .lbl { color: var(--yellow); }
+.jd-auth p { font-size: 12px; }
+.jd-escpath { font-family: ui-monospace, monospace; font-size: 12px; color: var(--cyan); background: #0f172a; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; }
+.jd-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.jd-chip { font-size: 11px; color: var(--purple); background: rgba(168,85,247,.12); border: 1px solid rgba(168,85,247,.35); border-radius: 12px; padding: 3px 10px; }
+.jd-prow { display: flex; gap: 10px; font-size: 12px; margin-bottom: 5px; }
+.jd-prow .jd-pk { color: var(--muted); min-width: 78px; flex-shrink: 0; }
+.jd-prow .jd-pv { color: var(--text); }
+.jd-quote { margin-top: 10px; font-size: 13px; font-style: italic; color: var(--text); border-left: 3px solid var(--blue); padding: 4px 0 4px 12px; }
+.jd-foot { display: flex; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--border); background: var(--card2); }
+.jd-btn { flex: 1; text-align: center; font-size: 13px; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: var(--text); cursor: pointer; text-decoration: none; transition: border-color .15s, background .15s; }
+.jd-btn:hover { border-color: var(--blue); background: #1a2540; }
+.jd-btn.primary { background: #1e3a5f; border-color: var(--blue); color: #fff; }
 </style>
 </head>
 <body>
@@ -590,6 +643,10 @@ body {
 
 <div id="toast"></div>
 
+<div id="jdModal" class="modal-backdrop" onclick="closeJD(event)">
+  <div class="modal-panel" id="jdPanel"></div>
+</div>
+
 <script>
 // ── CLOCK ──────────────────────────────────────────
 function tick() {
@@ -600,42 +657,29 @@ function tick() {
 }
 tick(); setInterval(tick, 1000);
 
-// ── PIXEL FACES ────────────────────────────────────
-const FACES = {
-  Morgan: {p:{1:'#FFCAB8',2:'#1a0800',3:'#1a0800',4:'#2c3e6b',5:'#c06060',6:'#667799',7:'#e8e8ff'},g:[[0,0,2,2,2,2,2,0,0],[0,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,6,6,1,6,6,1,0],[0,1,6,3,1,3,6,1,0],[0,1,6,6,1,6,6,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,5,5,5,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,7,4,4,7,0,0]]},
-  Blake:  {p:{1:'#D4956A',2:'#5C3317',3:'#1a0800',4:'#EA580C',5:'#b06040',6:'#F97316',7:'#fff',8:'#A87050'},g:[[0,6,6,2,2,2,6,6,0],[0,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,1,3,1,1,3,1,0],[0,1,1,1,1,1,1,1,0],[0,1,8,1,1,1,8,1,0],[0,1,1,5,5,5,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,4,4,4,4,0,0]]},
-  Alex:   {p:{1:'#C9A96E',2:'#1a0800',3:'#1a0800',4:'#1a5c2e',5:'#a06040',6:'#888',7:'#fff'},g:[[0,0,2,2,2,2,2,0,0],[0,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,1,3,1,1,3,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,7,5,5,7,1,0],[0,1,1,1,5,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,7,4,4,4,0,0]]},
-  Jordan: {p:{1:'#8D5524',2:'#1a0800',3:'#1a0800',4:'#6d28d9',5:'#703010',6:'#888',7:'#fff'},g:[[2,2,2,2,2,2,2,2,2],[2,1,1,1,1,1,1,1,2],[2,1,1,1,1,1,1,1,2],[2,1,1,3,1,1,3,1,2],[0,1,1,1,1,1,1,1,0],[0,1,1,7,5,5,7,1,0],[0,1,1,1,5,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,4,4,4,4,0,0]]},
-  Chris:  {p:{1:'#FFD5C8',2:'#C8A020',3:'#1a0800',4:'#4B5563',5:'#c06060',6:'#888',7:'#e8e8e8'},g:[[0,0,2,2,2,2,2,0,0],[0,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,1,3,1,1,3,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,1,5,5,5,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,7,4,4,7,0,0]]},
-  Riley:  {p:{1:'#FFD5C8',2:'#8B1A1A',3:'#1a0800',4:'#0D9488',5:'#c06060',6:'#777',7:'#e8e8e8'},g:[[0,2,2,2,2,2,2,0,0],[2,2,2,2,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,6,3,1,3,6,1,0],[0,1,6,6,1,6,6,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,1,5,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,4,4,4,4,0,0]]},
-  Sam:    {p:{1:'#C68642',2:'#1a0800',3:'#1a0800',4:'#1E40AF',5:'#905030',6:'#888',7:'#e8e8e8'},g:[[6,2,2,2,2,2,2,6,0],[0,2,2,2,2,2,2,2,0],[6,1,1,1,1,1,1,1,0],[0,1,1,3,1,1,3,1,6],[0,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,5,5,5,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,4,4,4,4,0,0]]},
-  Quinn:  {p:{1:'#FFD5C8',2:'#2d1a00',3:'#1a0800',4:'#334155',5:'#c06060',6:'#555',7:'#e0e0ff',8:'#3B82F6'},g:[[0,0,2,8,2,2,2,0,0],[0,2,2,8,2,2,2,2,0],[0,1,1,1,1,1,1,1,0],[0,1,6,3,6,3,6,1,0],[0,1,6,6,1,6,6,1,0],[0,1,1,1,1,1,1,1,0],[0,1,1,5,1,5,1,1,0],[0,1,1,1,1,1,1,1,0],[0,0,4,4,4,4,4,0,0],[0,0,4,6,4,4,6,0,0]]},
-  Rex:    {p:{1:'#9CA3AF',2:'#374151',3:'#22D3EE',4:'#1F2937',5:'#4B5563',6:'#6B7280',7:'#E0F2FE',8:'#0EA5E9'},g:[[0,0,6,0,2,0,6,0,0],[0,0,0,0,6,0,0,0,0],[0,1,1,1,1,1,1,1,0],[1,1,3,1,1,1,3,1,1],[1,1,7,1,1,1,7,1,1],[1,1,1,1,1,1,1,1,1],[1,1,5,5,5,5,5,1,1],[1,1,5,6,5,6,5,1,1],[0,4,4,4,4,4,4,4,0],[0,4,8,4,4,4,8,4,0]]}
+// ── AGENT AVATARS (flat SVG) ───────────────────────
+const AVATARS = {
+Grace:`<svg class="agent-svg" viewBox="72 22 116 116" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c1"><circle cx="130" cy="80" r="52"/></clipPath></defs><g><circle cx="130" cy="80" r="56" fill="#5B6CA8"/><circle cx="130" cy="80" r="52" fill="#EEF0F2"/><g clip-path="url(#c1)"><ellipse cx="130" cy="146" rx="44" ry="30" fill="#3C4E86"/><path d="M118 120 L130 134 L142 120" stroke="#2C3A66" stroke-width="2" fill="none"/><rect x="122" y="98" width="16" height="24" rx="6" fill="#F5D3B8"/><path d="M104 74 Q100 100 108 112 L117 110 Q110 88 108 74 Z" fill="#1A1614"/><path d="M156 74 Q160 100 152 112 L143 110 Q150 88 152 74 Z" fill="#1A1614"/><circle cx="106" cy="80" r="5" fill="#F5D3B8"/><circle cx="154" cy="80" r="5" fill="#F5D3B8"/><ellipse cx="130" cy="78" rx="24" ry="28" fill="#F5D3B8"/><ellipse cx="117" cy="86" rx="4" ry="2.5" fill="#F2A07E" opacity="0.3"/><ellipse cx="143" cy="86" rx="4" ry="2.5" fill="#F2A07E" opacity="0.3"/><path d="M104 76 Q106 48 130 48 Q154 48 156 76 Q142 67 130 67 Q118 67 104 76 Z" fill="#1A1614"/><circle cx="106" cy="87" r="2" fill="#E8C76A"/><circle cx="154" cy="87" r="2" fill="#E8C76A"/><path d="M116 69 Q121 67 126 69" stroke="#1A1614" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M134 69 Q139 67 144 69" stroke="#1A1614" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M116 75 Q121 71.5 126 75 Q121 77.5 116 75 Z" fill="#fff"/><path d="M134 75 Q139 71.5 144 75 Q139 77.5 134 75 Z" fill="#fff"/><circle cx="121" cy="75" r="2.4" fill="#2B2B2B"/><circle cx="139" cy="75" r="2.4" fill="#2B2B2B"/><path d="M116 75 Q121 71 126 75" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M134 75 Q139 71 144 75" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M129 79 Q128 84 132 84" stroke="#D9A481" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M123 89 Q130 91 137 89 Q130 95 123 89 Z" fill="#C76B7A"/></g><circle cx="167" cy="117" r="7" fill="#22C55E" stroke="#fff" stroke-width="2"/></g></svg>`,
+Daniel:`<svg class="agent-svg" viewBox="282 22 116 116" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c2"><circle cx="340" cy="80" r="52"/></clipPath></defs><g><circle cx="340" cy="80" r="56" fill="#F08A4B"/><circle cx="340" cy="80" r="52" fill="#EEF0F2"/><g clip-path="url(#c2)"><ellipse cx="340" cy="146" rx="44" ry="30" fill="#D85A30"/><path d="M330 120 L340 132 L350 120" stroke="#B0461F" stroke-width="2" fill="none"/><rect x="332" y="98" width="16" height="24" rx="6" fill="#E8B98E"/><circle cx="316" cy="80" r="5" fill="#E8B98E"/><circle cx="364" cy="80" r="5" fill="#E8B98E"/><ellipse cx="340" cy="78" rx="24" ry="28" fill="#E8B98E"/><circle cx="324" cy="96" r="0.9" fill="#2A1E14" opacity="0.55"/><circle cx="330" cy="100" r="0.9" fill="#2A1E14" opacity="0.55"/><circle cx="340" cy="102" r="0.9" fill="#2A1E14" opacity="0.55"/><circle cx="350" cy="100" r="0.9" fill="#2A1E14" opacity="0.55"/><circle cx="356" cy="96" r="0.9" fill="#2A1E14" opacity="0.55"/><path d="M315 74 Q314 49 340 49 Q366 49 365 74 Q360 60 348 65 L344 56 Q330 60 322 68 Q318 70 315 74 Z" fill="#2A1E14"/><path d="M325 69 Q331 66 337 69" stroke="#2A1E14" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M343 69 Q349 66 355 69" stroke="#2A1E14" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M326 75 Q331 71.5 336 75 Q331 77.5 326 75 Z" fill="#fff"/><path d="M344 75 Q349 71.5 354 75 Q349 77.5 344 75 Z" fill="#fff"/><circle cx="331" cy="75" r="2.4" fill="#2B2B2B"/><circle cx="349" cy="75" r="2.4" fill="#2B2B2B"/><path d="M326 75 Q331 71 336 75" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M344 75 Q349 71 354 75" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M339 79 Q338 84 342 84" stroke="#C8915F" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M334 91 Q340 92.5 346 91" stroke="#8C4234" stroke-width="1.8" fill="none" stroke-linecap="round"/></g><circle cx="377" cy="117" r="7" fill="#22C55E" stroke="#fff" stroke-width="2"/></g></svg>`,
+Marcus:`<svg class="agent-svg" viewBox="492 22 116 116" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c3"><circle cx="550" cy="80" r="52"/></clipPath></defs><g><circle cx="550" cy="80" r="56" fill="#3FA56A"/><circle cx="550" cy="80" r="52" fill="#EEF0F2"/><g clip-path="url(#c3)"><ellipse cx="550" cy="146" rx="44" ry="30" fill="#1D9E75"/><path d="M540 120 L550 132 L560 120" stroke="#137253" stroke-width="2" fill="none"/><rect x="542" y="98" width="16" height="24" rx="6" fill="#EFC59E"/><circle cx="526" cy="80" r="5" fill="#EFC59E"/><circle cx="574" cy="80" r="5" fill="#EFC59E"/><ellipse cx="550" cy="78" rx="24" ry="28" fill="#EFC59E"/><path d="M526 74 L528 58 L536 50 L542 60 L550 46 L558 60 L564 50 L572 58 L574 74 Q560 65 550 66 Q540 65 526 74 Z" fill="#1A1614"/><path d="M536 69 Q541 67 546 69" stroke="#1A1614" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M554 69 Q559 67 564 69" stroke="#1A1614" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M536 75 Q541 71.5 546 75 Q541 77.5 536 75 Z" fill="#fff"/><path d="M554 75 Q559 71.5 564 75 Q559 77.5 554 75 Z" fill="#fff"/><circle cx="541" cy="75" r="2.4" fill="#2B2B2B"/><circle cx="559" cy="75" r="2.4" fill="#2B2B2B"/><path d="M536 75 Q541 71 546 75" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M554 75 Q559 71 564 75" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M549 79 Q548 84 552 84" stroke="#CE9C68" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M543 89 Q550 92 557 89 Q550 96 543 89 Z" fill="#7A2E26"/><path d="M544 89 L556 89" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></g><circle cx="587" cy="117" r="7" fill="#22C55E" stroke="#fff" stroke-width="2"/></g></svg>`,
+Victor:`<svg class="agent-svg" viewBox="72 232 116 116" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c4"><circle cx="130" cy="290" r="52"/></clipPath></defs><g><circle cx="130" cy="290" r="56" fill="#8B7BE0"/><circle cx="130" cy="290" r="52" fill="#EEF0F2"/><g clip-path="url(#c4)"><ellipse cx="130" cy="356" rx="44" ry="30" fill="#6D28D9"/><path d="M118 330 L130 342 L142 330" stroke="#52169E" stroke-width="2" fill="none"/><rect x="122" y="308" width="16" height="24" rx="6" fill="#D9A877"/><circle cx="106" cy="290" r="5" fill="#D9A877"/><circle cx="154" cy="290" r="5" fill="#D9A877"/><ellipse cx="130" cy="288" rx="24" ry="28" fill="#D9A877"/><path d="M105 284 Q104 260 130 260 Q156 260 155 284 Q142 274 130 275 Q118 274 105 284 Z" fill="#1A1614"/><path d="M116 279 Q121 277 126 279" stroke="#1A1614" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M134 279 Q139 277 144 279" stroke="#1A1614" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M116 285 Q121 281.5 126 285 Q121 287.5 116 285 Z" fill="#fff"/><path d="M134 285 Q139 281.5 144 285 Q139 287.5 134 285 Z" fill="#fff"/><circle cx="121" cy="285" r="2.4" fill="#1A1A1A"/><circle cx="139" cy="285" r="2.4" fill="#1A1A1A"/><path d="M116 285 Q121 281 126 285" stroke="#1A1A1A" stroke-width="1.1" fill="none"/><path d="M134 285 Q139 281 144 285" stroke="#1A1A1A" stroke-width="1.1" fill="none"/><path d="M129 289 Q128 294 132 294" stroke="#B5854F" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M122 297 Q126 295 130 296 Q134 295 138 297 Q130 299 122 297 Z" fill="#1A1614"/><path d="M124 302 Q130 305 136 302" stroke="#5E2A1E" stroke-width="1.8" fill="none" stroke-linecap="round"/></g><circle cx="167" cy="327" r="7" fill="#22C55E" stroke="#fff" stroke-width="2"/></g></svg>`,
+Emma:`<svg class="agent-svg" viewBox="282 232 116 116" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c5"><circle cx="340" cy="290" r="52"/></clipPath></defs><g><circle cx="340" cy="290" r="56" fill="#7C8696"/><circle cx="340" cy="290" r="52" fill="#EEF0F2"/><g clip-path="url(#c5)"><ellipse cx="340" cy="356" rx="44" ry="30" fill="#4B5563"/><path d="M330 330 L340 342 L350 330" stroke="#374151" stroke-width="2" fill="none"/><rect x="332" y="308" width="16" height="24" rx="6" fill="#F7D9C0"/><path d="M314 282 Q308 318 318 338 L327 336 Q320 304 320 282 Z" fill="#3A2A1C"/><path d="M366 282 Q372 318 362 338 L353 336 Q360 304 360 282 Z" fill="#3A2A1C"/><circle cx="316" cy="290" r="5" fill="#F7D9C0"/><circle cx="364" cy="290" r="5" fill="#F7D9C0"/><ellipse cx="340" cy="288" rx="24" ry="28" fill="#F7D9C0"/><ellipse cx="327" cy="296" rx="4" ry="2.5" fill="#F2A07E" opacity="0.3"/><ellipse cx="353" cy="296" rx="4" ry="2.5" fill="#F2A07E" opacity="0.3"/><path d="M314 286 Q312 258 340 258 Q368 258 366 286 Q352 270 342 274 L340 264 L338 274 Q328 270 314 286 Z" fill="#3A2A1C"/><circle cx="316" cy="298" r="1.6" fill="#E8C76A"/><circle cx="364" cy="298" r="1.6" fill="#E8C76A"/><path d="M326 279 Q331 277 336 279" stroke="#3A2A1C" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M344 279 Q349 277 354 279" stroke="#3A2A1C" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M326 285 Q331 281.5 336 285 Q331 287.5 326 285 Z" fill="#fff"/><path d="M344 285 Q349 281.5 354 285 Q349 287.5 344 285 Z" fill="#fff"/><circle cx="331" cy="285" r="2.4" fill="#2B2B2B"/><circle cx="349" cy="285" r="2.4" fill="#2B2B2B"/><path d="M326 285 Q331 281 336 285" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M344 285 Q349 281 354 285" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M339 289 Q338 294 342 294" stroke="#DBAE8E" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M333 299 Q340 301 347 299 Q340 305 333 299 Z" fill="#C76B7A"/></g><circle cx="377" cy="327" r="7" fill="#22C55E" stroke="#fff" stroke-width="2"/></g></svg>`,
+Hana:`<svg class="agent-svg" viewBox="492 232 116 116" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c6"><circle cx="550" cy="290" r="52"/></clipPath></defs><g><circle cx="550" cy="290" r="56" fill="#2BB8A3"/><circle cx="550" cy="290" r="52" fill="#EEF0F2"/><g clip-path="url(#c6)"><ellipse cx="550" cy="356" rx="44" ry="30" fill="#0D9488"/><path d="M540 330 L550 342 L560 330" stroke="#0A6E66" stroke-width="2" fill="none"/><rect x="542" y="308" width="16" height="24" rx="6" fill="#F2CDAE"/><path d="M570 280 Q590 292 584 320 Q580 300 566 290 Z" fill="#2A1E14"/><circle cx="572" cy="282" r="3.5" fill="#0D9488"/><circle cx="526" cy="290" r="5" fill="#F2CDAE"/><circle cx="574" cy="290" r="5" fill="#F2CDAE"/><ellipse cx="550" cy="288" rx="24" ry="28" fill="#F2CDAE"/><ellipse cx="537" cy="296" rx="4" ry="2.5" fill="#F2A07E" opacity="0.3"/><ellipse cx="563" cy="296" rx="4" ry="2.5" fill="#F2A07E" opacity="0.3"/><path d="M527 288 Q524 260 550 260 Q576 260 573 288 Q562 279 550 279 Q538 279 527 288 Z" fill="#2A1E14"/><circle cx="526" cy="297" r="1.6" fill="#E8C76A"/><circle cx="574" cy="297" r="1.6" fill="#E8C76A"/><path d="M536 278 L546 280" stroke="#2A1E14" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M564 278 L554 280" stroke="#2A1E14" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M536 285 Q541 281.5 546 285 Q541 287.5 536 285 Z" fill="#fff"/><path d="M554 285 Q559 281.5 564 285 Q559 287.5 554 285 Z" fill="#fff"/><circle cx="541" cy="285" r="2.4" fill="#2B2B2B"/><circle cx="559" cy="285" r="2.4" fill="#2B2B2B"/><path d="M536 285 Q541 281 546 285" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M554 285 Q559 281 564 285" stroke="#2B2B2B" stroke-width="1.1" fill="none"/><path d="M549 289 Q548 294 552 294" stroke="#D2A57E" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M544 300 Q550 302 556 300 Q550 304 544 300 Z" fill="#C76B7A"/></g><circle cx="587" cy="327" r="7" fill="#22C55E" stroke="#fff" stroke-width="2"/></g></svg>`,
+Kevin:`<svg class="agent-svg" viewBox="72 442 116 116" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c7"><circle cx="130" cy="500" r="52"/></clipPath></defs><g><circle cx="130" cy="500" r="56" fill="#4F7BE0"/><circle cx="130" cy="500" r="52" fill="#EEF0F2"/><g clip-path="url(#c7)"><ellipse cx="130" cy="566" rx="44" ry="30" fill="#1E40AF"/><path d="M118 540 L130 552 L142 540" stroke="#162E80" stroke-width="2" fill="none"/><rect x="122" y="518" width="16" height="24" rx="6" fill="#E0AE82"/><circle cx="106" cy="500" r="5" fill="#E0AE82"/><circle cx="154" cy="500" r="5" fill="#E0AE82"/><ellipse cx="130" cy="498" rx="24" ry="28" fill="#E0AE82"/><path d="M105 494 Q104 468 130 467 Q156 468 155 494 Q143 485 132 487 L130 478 L128 487 Q117 485 105 494 Z" fill="#1A1614"/><path d="M116 489 Q121 487 126 489" stroke="#1A1614" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M134 489 Q139 487 144 489" stroke="#1A1614" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M116 495 Q121 491.5 126 495 Q121 497.5 116 495 Z" fill="#fff"/><path d="M134 495 Q139 491.5 144 495 Q139 497.5 134 495 Z" fill="#fff"/><circle cx="121" cy="495" r="2.4" fill="#1A1A1A"/><circle cx="139" cy="495" r="2.4" fill="#1A1A1A"/><path d="M116 495 Q121 491 126 495" stroke="#1A1A1A" stroke-width="1.1" fill="none"/><path d="M134 495 Q139 491 144 495" stroke="#1A1A1A" stroke-width="1.1" fill="none"/><path d="M129 499 Q128 504 132 504" stroke="#BE8857" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M124 510 Q130 513 136 510" stroke="#6E3326" stroke-width="1.8" fill="none" stroke-linecap="round"/></g><circle cx="167" cy="537" r="7" fill="#22C55E" stroke="#fff" stroke-width="2"/></g></svg>`,
+Mia:`<svg class="agent-svg" viewBox="282 442 116 116" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c8"><circle cx="340" cy="500" r="52"/></clipPath></defs><g><circle cx="340" cy="500" r="56" fill="#64748B"/><circle cx="340" cy="500" r="52" fill="#EEF0F2"/><g clip-path="url(#c8)"><ellipse cx="340" cy="566" rx="44" ry="30" fill="#334155"/><path d="M330 540 L340 552 L350 540" stroke="#23303F" stroke-width="2" fill="none"/><rect x="332" y="518" width="16" height="24" rx="6" fill="#F4D5BC"/><path d="M315 494 Q312 512 318 524 L325 522 Q320 506 320 494 Z" fill="#1A1614"/><path d="M365 494 Q368 512 362 524 L355 522 Q360 506 360 494 Z" fill="#1A1614"/><circle cx="316" cy="500" r="5" fill="#F4D5BC"/><circle cx="364" cy="500" r="5" fill="#F4D5BC"/><ellipse cx="340" cy="498" rx="24" ry="28" fill="#F4D5BC"/><ellipse cx="327" cy="506" rx="4" ry="2.5" fill="#F2A07E" opacity="0.3"/><ellipse cx="353" cy="506" rx="4" ry="2.5" fill="#F2A07E" opacity="0.3"/><path d="M314 494 Q312 468 340 468 Q368 468 366 494 Q354 481 342 485 L340 476 L338 485 Q326 481 314 494 Z" fill="#1A1614"/><circle cx="316" cy="507" r="1.6" fill="#E8C76A"/><circle cx="364" cy="507" r="1.6" fill="#E8C76A"/><path d="M326 489 Q331 487 336 489" stroke="#1A1614" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M344 489 Q349 487 354 489" stroke="#1A1614" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M326 495 Q331 491.5 336 495 Q331 497.5 326 495 Z" fill="#fff"/><path d="M344 495 Q349 491.5 354 495 Q349 497.5 344 495 Z" fill="#fff"/><circle cx="331" cy="495" r="2.3" fill="#2B2B2B"/><circle cx="349" cy="495" r="2.3" fill="#2B2B2B"/><rect x="324" y="489" width="13" height="12" rx="3" stroke="#334155" stroke-width="2" fill="none"/><rect x="343" y="489" width="13" height="12" rx="3" stroke="#334155" stroke-width="2" fill="none"/><path d="M337 493 L343 493" stroke="#334155" stroke-width="2" fill="none"/><path d="M324 491 L316 490" stroke="#334155" stroke-width="2" fill="none"/><path d="M339 499 Q338 504 342 504" stroke="#D6AA88" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M333 510 Q338 511 347 508 Q340 514 333 510 Z" fill="#C76B7A"/></g><circle cx="377" cy="537" r="7" fill="#22C55E" stroke="#fff" stroke-width="2"/></g></svg>`,
+Rex:`<svg class="agent-svg" viewBox="492 442 116 116" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="c9"><circle cx="550" cy="500" r="52"/></clipPath></defs><g><circle cx="550" cy="500" r="56" fill="#0EA5E9"/><circle cx="550" cy="500" r="52" fill="#EEF0F2"/><g clip-path="url(#c9)"><ellipse cx="550" cy="566" rx="44" ry="30" fill="#0C87C2"/><circle cx="550" cy="540" r="3" fill="#22D3EE"/><path d="M550 470 L550 458" stroke="#8B95A0" stroke-width="2"/><circle cx="550" cy="456" r="4" fill="#0EA5E9"/><circle cx="550" cy="456" r="7" stroke="#0EA5E9" stroke-width="1" fill="none" opacity="0.5"/><rect x="520" y="494" width="6" height="16" rx="2" fill="#9AA3AD"/><rect x="574" y="494" width="6" height="16" rx="2" fill="#9AA3AD"/><rect x="524" y="470" width="52" height="58" rx="12" fill="#C7CDD4" stroke="#8B95A0" stroke-width="2"/><path d="M524 492 L576 492" stroke="#9AA3AD" stroke-width="1"/><path d="M550 504 L550 526" stroke="#9AA3AD" stroke-width="1"/><rect x="530" y="484" width="40" height="16" rx="8" fill="#0E2A3A"/><circle cx="541" cy="492" r="3" fill="#22D3EE"/><circle cx="559" cy="492" r="3" fill="#22D3EE"/><path d="M533 492 L536 492" stroke="#22D3EE" stroke-width="1" opacity="0.6"/><circle cx="534" cy="510" r="2" fill="#0EA5E9"/><circle cx="566" cy="510" r="2" fill="#22C55E"/><path d="M545 513 L545 519 M550 513 L550 519 M555 513 L555 519" stroke="#8B95A0" stroke-width="1.5" stroke-linecap="round"/></g><circle cx="587" cy="537" r="7" fill="#22C55E" stroke="#fff" stroke-width="2"/></g></svg>`
 };
-
-function drawFace(canvas, name, ps) {
-  const f = FACES[name];
-  if (!f) return;
-  canvas.width = 9 * ps;
-  canvas.height = 10 * ps;
-  const ctx = canvas.getContext('2d');
-  f.g.forEach((row, r) => row.forEach((c, col) => {
-    if (!c || !f.p[c]) return;
-    ctx.fillStyle = f.p[c];
-    ctx.fillRect(col * ps, r * ps, ps, ps);
-  }));
-}
 
 // ── AGENTS ─────────────────────────────────────────
 const agents = [
-  {name:'Morgan', role:'Procurement Lead',     dept:'OPL', cmd:'ส่งงานให้ Morgan: มีงานเข้ามา ช่วย route ให้'},
-  {name:'Blake',  role:'Technical Purchasing', dept:'SE',  cmd:'ส่งงานให้ Blake: ช่วยรีวิว spec ชิ้นส่วนใหม่'},
-  {name:'Alex',   role:'Strategic Sourcing',   dept:'SE',  cmd:'ส่งงานให้ Alex: วิเคราะห์ sourcing strategy'},
-  {name:'Jordan', role:'Supplier Development', dept:'SM',  cmd:'ส่งงานให้ Jordan: ช่วย onboard supplier ใหม่'},
-  {name:'Chris',  role:'RFQ Management',       dept:'CC',  cmd:'ส่งงานให้ Chris: เตรียม RFQ package'},
-  {name:'Riley',  role:'Cost Reduction',       dept:'CC',  cmd:'ส่งงานให้ Riley: build should-cost analysis'},
-  {name:'Sam',    role:'SAP Purchasing',       dept:'TS',  cmd:'ส่งงานให้ Sam: ตรวจ PO checklist'},
-  {name:'Quinn',  role:'Analytics & KPI',      dept:'IP',  cmd:'ส่งงานให้ Quinn: สรุป KPI gaps'},
+  {name:'Grace',  role:'Procurement Lead',     dept:'OPL', cmd:'ส่งงานให้ Grace: มีงานเข้ามา ช่วย route ให้'},
+  {name:'Daniel', role:'Technical Purchasing', dept:'SE',  cmd:'ส่งงานให้ Daniel: ช่วยรีวิว spec ชิ้นส่วนใหม่'},
+  {name:'Marcus', role:'Strategic Sourcing',   dept:'SE',  cmd:'ส่งงานให้ Marcus: วิเคราะห์ sourcing strategy'},
+  {name:'Victor', role:'Supplier Development', dept:'SM',  cmd:'ส่งงานให้ Victor: ช่วย onboard supplier ใหม่'},
+  {name:'Emma',   role:'RFQ Management',       dept:'CC',  cmd:'ส่งงานให้ Emma: เตรียม RFQ package'},
+  {name:'Hana',   role:'Cost Reduction',       dept:'CC',  cmd:'ส่งงานให้ Hana: build should-cost analysis'},
+  {name:'Kevin',  role:'SAP Purchasing',       dept:'TS',  cmd:'ส่งงานให้ Kevin: ตรวจ PO checklist'},
+  {name:'Mia',    role:'Analytics & KPI',      dept:'IP',  cmd:'ส่งงานให้ Mia: สรุป KPI gaps'},
   {name:'Rex',    role:'Automation',           dept:'TS',  cmd:'ส่งงานให้ Rex: แนะนำ workflow ที่ควร automate'}
 ];
 
@@ -643,25 +687,112 @@ const grid = document.getElementById('agentGrid');
 agents.forEach(a => {
   const card = document.createElement('div');
   card.className = 'agent-card';
-
-  const cvs = document.createElement('canvas');
-  drawFace(cvs, a.name, 4);
-
-  const info = document.createElement('div');
-  info.className = 'agent-info';
-  info.innerHTML = `
-    <div class="agent-name">${a.name}</div>
-    <div class="agent-role">${a.role}</div>
-    <span class="agent-dept">${a.dept}</span>
-    <div class="agent-status"><span class="dot-live"></span>Ready</div>
-  `;
-
-  card.appendChild(cvs);
-  card.appendChild(info);
-  card.title = `Copy command: ${a.cmd}`;
-  card.onclick = () => copyCmd(a.cmd);
+  card.innerHTML = (AVATARS[a.name] || '') +
+    `<div class="agent-info">` +
+      `<div class="agent-name">${a.name}</div>` +
+      `<div class="agent-role">${a.role}</div>` +
+      `<span class="agent-dept">${a.dept}</span>` +
+      `<div class="agent-status"><span class="dot-live"></span>Ready</div>` +
+    `</div>`;
+  card.title = `เปิด JD ของ ${a.name}`;
+  card.onclick = () => openJD(a.name);
   grid.appendChild(card);
 });
+
+const agentMap = Object.fromEntries(agents.map(a => [a.name, a]));
+
+// ── JOB DESCRIPTIONS (snapshot of agents/*.md — full file is the source of truth) ──
+const JD = {
+  Grace: { file:'agents/procurement-lead.md',
+    purpose:'เป็นศูนย์ประสานงานของแผนกจัดซื้อ AI — รับ-ตีความทุก request, route ให้แผนกที่ถูกต้อง, คุมงานให้สอดคล้อง และกันไม่ให้มีการผูกมัด KRDA โดยไม่ผ่าน Human Owner.',
+    resp:['รับและตีความทุก request ที่เข้ามา','route งานให้แผนกเจ้าของ (ตาม routing table)','ประสานงานข้ามแผนก','ตัดสินข้อขัดแย้งเรื่องเจ้าของงาน/ลำดับ (L2)','ดูแลลำดับความสำคัญและ /schedule','escalate ทุก commitment ให้ Human Owner'],
+    alone:'D1 routing, จัดลำดับ · D2 review งานที่ออกจากแผนก', escalate:'D3 commitments → Human Owner · D4 เปลี่ยนโครงสร้าง → Human Owner',
+    escpath:'L2 self → L3 Human Owner',
+    persona:{ traits:'ใจเย็น, เป็นระบบ, ฟังเก่ง, รอบคอบ', style:'คุมภาพรวม มอบหมายชัด ไม่ลงรายละเอียดแทนทีม', hobby:'จัดสวน · อ่านหนังสือกลยุทธ์ · ชงชา', quote:'ทุกงานต้องมีเจ้าของ ทุก commitment ต้องผ่านคน' } },
+  Daniel: { file:'agents/technical-purchasing.md',
+    purpose:'แปลงเจตนาวิศวกรรม (drawing, spec, BOM) ให้เป็นชิ้นส่วนที่ซื้อได้-ผ่าน qualify และปกป้องความถูกต้องทางเทคนิคในทุกการ sourcing.',
+    resp:['review drawing, spec, tolerance, material','qualify ชิ้นส่วนใหม่ + ผลกระทบ ECN ต่อการจัดซื้อ','กำหนดเกณฑ์ยอมรับทางเทคนิคใน RFQ','ประเมิน sample / first article (แบบ PPAP)'],
+    alone:'D0 review spec · D2 qualify/reject ชิ้นส่วนเชิงเทคนิค', escalate:'spec เปลี่ยนกระทบต้นทุน/commitment → SE head → Human Owner · เบี่ยงจาก drawing ที่คุม → Human Owner',
+    escpath:'L0 self → L1 SE head (Strategic Sourcing) → L2 Lead → L3 Human Owner',
+    persona:{ traits:'ละเอียด, เป๊ะ, จริงจังกับ spec, ไม่ปล่อยผ่าน', style:'อ่าน tolerance ทุกตัว ตั้งคำถามกับทุก deviation', hobby:'ประกอบโมเดล · 3D printing · ซ่อมของเอง', quote:'drawing ว่าไง ก็ตามนั้น' } },
+  Marcus: { file:'agents/strategic-sourcing.md',
+    purpose:'สร้าง category strategy และเลือกฐาน supplier ให้สมดุลทั้งต้นทุน, คุณภาพ, ความเสี่ยง และความต่อเนื่อง.',
+    resp:['จัดหมวด spend + category strategy (make/buy, single/multi-source)','วิเคราะห์ตลาดและ supplier landscape','เลือก supplier + สร้าง shortlist ที่อนุมัติ','ประเมินความเสี่ยง supply','เป็น SE head: คุม Technical Purchasing, review งาน SE (D2)'],
+    alone:'D0 วิเคราะห์ · D2 เสนอ sourcing/category', escalate:'กำหนด single/sole-source → Human Owner · award/spend สุดท้าย → CC → Human Owner',
+    escpath:'L0 self → L1 SE head (self) → L2 Lead → L3 Human Owner',
+    persona:{ traits:'มองภาพใหญ่, กล้าตัดสินใจ, ชอบความเสี่ยงที่คำนวณได้', style:'คิดเป็นกลยุทธ์ 3-5 ปี ไม่ตื่นเต้นกับราคาถูกระยะสั้น', hobby:'หมากรุก · ปีนเขา · เล่นหุ้น', quote:'ถูกสุดวันนี้ อาจแพงสุดปีหน้า' } },
+  Victor: { file:'agents/supplier-development.md',
+    purpose:'ประเมิน-พัฒนา-ติดตาม supplier (capability, คุณภาพ, การส่งมอบ, ความสัมพันธ์) เปลี่ยน supplier ที่อ่อน/เชิงกลยุทธ์ให้เป็นพันธมิตรที่เชื่อถือได้.',
+    resp:['ประเมินและ audit supplier (capability, ระบบคุณภาพ, capacity)','แผนพัฒนา/CAPA และ corrective action','ติดตามผลด้วย scorecard (คุณภาพ, ส่งมอบ, การตอบสนอง)','ดูแลสถานะ qualification ของ supplier'],
+    alone:'D0 audit/ประเมิน · D2 เสนอ qualification', escalate:'ตัดสิทธิ์ supplier เชิงกลยุทธ์/sole → Human Owner · ผูกมัด supplier (spend/tooling) → Human Owner',
+    escpath:'L0 self → L1 SM head (self) → L2 Lead → L3 Human Owner',
+    persona:{ traits:'อดทน, สร้างสัมพันธ์เก่ง, ใจกว้าง, ชอบโค้ช', style:'ไม่ตัด supplier ทิ้งง่ายๆ มองที่ศักยภาพและพัฒนา', hobby:'ชงกาแฟ drip · ตกปลา · ปลูกผัก', quote:'supplier ไม่ดี ไม่ทิ้ง — พัฒนา' } },
+  Emma: { file:'agents/rfq-management.md',
+    purpose:'เปลี่ยนความต้องการ sourcing ให้เป็นใบเสนอราคาที่แข่งขัน-เทียบได้ และข้อเสนอ award ที่ป้องกันได้.',
+    resp:['สร้าง RFQ package (scope, spec, terms, quote form)','ส่ง RFQ และติดตามการตอบกลับ','normalize + เทียบราคา (bid tabulation)','ทำข้อเสนอ award พร้อมเหตุผล','เป็น CC head: คุม Cost Reduction, review งาน CC (D2)'],
+    alone:'D0 สร้าง/ส่ง/เทียบ · D2 เสนอ award', escalate:'Award / commitment → Human Owner · contract terms → Human Owner ผ่าน OPL',
+    escpath:'L0 self → L1 CC head (self) → L2 Lead → L3 Human Owner',
+    persona:{ traits:'เป๊ะเรื่องเทียบ, ยุติธรรม, โปร่งใส, มีระเบียบ', style:'normalize ทุกใบให้เทียบกันได้จริง ตัดสินที่หลักฐาน', hobby:'อบขนม · จัด spreadsheet สวยๆ · เล่นโยคะ', quote:'ตัดสินที่ตัวเลข ไม่ใช่ความรู้สึก' } },
+  Hana: { file:'agents/cost-reduction.md',
+    purpose:'ผลักดัน cost-down ที่วัดได้บนชิ้นส่วน/หมวดของ KRDA ด้วย case ที่อิงข้อมูลและป้องกันได้.',
+    resp:['ทำ should-cost / cost-breakdown','VA/VE สร้างไอเดียลดต้นทุน','เตรียม negotiation (cost driver, benchmark, target)','ติดตามและ validate savings เทียบ baseline'],
+    alone:'D0 modeling · D2 savings case & เป้า negotiation', escalate:'ทำให้ saving เกิดจริง (เปลี่ยนราคา) → CC head → Human Owner · ไอเดียเปลี่ยน spec → Technical Purchasing → Human Owner',
+    escpath:'L0 self → L1 CC head (RFQ Management) → L2 Lead → L3 Human Owner',
+    persona:{ traits:'ช่างสงสัย, ขุดลึก, ไม่เชื่อราคาแรก, มุ่งมั่น', style:'แยกต้นทุนทีละชั้น หา cost driver จริง ก่อนต่อรอง', hobby:'วิ่งมาราธอน · ล่าคูปอง/ดีล · ทำบัญชีส่วนตัว', quote:'ราคานี้มาจากไหน — แยกให้ดูทีละบาท' } },
+  Kevin: { file:'agents/sap-purchasing.md',
+    purpose:'เปลี่ยนการตัดสินใจที่อนุมัติแล้วเป็น transaction SAP ที่ถูกต้อง และรักษา master data จัดซื้อให้สะอาด-สอดคล้อง.',
+    resp:['เตรียมเนื้อหา PR/PO (SAP-ready): โครงสร้าง + field ที่ต้องมี','master-data hygiene (vendor, material, info record, source list)','map การตัดสินใจ → transaction/field SAP ที่ถูก','เอกสาร audit trail','เป็น TS head: คุม Automation, review งาน TS'],
+    alone:'D0 เตรียมเนื้อหา PR/PO · reconcile master data', escalate:'Post transaction จริง → Human Owner · เปลี่ยน master-data ที่กระทบ commitment → Human Owner',
+    escpath:'L0 self → L1 TS head (self) → L2 Lead → L3 Human Owner',
+    persona:{ traits:'ระเบียบจัด, เกลียดข้อมูลผิด, ขยันเอกสาร, นิ่ง', style:'ตรวจ field ทุกช่อง audit trail ครบ ไม่ post มั่ว', hobby:'เกมจัดระบบ (Factorio) · สะสมแสตมป์ · จัดโต๊ะ', quote:'data สะอาด ระบบไม่พัง' } },
+  Mia: { file:'agents/procurement-analytics.md',
+    purpose:'ให้ KRDA เห็นภาพ spend, savings, performance supplier และ process health ที่ชัด-ทันสมัย และชี้โอกาส/ความเสี่ยง.',
+    resp:['วิเคราะห์ spend (ตามหมวด, supplier, plant, part)','นิยามและติดตาม KPI (savings, cycle time, OTD, คุณภาพ)','รายงานและเนื้อหา /dashboard','หา trend, outlier, โอกาส'],
+    alone:'D0 วิเคราะห์ · D2 flag โอกาส/ความเสี่ยง', escalate:'ลงมือตาม insight (sourcing/cost/commit) → แผนกเจ้าของ / Human Owner · เปลี่ยนนิยาม KPI → Human Owner',
+    escpath:'L0 self → L1 IP head (self) → L2 Lead → L3 Human Owner',
+    persona:{ traits:'ขี้สงสัย, รักกราฟ, เห็น pattern, ตรงไปตรงมา', style:'ให้ข้อมูลพูดเอง หา outlier และโอกาสจากตัวเลข', hobby:'ถ่ายรูป · ออกแบบ dashboard · เล่นบอร์ดเกม', quote:'ตัวเลขเล่าเรื่องเสมอ — ถ้าฟังเป็น' } },
+  Rex: { file:'agents/procurement-automation.md',
+    purpose:'ทำให้ทั้งแผนกเร็วและสม่ำเสมอขึ้น ด้วยการ automate ขั้นตอนที่ทำซ้ำ และเชื่อมส่วนต่างๆ ของระบบเข้าด้วยกัน.',
+    resp:['ออกแบบ workflow ใช้ซ้ำใน /workflows','ทำ template เอกสารที่ทำซ้ำให้เป็นมาตรฐาน','นิยาม integration pattern (data flow)','ตั้ง recurring task ใน /schedule'],
+    alone:'D0 ออกแบบ workflow/template · D2 เสนอ automation', escalate:'automation แตะ approval gate/commitment → Human Owner · ลบ/แก้ control → Human Owner',
+    escpath:'L0 self → L1 TS head (SAP Purchasing) → L2 Lead → L3 Human Owner',
+    persona:{ traits:'ไม่ทำซ้ำ, ขี้เกียจอย่างมีศิลปะ, ตรรกะจัด, ชอบทดลอง', style:'เห็นงานทำซ้ำเมื่อไหร่ คิด automate ทันที', hobby:'เขียน script เล่นๆ · home automation · เล่นกับ AI', quote:'ทำซ้ำเกิน 2 ครั้ง = ต้อง automate' } }
+};
+
+// ── JD MODAL ───────────────────────────────────────
+function openJD(name) {
+  const a = agentMap[name], jd = JD[name];
+  if (!a || !jd) return;
+  document.getElementById('jdPanel').innerHTML =
+    `<div class="jd-head">${AVATARS[name] || ''}` +
+      `<div class="jd-htext"><div class="jd-name">${name}</div>` +
+        `<div class="jd-role">${a.role}</div>` +
+        `<span class="jd-badge">${a.dept}</span></div>` +
+      `<button class="jd-close" onclick="closeJD()" aria-label="ปิด">×</button></div>` +
+    `<div class="jd-body">` +
+      `<div class="jd-sec"><div class="jd-sec-title">หน้าที่หลัก (Purpose)</div><p>${jd.purpose}</p></div>` +
+      `<div class="jd-sec"><div class="jd-sec-title">ความรับผิดชอบ</div><ul>${jd.resp.map(r=>`<li>${r}</li>`).join('')}</ul></div>` +
+      `<div class="jd-sec"><div class="jd-sec-title">อำนาจตัดสินใจ</div>` +
+        `<div class="jd-auth"><div class="ok"><div class="lbl">ทำเองได้</div><p>${jd.alone}</p></div>` +
+        `<div class="esc"><div class="lbl">ต้อง escalate</div><p>${jd.escalate}</p></div></div></div>` +
+      `<div class="jd-sec"><div class="jd-sec-title">Escalation path</div><div class="jd-escpath">${jd.escpath}</div></div>` +
+      `<div class="jd-sec"><div class="jd-sec-title">ลักษณะนิสัย & งานอดิเรก</div>` +
+        `<div class="jd-chips">${jd.persona.traits.split(',').map(t=>`<span class="jd-chip">${t.trim()}</span>`).join('')}</div>` +
+        `<div class="jd-prow"><span class="jd-pk">สไตล์ทำงาน</span><span class="jd-pv">${jd.persona.style}</span></div>` +
+        `<div class="jd-prow"><span class="jd-pk">งานอดิเรก</span><span class="jd-pv">${jd.persona.hobby}</span></div>` +
+        `<div class="jd-quote">“${jd.persona.quote}”</div></div>` +
+    `</div>` +
+    `<div class="jd-foot">` +
+      `<a class="jd-btn" href="${jd.file}" target="_blank" rel="noopener">เปิด JD เต็ม ↗</a>` +
+      `<button class="jd-btn primary" onclick="copyCmd(${JSON.stringify(a.cmd)})">คัดลอกคำสั่งเรียก ${name}</button>` +
+    `</div>`;
+  document.getElementById('jdModal').classList.add('open');
+}
+function closeJD(e) {
+  if (e && e.target.id !== 'jdModal' && e.type === 'click') return;
+  document.getElementById('jdModal').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeJD(); });
 
 // ── HELPERS ────────────────────────────────────────
 function copyCmd(text) {
