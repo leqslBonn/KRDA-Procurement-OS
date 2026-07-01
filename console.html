@@ -71,17 +71,23 @@
   .say{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:8px;padding:9px 13px;flex:1}
   .say.tech{border-left-color:var(--blue)}.say.cost{border-left-color:var(--amb)}.say.risk{border-left-color:var(--red)}.say.rfq{border-left-color:var(--org)}.say.cos{border-left-color:var(--grn)}.say.src{border-left-color:var(--purp)}
   .stage{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin:20px 0 4px;border-top:1px dashed var(--line);padding-top:12px}
-  /* print */
-  #report-out{background:#fff;color:#111;border-radius:10px;padding:26px;margin-top:14px}
-  #report-out h2{color:#111;border-color:#2ea043}#report-out h3{color:#555}
-  #report-out table th{background:#f0f3f6;color:#333}#report-out table td,#report-out table th{border-color:#ccd}
-  #report-out .badge{border:1px solid #ccc}
+  /* paper = printable generated docs (white) */
+  .paper{background:#fff;color:#111;border-radius:10px;padding:26px;margin-top:14px}
+  .paper h2{color:#111;border-color:#2ea043}.paper h3{color:#555}
+  .paper table th{background:#f0f3f6;color:#333}.paper table td,.paper table th{border-color:#ccd}
+  .paper .badge{border:1px solid #ccc}
+  /* status / progress */
+  .bar{height:14px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--grn),var(--grn2))}
+  .mcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:8px}
+  .mcard .mh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+  .st-g{color:var(--grn2)}.st-b{color:var(--amb)}.st-o{color:var(--org)}.st-p{color:var(--mut)}
   @media print{
     .top,.side,.no-print{display:none!important}
     .main{margin:0;padding:0;max-width:none}
-    .sec{display:none!important}.sec#report.on{display:block!important}
-    #report h1,#report .sub,#report .row-actions{display:none}
-    #report-out{box-shadow:none;border-radius:0;padding:0}
+    .sec{display:none!important}.sec.on{display:block!important}
+    .sec.on>*:not(.paper){display:none!important}
+    .paper{box-shadow:none;border-radius:0;padding:0;margin:0}
     body{background:#fff}
   }
   @media(max-width:820px){.side{display:none}.main{margin-left:0}.g4,.g3,.g2{grid-template-columns:1fr 1fr}}
@@ -92,7 +98,7 @@
 <header class="top">
   <div class="logo" id="logoBox" title="คลิกเพื่อใส่โลโก้ / click to set logo"></div>
   <input type="file" id="logoFile" accept="image/*" style="display:none">
-  <div class="ttl">KRDA Procurement Console<small id="verTxt">v1.0 · offline</small></div>
+  <div class="ttl">KRDA Procurement Console<small id="verTxt">v1.1 · offline</small></div>
   <div class="sp"></div>
   <div class="lang">
     <button id="laTH" class="on" onclick="setLang('th')">ไทย</button>
@@ -104,11 +110,16 @@
   <aside class="side">
     <nav class="nav" id="nav">
       <button data-s="home" class="on"><span class="ic">🏠</span><span data-k="nav.home"></span></button>
+      <button data-s="modules"><span class="ic">📊</span><span data-k="nav.modules"></span></button>
       <button data-s="evaluate"><span class="ic">🧮</span><span data-k="nav.eval"></span></button>
       <button data-s="tco"><span class="ic">💵</span><span data-k="nav.tco"></span></button>
-      <button data-s="sc"><span class="ic">🔩</span><span data-k="nav.sc"></span></button>
+      <button data-s="sow"><span class="ic">🚀</span><span data-k="nav.sow"></span></button>
+      <button data-s="contract"><span class="ic">📑</span><span data-k="nav.contract"></span></button>
+      <button data-s="milestone"><span class="ic">💰</span><span data-k="nav.milestone"></span></button>
       <button data-s="accept"><span class="ic">✅</span><span data-k="nav.accept"></span></button>
+      <button data-s="nego"><span class="ic">🤝</span><span data-k="nav.nego"></span></button>
       <button data-s="report"><span class="ic">📄</span><span data-k="nav.report"></span></button>
+      <button data-s="sc"><span class="ic">🔩</span><span data-k="nav.sc"></span></button>
       <button data-s="history"><span class="ic">🗂️</span><span data-k="nav.history"></span></button>
       <button data-s="minutes"><span class="ic">💬</span><span data-k="nav.minutes"></span></button>
       <button data-s="manual"><span class="ic">📖</span><span data-k="nav.manual"></span></button>
@@ -234,7 +245,7 @@
         <button class="btn" onclick="makeReport()" data-k="rp.gen"></button>
         <button class="btn org" onclick="window.print()" data-k="rp.print"></button>
       </div>
-      <div id="report-out"><p style="color:#888" data-k="rp.empty"></p></div>
+      <div id="report-out" class="paper"><p style="color:#888" data-k="rp.empty"></p></div>
     </section>
 
     <!-- HISTORY -->
@@ -285,6 +296,72 @@
       </table>
     </section>
 
+    <!-- MODULES STATUS -->
+    <section class="sec" id="modules">
+      <h1 data-k="mo.title"></h1>
+      <p class="sub" data-k="mo.sub"></p>
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><b data-k="mo.overall"></b><b id="moPct"></b></div>
+        <div class="bar"><i id="moBar" style="width:0%"></i></div>
+        <div class="help" id="moCount"></div>
+      </div>
+      <div id="moList"></div>
+      <div class="note" data-k="mo.legend"></div>
+    </section>
+
+    <!-- SOW BUILDER -->
+    <section class="sec" id="sow">
+      <h1 data-k="sow.title"></h1>
+      <p class="sub" data-k="sow.sub"></p>
+      <div class="grid g2">
+        <div><label class="help" data-k="sow.proj"></label><input type="text" id="sowProj"></div>
+        <div><label class="help" data-k="sow.obj"></label><input type="text" id="sowObj"></div>
+      </div>
+      <label class="help" data-k="sow.in"></label><textarea id="sowIn" rows="3"></textarea>
+      <label class="help" data-k="sow.out"></label><textarea id="sowOut2" rows="2"></textarea>
+      <label class="help" data-k="sow.del"></label><textarea id="sowDel" rows="3"></textarea>
+      <label class="help" data-k="sow.ms"></label><textarea id="sowMs" rows="3" placeholder="M1 ... 20% / M2 ... 30% / M3 ... 30% / M4 ... 20%"></textarea>
+      <div class="row-actions no-print"><button class="btn" onclick="genSOW()" data-k="sow.gen"></button><button class="btn org" onclick="window.print()" data-k="common.print"></button></div>
+      <div id="sow-out" class="paper" style="display:none"></div>
+    </section>
+
+    <!-- CONTRACT CHECKLIST -->
+    <section class="sec" id="contract">
+      <h1 data-k="ct.title"></h1>
+      <p class="sub" data-k="ct.sub"></p>
+      <div id="ctList"></div>
+      <div id="ctVerdict" class="note"></div>
+    </section>
+
+    <!-- MILESTONE TRACKER -->
+    <section class="sec" id="milestone">
+      <h1 data-k="ms.title"></h1>
+      <p class="sub" data-k="ms.sub"></p>
+      <div class="grid g2">
+        <div><label class="help" data-k="ms.total"></label><input type="number" id="msTotal" value="2330000" oninput="calcMS()"> THB</div>
+        <div><label class="help" data-k="ms.retention"></label><input type="number" id="msRet" value="15" oninput="calcMS()"> %</div>
+      </div>
+      <table><thead><tr><th data-k="ms.name"></th><th class="num" data-k="ms.pct"></th><th class="num" data-k="ms.amt"></th><th class="num" data-k="ms.status"></th></tr></thead><tbody id="msBody"></tbody></table>
+      <button class="btn sec2 no-print" onclick="addMS()" data-k="ms.add"></button>
+      <div id="msSummary" class="note"></div>
+    </section>
+
+    <!-- NEGOTIATION PREP -->
+    <section class="sec" id="nego">
+      <h1 data-k="ng.title"></h1>
+      <p class="sub" data-k="ng.sub"></p>
+      <div class="grid g3">
+        <div><label class="help" data-k="ng.target"></label><input type="text" id="ngTarget"></div>
+        <div><label class="help" data-k="ng.walk"></label><input type="text" id="ngWalk"></div>
+        <div><label class="help" data-k="ng.batna"></label><input type="text" id="ngBatna"></div>
+      </div>
+      <h3 data-k="ng.levers"></h3>
+      <div id="ngLevers"></div>
+      <label class="help" data-k="ng.ladder"></label><textarea id="ngLadder" rows="3"></textarea>
+      <div class="row-actions no-print"><button class="btn" onclick="genNego()" data-k="ng.gen"></button><button class="btn org" onclick="window.print()" data-k="common.print"></button></div>
+      <div id="nego-out" class="paper" style="display:none"></div>
+    </section>
+
   </main>
 </div>
 
@@ -292,8 +369,14 @@
 /* ============ i18n ============ */
 const L={
  th:{
-  "nav.home":"หน้าหลัก","nav.eval":"ประเมิน Vendor","nav.tco":"คิดต้นทุน TCO","nav.sc":"Should-cost ชิ้นส่วน","nav.accept":"ตรวจรับงาน","nav.report":"Report / พิมพ์","nav.history":"ประวัติเคส","nav.minutes":"ดูประชุม","nav.manual":"คู่มือ",
-  "foot":"Human Owner: Wongsakorn · เปิดด้วย double-click · ออฟไลน์ · เซฟในเครื่อง",
+  "nav.home":"หน้าหลัก","nav.modules":"Modules (สถานะ)","nav.eval":"ประเมิน Vendor","nav.tco":"คิดต้นทุน TCO","nav.sow":"SOW (ขอบเขตงาน)","nav.contract":"เช็คสัญญา","nav.milestone":"งวดจ่ายเงิน","nav.sc":"Should-cost ชิ้นส่วน","nav.accept":"ตรวจรับงาน","nav.nego":"เตรียมเจรจา","nav.report":"Report / พิมพ์","nav.history":"ประวัติเคส","nav.minutes":"ดูประชุม","nav.manual":"คู่มือ",
+  "common.print":"🖨️ พิมพ์ / PDF",
+  "mo.title":"📊 Modules & สถานะการพัฒนา","mo.sub":"ดูว่าแต่ละเครื่องมือพัฒนาไปกี่ % และใช้งานจริงได้แค่ไหน — อัปเดตทุกครั้งที่เพิ่มของใหม่",
+  "mo.overall":"ความคืบหน้ารวมทั้งระบบ","mo.legend":"🟢 พร้อมใช้จริง · 🟡 beta (ใช้ได้ แต่ยังต้องข้อมูลจริง/ขัดเกลา) · 🟠 กำลังทำ · ⚪ วางแผนไว้ — แต่ละตัวมีหมายเหตุว่าต้องเช็คอะไรก่อนเชื่อ",
+  "sow.title":"🚀 SOW — เขียนขอบเขตงาน","sow.sub":"เขียนให้ชัดก่อนเลือก vendor → กัน scope creep (งานบานปลาย) + เป็นฐานตรวจรับ","sow.proj":"ชื่อโครงการ","sow.obj":"วัตถุประสงค์ (ผลลัพธ์ที่ต้องการ)","sow.in":"อยู่ในขอบเขต (in-scope)","sow.out":"นอกขอบเขต (out-scope — กันงานบานปลาย)","sow.del":"สิ่งที่ต้องส่งมอบ (code/เอกสาร/data handover)","sow.ms":"งวดงาน + % จ่าย (1 บรรทัด/งวด)","sow.gen":"สร้างเอกสาร SOW",
+  "ct.title":"📑 เช็คเงื่อนไขสัญญา (ก่อนเซ็น)","ct.sub":"เช็คให้ครบก่อนเซ็น — ขาดข้อไหน vendor คุมคุณได้",
+  "ms.title":"💰 ติดตามงวดจ่ายเงิน","ms.sub":"จ่ายตามงวดที่รับงานผ่าน + กันเงินประกัน — ดูภาพรวมทั้งโครงการ","ms.total":"มูลค่าสัญญารวม","ms.retention":"กันเงินประกัน (retention)","ms.name":"งวดงาน","ms.pct":"% จ่าย","ms.amt":"จำนวนเงิน","ms.status":"สถานะ","ms.add":"+ เพิ่มงวด",
+  "ng.title":"🤝 เตรียมเจรจา (ก่อนเข้าห้องคุย)","ng.sub":"มี target + walk-away + BATNA + lever ก่อนคุย = ต่อรองได้จริง ไม่โดนกดดัน","ng.target":"เป้าหมาย (target)","ng.walk":"จุดถอย (walk-away)","ng.batna":"ทางเลือกสำรอง (BATNA)","ng.levers":"Levers (ไพ่ที่มี)","ng.ladder":"ลำดับการยอม (concession ladder) — ให้อะไร แลกอะไร","ng.gen":"สร้าง brief เจรจา",
   "home.title":"KRDA Procurement Console","home.sub":"เครื่องมือจัดซื้อพร้อมใช้ — เลือก vendor, คิดต้นทุน, ตรวจรับงาน, สร้าง report ส่งหัวหน้า",
   "home.c1k":"เวอร์ชันระบบ","home.c2k":"พนักงาน AI","home.c2s":"+ Chief of Staff","home.c3k":"กรอบตัดสินใจ","home.c4k":"เคสฝึก",
   "home.h2":"งานหลัก — เลือก & คุม Vendor (IoT / Smart Farm)",
@@ -323,8 +406,14 @@ const L={
   "ma.h4":"weight/กฎ อยู่ไฟล์ไหน","ma.fileWhat":"อะไร","ma.fileWhere":"ไฟล์","ma.f1":"weight เลือก vendor","ma.f2":"เกณฑ์เงินใครเซ็น","ma.f3":"วิธีคิดคะแนนกลาง"
  },
  en:{
-  "nav.home":"Home","nav.eval":"Vendor Eval","nav.tco":"TCO Calc","nav.sc":"Should-cost","nav.accept":"Acceptance","nav.report":"Report / Print","nav.history":"Case History","nav.minutes":"Minutes","nav.manual":"Manual",
-  "foot":"Human Owner: Wongsakorn · double-click to open · offline · saves locally",
+  "nav.home":"Home","nav.modules":"Modules (status)","nav.eval":"Vendor Eval","nav.tco":"TCO Calc","nav.sow":"SOW","nav.contract":"Contract Check","nav.milestone":"Payments","nav.sc":"Should-cost","nav.accept":"Acceptance","nav.nego":"Negotiation","nav.report":"Report / Print","nav.history":"Case History","nav.minutes":"Minutes","nav.manual":"Manual",
+  "common.print":"🖨️ Print / PDF",
+  "mo.title":"📊 Modules & Dev Status","mo.sub":"See how far each tool is built (%) and how usable it is on real work — updated whenever new modules ship",
+  "mo.overall":"Overall system progress","mo.legend":"🟢 ready (real-use) · 🟡 beta (works, needs real data/polish) · 🟠 building · ⚪ planned — each has a note on what to verify before trusting it",
+  "sow.title":"🚀 SOW — Scope of Work","sow.sub":"Write it clearly before picking a vendor → prevents scope creep + becomes the acceptance baseline","sow.proj":"Project name","sow.obj":"Objective (desired outcome)","sow.in":"In scope","sow.out":"Out of scope (cost-creep shield)","sow.del":"Deliverables (code/docs/data handover)","sow.ms":"Milestones + % payment (1 line each)","sow.gen":"Generate SOW",
+  "ct.title":"📑 Contract Terms Check (before signing)","ct.sub":"Secure these before you sign — missing any = the vendor controls you",
+  "ms.title":"💰 Milestone Payment Tracker","ms.sub":"Pay per accepted milestone + hold retention — see the whole project","ms.total":"Total contract value","ms.retention":"Retention","ms.name":"Milestone","ms.pct":"% pay","ms.amt":"Amount","ms.status":"Status","ms.add":"+ Add milestone",
+  "ng.title":"🤝 Negotiation Prep (before the room)","ng.sub":"Target + walk-away + BATNA + levers ready = real leverage, no pressure","ng.target":"Target","ng.walk":"Walk-away","ng.batna":"BATNA (alternative)","ng.levers":"Levers (what you hold)","ng.ladder":"Concession ladder — give what, get what","ng.gen":"Generate brief",
   "home.title":"KRDA Procurement Console","home.sub":"Ready-to-use procurement tools — pick vendors, cost it, accept work, generate a report for your boss",
   "home.c1k":"System version","home.c2k":"AI employees","home.c2s":"+ Chief of Staff","home.c3k":"Decision frameworks","home.c4k":"Training cases",
   "home.h2":"Core work — Pick & control Vendors (IoT / Smart Farm)",
@@ -363,7 +452,9 @@ function applyI18n(){
   document.getElementById('laEN').classList.toggle('on',lang==='en');
   // re-render dynamic
   renderEvalHeads(); calc(); renderHistory();
+  if(window._extraRender){ renderModules(); renderCT(); renderMS(); renderNGL(); }
 }
+window._extraRender=false;
 function setLang(l){lang=l;localStorage.setItem('krda_lang',l);applyI18n();}
 
 /* ============ nav ============ */
@@ -512,8 +603,128 @@ function calcAccept(){const pass=CRITa.filter(c=>c.p).length,tot=CRITa.length;co
   else{v=lang==='th'?'✅ รับงานได้ — จ่าย milestone นี้ (กันเงินประกันไว้)':'✅ Accepted — release this milestone (hold retention)';cls='ok';}
   document.getElementById('acVerdict').innerHTML=`<b class="${cls}">${v}</b><br>${lang==='th'?'ผ่านเกณฑ์':'Criteria passed'}: ${pass}/${tot} · ${lang==='th'?'punch major ค้าง':'open major'}: ${openMajor}`;}
 
+/* ============ Modules status ============ */
+const MODULES=[
+ {th:'ประเมิน Vendor',en:'Vendor Evaluation',st:'g',pct:100,note_th:'ใช้จริงได้',note_en:'production-ready'},
+ {th:'คิดต้นทุน TCO',en:'TCO Calculator',st:'g',pct:100,note_th:'ใช้จริงได้',note_en:'production-ready'},
+ {th:'ตรวจรับงาน',en:'Acceptance',st:'g',pct:90,note_th:'ใช้ได้ · ต่อ 1 milestone',note_en:'usable · single milestone'},
+ {th:'Report / พิมพ์',en:'Report / Print',st:'g',pct:95,note_th:'ใช้จริงได้',note_en:'production-ready'},
+ {th:'SOW Builder',en:'SOW Builder',st:'b',pct:80,note_th:'ใช้ได้ · ยังไม่เซฟประวัติ',note_en:'usable · no save yet'},
+ {th:'เช็คสัญญา',en:'Contract Checklist',st:'b',pct:80,note_th:'ใช้ได้',note_en:'usable'},
+ {th:'งวดจ่ายเงิน',en:'Milestone Tracker',st:'b',pct:80,note_th:'ใช้ได้ · ยังไม่ link ตรวจรับ',note_en:'usable · not linked to acceptance'},
+ {th:'เตรียมเจรจา',en:'Negotiation Prep',st:'b',pct:75,note_th:'ใช้ได้ · ยังไม่เซฟ',note_en:'usable · no save'},
+ {th:'Should-cost ชิ้นส่วน',en:'Should-cost (metal)',st:'b',pct:70,note_th:'⚠️ rate เป็นค่าประมาณ ต้องใส่ราคาจริง',note_en:'⚠️ rates are EST — set real rates'},
+ {th:'ประวัติเคส',en:'Case History',st:'b',pct:60,note_th:'⚠️ เก็บในเครื่องนี้เท่านั้น',note_en:'⚠️ this device only'},
+ {th:'POC Planner',en:'POC Planner',st:'p',pct:0,note_th:'วางแผนไว้',note_en:'planned'},
+ {th:'ฐานข้อมูล Supplier',en:'Supplier Database',st:'p',pct:0,note_th:'วางแผนไว้',note_en:'planned'},
+ {th:'เทียบใบเสนอราคา (RFQ)',en:'RFQ / Quote Compare',st:'p',pct:0,note_th:'วางแผนไว้',note_en:'planned'},
+ {th:'Approval Router (เงิน→ใครเซ็น)',en:'Approval Router',st:'p',pct:0,note_th:'ถัดไป (คุ้มสุด)',note_en:'next up'},
+ {th:'KPI Dashboard',en:'KPI Dashboard',st:'p',pct:0,note_th:'วางแผนไว้',note_en:'planned'},
+ {th:'Risk Register',en:'Risk Register',st:'p',pct:0,note_th:'วางแผนไว้',note_en:'planned'}
+];
+const ST={g:{i:'🟢',t_th:'พร้อมใช้',t_en:'ready'},b:{i:'🟡',t_th:'beta',t_en:'beta'},o:{i:'🟠',t_th:'กำลังทำ',t_en:'building'},p:{i:'⚪',t_th:'วางแผน',t_en:'planned'}};
+function renderModules(){
+  const el=document.getElementById('moList');if(!el)return;
+  const overall=Math.round(MODULES.reduce((a,m)=>a+m.pct,0)/MODULES.length);
+  document.getElementById('moPct').textContent=overall+'%';
+  document.getElementById('moBar').style.width=overall+'%';
+  const usable=MODULES.filter(m=>m.pct>=60).length;
+  document.getElementById('moCount').textContent=(lang==='th'
+    ?`ใช้งานได้ระดับหนึ่ง ${usable} / ${MODULES.length} module`
+    :`${usable} / ${MODULES.length} modules at usable level`);
+  el.innerHTML=MODULES.map(m=>{const s=ST[m.st];const cls='st-'+m.st;
+    return `<div class="mcard"><div class="mh">
+      <b>${s.i} ${lang==='th'?m.th:m.en}</b>
+      <span class="pill ${cls}">${lang==='th'?s.t_th:s.t_en} · ${m.pct}%</span></div>
+      <div class="bar"><i style="width:${m.pct}%"></i></div>
+      <div class="help" style="margin:6px 0 0">${lang==='th'?m.note_th:m.note_en}</div></div>`;}).join('');
+}
+
+/* ============ SOW Builder ============ */
+function genSOW(){
+  const g=id=>document.getElementById(id).value.trim();
+  const line=t=>t?t.split('\n').filter(x=>x.trim()).map(x=>`<li>${x}</li>`).join(''):'<li style="color:#999">—</li>';
+  const L2=lang==='th'?{h:'ขอบเขตงาน (SOW)',proj:'โครงการ',obj:'วัตถุประสงค์',inS:'อยู่ในขอบเขต',outS:'นอกขอบเขต',del:'สิ่งที่ต้องส่งมอบ',ms:'งวดงาน + การจ่าย',rule:'จ่ายตามงวดที่ตรวจรับผ่านเท่านั้น · KRDA เป็นเจ้าของ IP/data'}
+    :{h:'Scope of Work (SOW)',proj:'Project',obj:'Objective',inS:'In scope',outS:'Out of scope',del:'Deliverables',ms:'Milestones + payment',rule:'Pay only on accepted milestones · KRDA owns IP/data'};
+  const out=document.getElementById('sow-out');out.style.display='block';
+  out.innerHTML=`<h2>${L2.h}</h2>
+   <p><b>${L2.proj}:</b> ${g('sowProj')||'—'}<br><b>${L2.obj}:</b> ${g('sowObj')||'—'}</p>
+   <h3>${L2.inS}</h3><ul>${line(g('sowIn'))}</ul>
+   <h3>${L2.outS}</h3><ul>${line(g('sowOut2'))}</ul>
+   <h3>${L2.del}</h3><ul>${line(g('sowDel'))}</ul>
+   <h3>${L2.ms}</h3><ul>${line(g('sowMs'))}</ul>
+   <p style="color:#888;font-size:12px">${L2.rule}</p>`;
+  out.scrollIntoView({behavior:'smooth'});
+}
+
+/* ============ Contract Checklist ============ */
+const CT=[
+ {th:'ขอบเขต = SOW แนบท้าย',en:'Scope = attached SOW',crit:true},
+ {th:'KRDA เป็นเจ้าของ IP/ผลงาน + source',en:'KRDA owns IP/deliverables + source',crit:true},
+ {th:'KRDA เป็นเจ้าของ data + export ได้',en:'KRDA owns data + export anytime',crit:true},
+ {th:'จ่ายตามงวด (ไม่จ่ายล่วงหน้าก้อนใหญ่)',en:'Milestone payments (no big upfront)',crit:true},
+ {th:'กันเงินประกัน (retention) 10–20%',en:'Retention 10–20%',crit:false},
+ {th:'Change order — แก้ขอบเขต = เขียน+ตีราคา',en:'Change-order process (written + priced)',crit:false},
+ {th:'Warranty — แก้บั๊กฟรี N เดือน',en:'Warranty period',crit:false},
+ {th:'Support / SLA + บทปรับล่าช้า',en:'Support/SLA + late penalty',crit:false},
+ {th:'Source-code escrow (ถ้า startup เจ๊ง)',en:'Source-code escrow',crit:true},
+ {th:'NDA / รักษาความลับ',en:'NDA / confidentiality',crit:false},
+ {th:'Exit / โอนย้าย ไม่ lock-in',en:'Exit / transition, no lock-in',crit:false},
+ {th:'เกณฑ์รับงานชัด = ผูกการจ่าย',en:'Clear acceptance criteria → payment',crit:false}
+];
+function renderCT(){const el=document.getElementById('ctList');if(!el)return;
+  el.innerHTML=CT.map((c,i)=>`<label class="mcard" style="display:flex;gap:10px;align-items:center;cursor:pointer">
+    <input type="checkbox" data-ct="${i}" onchange="calcCT()"> <span>${lang==='th'?c.th:c.en} ${c.crit?'<span class="pill st-o">critical</span>':''}</span></label>`).join('');
+  calcCT();}
+function calcCT(){const checked=[...document.querySelectorAll('[data-ct]')].filter(x=>x.checked).length;
+  const critMiss=CT.map((c,i)=>({c,i})).filter(o=>o.c.crit&&!document.querySelector(`[data-ct="${o.i}"]`).checked);
+  const el=document.getElementById('ctVerdict');
+  const ready=critMiss.length===0;
+  el.innerHTML=(lang==='th'
+    ?`<b>${checked}/${CT.length}</b> ข้อครบ · `+(ready?'<b class="ok">✅ พร้อมเซ็น (เงื่อนไข critical ครบ)</b>':`<b class="bad">❌ ยังไม่พร้อม — ขาด critical: ${critMiss.map(o=>o.c.th).join(', ')}</b>`)
+    :`<b>${checked}/${CT.length}</b> secured · `+(ready?'<b class="ok">✅ Ready to sign (all critical secured)</b>':`<b class="bad">❌ Not ready — missing critical: ${critMiss.map(o=>o.c.en).join(', ')}</b>`));
+}
+
+/* ============ Milestone Tracker ============ */
+let MS=[{n:'M1 Design',pct:20,acc:false},{n:'M2 Build/POC',pct:30,acc:false},{n:'M3 Integration',pct:30,acc:false},{n:'M4 UAT/Go-live',pct:20,acc:false}];
+function renderMS(){const el=document.getElementById('msBody');if(!el)return;
+  el.innerHTML=MS.map((m,i)=>`<tr>
+    <td><input type="text" value="${m.n}" oninput="MS[${i}].n=this.value"></td>
+    <td class="num"><input type="number" value="${m.pct}" oninput="MS[${i}].pct=+this.value;calcMS()"></td>
+    <td class="num msAmt"></td>
+    <td class="num"><select onchange="MS[${i}].acc=(this.value==='acc');calcMS()"><option value="pend" ${!m.acc?'selected':''}>${lang==='th'?'รอ':'pending'}</option><option value="acc" ${m.acc?'selected':''}>${lang==='th'?'รับแล้ว':'accepted'}</option></select></td></tr>`).join('');
+  calcMS();}
+function addMS(){MS.push({n:'M'+(MS.length+1),pct:0,acc:false});renderMS();}
+function calcMS(){const total=+document.getElementById('msTotal').value||0,ret=+document.getElementById('msRet').value||0;
+  const rows=document.querySelectorAll('#msBody tr');let pctSum=0,paid=0;
+  MS.forEach((m,i)=>{const amt=total*(m.pct/100);pctSum+=m.pct;if(m.acc)paid+=amt;
+    if(rows[i])rows[i].querySelector('.msAmt').textContent=amt.toLocaleString();});
+  const retHold=total*(ret/100);const paidNet=paid*(1-ret/100);
+  const el=document.getElementById('msSummary');
+  el.innerHTML=(lang==='th'
+    ?`% รวม: <b class="${pctSum===100?'ok':'warn'}">${pctSum}%</b>${pctSum!==100?' (ควร 100)':''} · จ่ายแล้ว (หัก retention): <b>${Math.round(paidNet).toLocaleString()}</b> / ${total.toLocaleString()} THB · กันประกันไว้: <b>${Math.round(retHold).toLocaleString()}</b> · เหลือ: <b>${Math.round(total-paidNet-0).toLocaleString()}</b>`
+    :`Total %: <b class="${pctSum===100?'ok':'warn'}">${pctSum}%</b>${pctSum!==100?' (should be 100)':''} · Paid (net of retention): <b>${Math.round(paidNet).toLocaleString()}</b> / ${total.toLocaleString()} THB · Retention held: <b>${Math.round(retHold).toLocaleString()}</b>`);
+}
+
+/* ============ Negotiation Prep ============ */
+const NGL=[{th:'ปริมาณ/volume',en:'Volume'},{th:'เงื่อนไขจ่าย',en:'Payment terms'},{th:'สัญญาหลายปี',en:'Multi-year'},{th:'tooling/NRE',en:'Tooling/NRE'},{th:'mix สินค้า',en:'Product mix'},{th:'reference/แบรนด์ KRDA',en:'KRDA reference'}];
+function renderNGL(){const el=document.getElementById('ngLevers');if(!el)return;
+  el.innerHTML=NGL.map((l,i)=>`<label class="pill" style="display:inline-flex;gap:6px;align-items:center;cursor:pointer;padding:4px 10px;margin:3px"><input type="checkbox" data-ngl="${i}"> ${lang==='th'?l.th:l.en}</label>`).join('');}
+function genNego(){const g=id=>document.getElementById(id).value.trim();
+  const levers=[...document.querySelectorAll('[data-ngl]')].filter(x=>x.checked).map(x=>lang==='th'?NGL[+x.dataset.ngl].th:NGL[+x.dataset.ngl].en);
+  const L2=lang==='th'?{h:'Brief เจรจา',tg:'เป้าหมาย',wk:'จุดถอย',ba:'BATNA',lv:'Levers ที่ใช้',ld:'ลำดับการยอม',rule:'ราคา/เงื่อนไขสุดท้าย = Human Owner อนุมัติ · ห้ามเปิด quote คู่แข่ง'}
+    :{h:'Negotiation Brief',tg:'Target',wk:'Walk-away',ba:'BATNA',lv:'Levers',ld:'Concession ladder',rule:'Final price/terms = Human Owner approval · never reveal a rival quote'};
+  const out=document.getElementById('nego-out');out.style.display='block';
+  out.innerHTML=`<h2>${L2.h}</h2>
+   <p><b>${L2.tg}:</b> ${g('ngTarget')||'—'} · <b>${L2.wk}:</b> ${g('ngWalk')||'—'}<br><b>${L2.ba}:</b> ${g('ngBatna')||'—'}</p>
+   <h3>${L2.lv}</h3><p>${levers.length?levers.map(l=>`<span class="pill">${l}</span>`).join(' '):'—'}</p>
+   <h3>${L2.ld}</h3><p>${(g('ngLadder')||'—').replace(/\n/g,'<br>')}</p>
+   <p style="color:#888;font-size:12px">${L2.rule}</p>`;
+  out.scrollIntoView({behavior:'smooth'});
+}
+
 /* ============ init ============ */
-applyI18n();renderProc();calcSC();calcTCO();renderAccept();
+applyI18n();renderProc();calcSC();calcTCO();renderAccept();renderModules();renderCT();renderMS();renderNGL();window._extraRender=true;
 </script>
 </body>
 </html>
