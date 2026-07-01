@@ -82,6 +82,11 @@
   .mcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:8px}
   .mcard .mh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
   .st-g{color:var(--grn2)}.st-b{color:var(--amb)}.st-o{color:var(--org)}.st-p{color:var(--mut)}
+  .terms{margin-top:22px;border-color:var(--line);background:var(--panel2)}
+  .terms summary{color:var(--mut);font-weight:600;font-size:13px}
+  .terms b{color:var(--txt)}
+  .gterm{padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .gterm b{color:var(--grn2)}
   @media print{
     .top,.side,.no-print{display:none!important}
     .main{margin:0;padding:0;max-width:none}
@@ -122,6 +127,7 @@
       <button data-s="sc"><span class="ic">🔩</span><span data-k="nav.sc"></span></button>
       <button data-s="history"><span class="ic">🗂️</span><span data-k="nav.history"></span></button>
       <button data-s="minutes"><span class="ic">💬</span><span data-k="nav.minutes"></span></button>
+      <button data-s="glossary"><span class="ic">📚</span><span data-k="nav.gloss"></span></button>
       <button data-s="manual"><span class="ic">📖</span><span data-k="nav.manual"></span></button>
     </nav>
     <div class="foot" data-k="foot"></div>
@@ -362,6 +368,14 @@
       <div id="nego-out" class="paper" style="display:none"></div>
     </section>
 
+    <!-- GLOSSARY -->
+    <section class="sec" id="glossary">
+      <h1 data-k="gloss.title"></h1>
+      <p class="sub" data-k="gloss.sub"></p>
+      <input type="text" id="glossSearch" placeholder="ค้นหา / search..." oninput="renderGlossary()" style="max-width:340px;margin-bottom:8px">
+      <div id="glossList"></div>
+    </section>
+
   </main>
 </div>
 
@@ -370,7 +384,8 @@
 const L={
  th:{
   "nav.home":"หน้าหลัก","nav.modules":"Modules (สถานะ)","nav.eval":"ประเมิน Vendor","nav.tco":"คิดต้นทุน TCO","nav.sow":"SOW (ขอบเขตงาน)","nav.contract":"เช็คสัญญา","nav.milestone":"งวดจ่ายเงิน","nav.sc":"Should-cost ชิ้นส่วน","nav.accept":"ตรวจรับงาน","nav.nego":"เตรียมเจรจา","nav.report":"Report / พิมพ์","nav.history":"ประวัติเคส","nav.minutes":"ดูประชุม","nav.manual":"คู่มือ",
-  "common.print":"🖨️ พิมพ์ / PDF",
+  "common.print":"🖨️ พิมพ์ / PDF","nav.gloss":"ศัพท์ PU",
+  "gloss.title":"📚 ศัพท์เทคนิคจัดซื้อ (PU)","gloss.sub":"คำที่ใช้บ่อยในงานจัดซื้อ + ที่ใช้ในแอปนี้ — พิมพ์ค้นหาได้ (ท้ายแต่ละหน้ามีเฉพาะศัพท์ในหน้านั้น)","terms.head":"📚 ศัพท์ในหน้านี้",
   "mo.title":"📊 Modules & สถานะการพัฒนา","mo.sub":"ดูว่าแต่ละเครื่องมือพัฒนาไปกี่ % และใช้งานจริงได้แค่ไหน — อัปเดตทุกครั้งที่เพิ่มของใหม่",
   "mo.overall":"ความคืบหน้ารวมทั้งระบบ","mo.legend":"🟢 พร้อมใช้จริง · 🟡 beta (ใช้ได้ แต่ยังต้องข้อมูลจริง/ขัดเกลา) · 🟠 กำลังทำ · ⚪ วางแผนไว้ — แต่ละตัวมีหมายเหตุว่าต้องเช็คอะไรก่อนเชื่อ",
   "sow.title":"🚀 SOW — เขียนขอบเขตงาน","sow.sub":"เขียนให้ชัดก่อนเลือก vendor → กัน scope creep (งานบานปลาย) + เป็นฐานตรวจรับ","sow.proj":"ชื่อโครงการ","sow.obj":"วัตถุประสงค์ (ผลลัพธ์ที่ต้องการ)","sow.in":"อยู่ในขอบเขต (in-scope)","sow.out":"นอกขอบเขต (out-scope — กันงานบานปลาย)","sow.del":"สิ่งที่ต้องส่งมอบ (code/เอกสาร/data handover)","sow.ms":"งวดงาน + % จ่าย (1 บรรทัด/งวด)","sow.gen":"สร้างเอกสาร SOW",
@@ -407,7 +422,8 @@ const L={
  },
  en:{
   "nav.home":"Home","nav.modules":"Modules (status)","nav.eval":"Vendor Eval","nav.tco":"TCO Calc","nav.sow":"SOW","nav.contract":"Contract Check","nav.milestone":"Payments","nav.sc":"Should-cost","nav.accept":"Acceptance","nav.nego":"Negotiation","nav.report":"Report / Print","nav.history":"Case History","nav.minutes":"Minutes","nav.manual":"Manual",
-  "common.print":"🖨️ Print / PDF",
+  "common.print":"🖨️ Print / PDF","nav.gloss":"PU Glossary",
+  "gloss.title":"📚 Purchasing (PU) Glossary","gloss.sub":"Common procurement terms + those used in this app — type to search (each page also shows only its own terms at the bottom)","terms.head":"📚 Terms on this page",
   "mo.title":"📊 Modules & Dev Status","mo.sub":"See how far each tool is built (%) and how usable it is on real work — updated whenever new modules ship",
   "mo.overall":"Overall system progress","mo.legend":"🟢 ready (real-use) · 🟡 beta (works, needs real data/polish) · 🟠 building · ⚪ planned — each has a note on what to verify before trusting it",
   "sow.title":"🚀 SOW — Scope of Work","sow.sub":"Write it clearly before picking a vendor → prevents scope creep + becomes the acceptance baseline","sow.proj":"Project name","sow.obj":"Objective (desired outcome)","sow.in":"In scope","sow.out":"Out of scope (cost-creep shield)","sow.del":"Deliverables (code/docs/data handover)","sow.ms":"Milestones + % payment (1 line each)","sow.gen":"Generate SOW",
@@ -452,7 +468,7 @@ function applyI18n(){
   document.getElementById('laEN').classList.toggle('on',lang==='en');
   // re-render dynamic
   renderEvalHeads(); calc(); renderHistory();
-  if(window._extraRender){ renderModules(); renderCT(); renderMS(); renderNGL(); }
+  if(window._extraRender){ renderModules(); renderCT(); renderMS(); renderNGL(); renderTerms(); renderGlossary(); }
 }
 window._extraRender=false;
 function setLang(l){lang=l;localStorage.setItem('krda_lang',l);applyI18n();}
@@ -723,8 +739,66 @@ function genNego(){const g=id=>document.getElementById(id).value.trim();
   out.scrollIntoView({behavior:'smooth'});
 }
 
+/* ============ Glossary (PU terms) ============ */
+const GLOSS={
+ vendor:{tt:'Vendor / Supplier',et:'Vendor / Supplier',td:'ผู้ขาย/ผู้รับจ้างที่เราจ้างทำงานหรือซื้อของ',ed:'A company that sells to or builds for you'},
+ rfq:{tt:'RFQ',et:'RFQ',td:'คำขอใบเสนอราคา — ขอราคาอย่างเป็นทางการจากผู้ขาย',ed:'Request for Quotation — formal price request'},
+ rfp:{tt:'RFP',et:'RFP',td:'คำขอข้อเสนอ — ขอให้เสนอวิธีแก้ปัญหา+ราคา (มากกว่าราคาอย่างเดียว)',ed:'Request for Proposal — asks for a solution + price'},
+ tco:{tt:'TCO',et:'TCO',td:'ต้นทุนรวมตลอดอายุใช้งาน 3–5 ปี ไม่ใช่แค่ราคาแรกเข้า',ed:'Total Cost of Ownership over 3–5 yr, not the sticker price'},
+ shouldcost:{tt:'Should-cost',et:'Should-cost',td:'ต้นทุนที่ควรจะเป็น คิดจากล่างขึ้นบน (วัสดุ+process+โสหุ้ย)',ed:'Modeled fair cost built bottom-up'},
+ batna:{tt:'BATNA',et:'BATNA',td:'ทางเลือกที่ดีที่สุดถ้าดีลนี้ไม่สำเร็จ (เช่น มีเจ้าอื่นสำรอง)',ed:'Best Alternative To a Negotiated Agreement'},
+ zopa:{tt:'ZOPA',et:'ZOPA',td:'ช่วงราคาที่ทั้งสองฝ่ายรับได้ (มีโอกาสตกลงกันได้)',ed:'Zone Of Possible Agreement'},
+ gate:{tt:'Gate (เงื่อนไขบังคับ)',et:'Gate',td:'เกณฑ์ผ่าน/ไม่ผ่าน แลกกับราคาไม่ได้ — ตกแล้วตัดทันที',ed:'Mandatory pass/fail, not tradeable for price'},
+ weight:{tt:'Weight (น้ำหนัก)',et:'Weight',td:'ความสำคัญของแต่ละเกณฑ์ เป็น % รวมกัน 100%',ed:'Importance % of each criterion, sums to 100%'},
+ poc:{tt:'POC / Pilot',et:'POC / Pilot',td:'ทดลองใช้จริงระยะสั้นก่อนตัดสินใจซื้อจริง',ed:'Proof of Concept — short real trial before buying'},
+ sow:{tt:'SOW',et:'SOW',td:'เอกสารกำหนดขอบเขตงาน — งานไหนทำ ไม่ทำ ส่งมอบอะไร',ed:'Scope of Work — what is/ isn\'t included, deliverables'},
+ milestone:{tt:'Milestone (งวดงาน)',et:'Milestone',td:'แบ่งงานเป็นเฟส แต่ละเฟสมีเกณฑ์รับงาน+ผูกกับการจ่ายเงิน',ed:'A project phase tied to acceptance + payment'},
+ retention:{tt:'Retention (เงินประกันผลงาน)',et:'Retention',td:'กันเงินไว้ส่วนหนึ่ง (10–20%) จ่ายตอนจบงาน+ผ่าน warranty',ed:'% withheld, released at final acceptance/warranty'},
+ escrow:{tt:'Source-code escrow',et:'Source-code escrow',td:'ฝาก source code ไว้กับคนกลาง เผื่อ vendor เจ๊ง เราเอา code มาทำต่อได้',ed:'Code held by a 3rd party in case the vendor folds'},
+ ip:{tt:'IP (ทรัพย์สินทางปัญญา)',et:'IP',td:'ใครเป็นเจ้าของผลงาน/โค้ด/ดีไซน์ — ต้องเป็น KRDA',ed:'Intellectual Property — who owns the work; must be KRDA'},
+ lockin:{tt:'Lock-in (ผูกขาด)',et:'Lock-in',td:'สภาพที่ย้ายออกจาก vendor ยาก/แพง (ข้อมูลติด ย้ายไม่ได้)',ed:'Hard/costly to switch away from a vendor'},
+ sla:{tt:'SLA',et:'SLA',td:'ข้อตกลงระดับบริการ — เวลา response, uptime ที่รับประกัน',ed:'Service Level Agreement — guaranteed response/uptime'},
+ warranty:{tt:'Warranty (รับประกัน)',et:'Warranty',td:'ช่วงที่ vendor แก้บั๊ก/ข้อบกพร่องให้ฟรี',ed:'Period of free defect fixing'},
+ changeorder:{tt:'Change order',et:'Change order',td:'การเปลี่ยนขอบเขตงาน = ต้องเขียนเป็นลายลักษณ์ + ตีราคา (ไม่ฟรี)',ed:'A scope change — written + priced'},
+ punch:{tt:'Punch list',et:'Punch list',td:'รายการของที่ยังไม่ผ่าน ต้องให้ vendor แก้ก่อนรับงาน',ed:'List of defects to fix before acceptance'},
+ uat:{tt:'UAT',et:'UAT',td:'การทดสอบโดยผู้ใช้จริงก่อนรับมอบงาน',ed:'User Acceptance Test before sign-off'},
+ viability:{tt:'Viability',et:'Viability',td:'ความอยู่รอดของบริษัท — เงินทุนพอไหม จะเจ๊งไหม',ed:'Whether the vendor will financially survive'},
+ overhead:{tt:'Overhead (โสหุ้ย)',et:'Overhead',td:'ค่าใช้จ่ายทางอ้อมของ supplier (โรงงาน, บริหาร) คิดเป็น %',ed:'Supplier\'s indirect cost (factory/admin), a %'},
+ scrap:{tt:'Scrap (เศษเสีย)',et:'Scrap',td:'วัสดุที่เสียไปในการผลิต ต้องเผื่อในต้นทุน',ed:'Material wasted in production, allowed for in cost'},
+ nre:{tt:'NRE / Tooling',et:'NRE / Tooling',td:'ค่าทำครั้งเดียว (แม่พิมพ์/setup) เฉลี่ยลงต่อชิ้น',ed:'One-time cost (tooling/setup), amortized per unit'},
+ leadtime:{tt:'Lead time',et:'Lead time',td:'ระยะเวลาตั้งแต่สั่งจนได้รับของ',ed:'Time from order to delivery'},
+ moq:{tt:'MOQ',et:'MOQ',td:'จำนวนสั่งซื้อขั้นต่ำที่ผู้ขายรับทำ',ed:'Minimum Order Quantity'},
+ pr:{tt:'PR (ใบขอซื้อ)',et:'PR',td:'Purchase Requisition — ใบขอซื้อภายในก่อนออก PO',ed:'Purchase Requisition — internal buy request'},
+ po:{tt:'PO (ใบสั่งซื้อ)',et:'PO',td:'Purchase Order — เอกสารสั่งซื้ออย่างเป็นทางการถึงผู้ขาย',ed:'Purchase Order — formal order to the supplier'},
+ porpor20:{tt:'ปพ.20 (ทะเบียนผู้ขาย)',et:'Vendor registration',td:'แบบขึ้นทะเบียนผู้ขายของ KRDA ก่อนสั่งซื้อได้',ed:'KRDA vendor registration form'},
+ dbd:{tt:'DBD',et:'DBD',td:'หนังสือรับรองบริษัท (กรมพัฒนาธุรกิจการค้า) ยืนยันว่าบริษัทมีจริง',ed:'Thai company registration certificate'},
+ incoterms:{tt:'Incoterms',et:'Incoterms',td:'เงื่อนไขการส่งมอบระหว่างประเทศ (EXW/FCA/DAP) — ใครรับผิดชอบค่าขนส่ง/ประกัน',ed:'International delivery terms (EXW/FCA/DAP)'}
+};
+const PAGE_TERMS={
+ evaluate:['vendor','weight','gate','tco','viability','ip','poc'],
+ tco:['tco','nre','lockin'],
+ sow:['sow','milestone','ip','changeorder'],
+ contract:['ip','retention','escrow','sla','warranty','changeorder','lockin'],
+ milestone:['milestone','retention'],
+ accept:['uat','punch','milestone','retention'],
+ nego:['batna','zopa','gate','leadtime'],
+ sc:['shouldcost','overhead','scrap','nre','moq']
+};
+function renderTerms(){
+  document.querySelectorAll('.terms').forEach(e=>e.remove());
+  Object.keys(PAGE_TERMS).forEach(pid=>{const sec=document.getElementById(pid);if(!sec)return;
+    const items=PAGE_TERMS[pid].map(k=>{const g=GLOSS[k];if(!g)return'';return `<div class="gterm"><b>${lang==='th'?g.tt:g.et}</b> — ${lang==='th'?g.td:g.ed}</div>`;}).join('');
+    const d=document.createElement('details');d.className='terms';
+    d.innerHTML=`<summary>${t('terms.head')}</summary>${items}`;sec.appendChild(d);});
+}
+function renderGlossary(){const el=document.getElementById('glossList');if(!el)return;
+  const q=(document.getElementById('glossSearch').value||'').toLowerCase();
+  const keys=Object.keys(GLOSS).filter(k=>{const g=GLOSS[k];return !q||(g.tt+g.et+g.td+g.ed).toLowerCase().includes(q);}).sort((a,b)=>GLOSS[a].et.localeCompare(GLOSS[b].et));
+  el.innerHTML=keys.map(k=>{const g=GLOSS[k];return `<div class="gterm"><b>${g.et}${g.tt!==g.et?' · '+g.tt:''}</b><br>${lang==='th'?g.td:g.ed}</div>`;}).join('')||`<div class="help">— ไม่พบ / no match —</div>`;
+}
+
 /* ============ init ============ */
-applyI18n();renderProc();calcSC();calcTCO();renderAccept();renderModules();renderCT();renderMS();renderNGL();window._extraRender=true;
+applyI18n();renderProc();calcSC();calcTCO();renderAccept();renderModules();renderCT();renderMS();renderNGL();renderTerms();renderGlossary();window._extraRender=true;
 </script>
 </body>
 </html>
