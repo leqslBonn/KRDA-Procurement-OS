@@ -68,6 +68,7 @@ never duplicated.
 | `/schedule`   | Recurring tasks and procurement calendar. |
 | `/commands`   | Invocable entry-point actions (the org's front door). |
 | `/releases`   | Versioned release notes (OS-style version history). |
+| `/guides`     | Step-by-step user guides by work category (Thai). |
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for how these fit together, and
 [CLAUDE.md](CLAUDE.md) for the rules every AI agent must follow in this repo.
