@@ -87,6 +87,19 @@
   .terms b{color:var(--txt)}
   .gterm{padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
   .gterm b{color:var(--grn2)}
+  /* how-to guides */
+  .gcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;transition:.15s}
+  .gcard:hover{border-color:var(--grn);transform:translateY(-2px)}
+  .gcard .gi{font-size:26px}.gcard .gt{font-weight:700;margin:6px 0 3px;font-size:15px}.gcard .gw{color:var(--mut);font-size:12px}
+  .gstep{display:flex;gap:14px;margin:12px 0;align-items:flex-start}
+  .gnum{flex:0 0 34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#fff}
+  .gp1{background:#3b82f6}.gp2{background:var(--grn)}.gp3{background:var(--org)}.gp4{background:var(--purp)}
+  .gsbody{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px}
+  .gsbody .gst{font-weight:700;margin-bottom:3px}
+  .gsbody ul{margin:5px 0 0;padding-left:18px}.gsbody li{margin:3px 0;font-size:13px}
+  .gsec-h{font-weight:700;font-size:15px;margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+  .badlist li{color:#ffb3ae}.chklist li{list-style:none}.chklist{padding-left:0}
+  .backbtn{background:none;border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:6px 14px;cursor:pointer;margin-bottom:8px}
   @media print{
     .top,.side,.no-print{display:none!important}
     .main{margin:0;padding:0;max-width:none}
@@ -115,6 +128,7 @@
   <aside class="side">
     <nav class="nav" id="nav">
       <button data-s="home" class="on"><span class="ic">🏠</span><span data-k="nav.home"></span></button>
+      <button data-s="howto"><span class="ic">📘</span><span data-k="nav.howto"></span></button>
       <button data-s="modules"><span class="ic">📊</span><span data-k="nav.modules"></span></button>
       <button data-s="evaluate"><span class="ic">🧮</span><span data-k="nav.eval"></span></button>
       <button data-s="tco"><span class="ic">💵</span><span data-k="nav.tco"></span></button>
@@ -302,6 +316,14 @@
       </table>
     </section>
 
+    <!-- HOW-TO GUIDES -->
+    <section class="sec" id="howto">
+      <h1 data-k="ht.title"></h1>
+      <p class="sub" data-k="ht.sub"></p>
+      <div id="htHome"></div>
+      <div id="htDetail" style="display:none"></div>
+    </section>
+
     <!-- MODULES STATUS -->
     <section class="sec" id="modules">
       <h1 data-k="mo.title"></h1>
@@ -384,7 +406,9 @@
 const L={
  th:{
   "nav.home":"หน้าหลัก","nav.modules":"Modules (สถานะ)","nav.eval":"ประเมิน Vendor","nav.tco":"คิดต้นทุน TCO","nav.sow":"SOW (ขอบเขตงาน)","nav.contract":"เช็คสัญญา","nav.milestone":"งวดจ่ายเงิน","nav.sc":"Should-cost ชิ้นส่วน","nav.accept":"ตรวจรับงาน","nav.nego":"เตรียมเจรจา","nav.report":"Report / พิมพ์","nav.history":"ประวัติเคส","nav.minutes":"ดูประชุม","nav.manual":"คู่มือ",
-  "common.print":"🖨️ พิมพ์ / PDF","nav.gloss":"ศัพท์ PU",
+  "common.print":"🖨️ พิมพ์ / PDF","nav.gloss":"ศัพท์ PU","nav.howto":"📘 วิธีใช้งาน",
+  "ht.title":"📘 วิธีใช้งาน (อ่านง่าย)","ht.sub":"เลือกงานที่คุณกำลังทำ → ดูขั้นตอนแบบทีละสเต็ป · ไม่รู้ว่างานไหนดูอันไหน กดการ์ดตามชื่อได้เลย",
+  "ht.back":"← กลับ","ht.when":"ใช้เมื่อไหร่","ht.steps":"ขั้นตอน","ht.pit":"⚠️ อย่าทำแบบนี้","ht.chk":"✅ เช็คก่อนจบ",
   "gloss.title":"📚 ศัพท์เทคนิคจัดซื้อ (PU)","gloss.sub":"คำที่ใช้บ่อยในงานจัดซื้อ + ที่ใช้ในแอปนี้ — พิมพ์ค้นหาได้ (ท้ายแต่ละหน้ามีเฉพาะศัพท์ในหน้านั้น)","terms.head":"📚 ศัพท์ในหน้านี้",
   "mo.title":"📊 Modules & สถานะการพัฒนา","mo.sub":"ดูว่าแต่ละเครื่องมือพัฒนาไปกี่ % และใช้งานจริงได้แค่ไหน — อัปเดตทุกครั้งที่เพิ่มของใหม่",
   "mo.overall":"ความคืบหน้ารวมทั้งระบบ","mo.legend":"🟢 พร้อมใช้จริง · 🟡 beta (ใช้ได้ แต่ยังต้องข้อมูลจริง/ขัดเกลา) · 🟠 กำลังทำ · ⚪ วางแผนไว้ — แต่ละตัวมีหมายเหตุว่าต้องเช็คอะไรก่อนเชื่อ",
@@ -422,7 +446,9 @@ const L={
  },
  en:{
   "nav.home":"Home","nav.modules":"Modules (status)","nav.eval":"Vendor Eval","nav.tco":"TCO Calc","nav.sow":"SOW","nav.contract":"Contract Check","nav.milestone":"Payments","nav.sc":"Should-cost","nav.accept":"Acceptance","nav.nego":"Negotiation","nav.report":"Report / Print","nav.history":"Case History","nav.minutes":"Minutes","nav.manual":"Manual",
-  "common.print":"🖨️ Print / PDF","nav.gloss":"PU Glossary",
+  "common.print":"🖨️ Print / PDF","nav.gloss":"PU Glossary","nav.howto":"📘 How-to",
+  "ht.title":"📘 How-to Guides (easy read)","ht.sub":"Pick the job you're doing → see step-by-step cards · not sure which? click the card that matches your task",
+  "ht.back":"← Back","ht.when":"When to use","ht.steps":"Steps","ht.pit":"⚠️ Don't do this","ht.chk":"✅ Check before done",
   "gloss.title":"📚 Purchasing (PU) Glossary","gloss.sub":"Common procurement terms + those used in this app — type to search (each page also shows only its own terms at the bottom)","terms.head":"📚 Terms on this page",
   "mo.title":"📊 Modules & Dev Status","mo.sub":"See how far each tool is built (%) and how usable it is on real work — updated whenever new modules ship",
   "mo.overall":"Overall system progress","mo.legend":"🟢 ready (real-use) · 🟡 beta (works, needs real data/polish) · 🟠 building · ⚪ planned — each has a note on what to verify before trusting it",
@@ -468,7 +494,7 @@ function applyI18n(){
   document.getElementById('laEN').classList.toggle('on',lang==='en');
   // re-render dynamic
   renderEvalHeads(); calc(); renderHistory();
-  if(window._extraRender){ renderModules(); renderCT(); renderMS(); renderNGL(); renderTerms(); renderGlossary(); }
+  if(window._extraRender){ renderModules(); renderCT(); renderMS(); renderNGL(); renderTerms(); renderGlossary(); renderHowtoHome(); }
 }
 window._extraRender=false;
 function setLang(l){lang=l;localStorage.setItem('krda_lang',l);applyI18n();}
@@ -797,8 +823,72 @@ function renderGlossary(){const el=document.getElementById('glossList');if(!el)r
   el.innerHTML=keys.map(k=>{const g=GLOSS[k];return `<div class="gterm"><b>${g.et}${g.tt!==g.et?' · '+g.tt:''}</b><br>${lang==='th'?g.td:g.ed}</div>`;}).join('')||`<div class="help">— ไม่พบ / no match —</div>`;
 }
 
+/* ============ How-to Guides ============ */
+const GUIDES=[
+ {ic:'🧮',t:'เลือก Vendor',w:'มี vendor มานำเสนอ (pitch) แล้วต้องเลือกเจ้า — งาน IoT / smart farm / จ้างทำระบบ',
+  steps:[
+   {p:1,t:'ก่อนวัน pitch — เตรียม',d:['เขียนสั้นๆ ว่าต้องการระบบอะไร ขนาดเท่าไหร่','เปิดแท็บ 🧮 ดูเกณฑ์ 11 ข้อ (⛔ = gate ห้ามพลาด: เจ้าของข้อมูล + บริษัทจะเจ๊งไหม)','ตั้ง weight ก่อนฟัง (รวมต้อง 100%)','เตรียม 5 คำถาม: ใครเป็นเจ้าของ data · ถ้าเจ๊งทำไง · ขอ demo จริง · เชื่อมระบบได้ไหม · ราคารวม 5 ปี']},
+   {p:2,t:'ระหว่าง pitch — ให้คะแนน',d:['แก้ชื่อเจ้า A/B/C เป็นชื่อจริง','ให้คะแนน 1–5 ตามที่เห็นจริง (มีแต่สไลด์ = ให้ 2)','จด 🚩 red flag (เลี่ยงเรื่อง data / บริษัทเล็ก / ผูกขาด)','ดูผลสด: gate ✗ = ตัดทันที ไม่ว่าถูกแค่ไหน']},
+   {p:3,t:'หลัง pitch — สรุปเสนอหัวหน้า',d:['แท็บ 💵 TCO ใส่ต้นทุน 5 ปี → ใครถูกจริง','กลับแท็บ 🧮 กด "สร้าง Report"','แท็บ 📄 กด 🖨️ พิมพ์ / PDF ส่งหัวหน้า','เซฟเคสไว้ (แท็บ 🗂️)']}],
+  pit:['เลือกเจ้าถูกสุดทันที — เช็ค gate ก่อน','เชื่อ demo ว่า "เสร็จแล้ว" — ขอ POC ก่อน','ปรับ weight หลังเห็นราคา (ตั้งก่อนฟังเสมอ)'],
+  chk:['ให้คะแนนครบทุกเจ้า ทุกเกณฑ์','เจ้าที่แนะนำผ่าน gate ทุกข้อ','ทำ TCO 5 ปีแล้ว','ในข้อเสนอมี "ทำ POC ก่อน"']},
+ {ic:'🚀',t:'คุมงานจ้าง (Owner)',w:'จ้าง vendor ทำแล้ว คุณเป็นเจ้าของงาน ต้องคุมให้ได้งานตรง จ่ายถูกจังหวะ',
+  steps:[
+   {p:1,t:'เขียน SOW (ขอบเขตงาน)',d:['แท็บ 🚀 SOW ใส่ ชื่อโครงการ + วัตถุประสงค์','เขียน in-scope / out-scope ให้ชัด (กันงานบานปลาย)','ส่งมอบ: ระบบ + source code + เอกสาร + ข้อมูล','แบ่งงวด M1–M4 + % จ่าย']},
+   {p:2,t:'เช็คสัญญา ก่อนเซ็น',d:['แท็บ 📑 ติ๊กให้ครบ critical','KRDA เป็นเจ้าของ IP + data · จ่ายตามงวด · escrow','ขาด critical = ยังไม่เซ็น','สัญญาผูกมัด → ผู้มีอำนาจเซ็น']},
+   {p:3,t:'ตั้งงวด + ตรวจรับ',d:['แท็บ 💰 ใส่มูลค่าสัญญา + retention 10–20%','vendor ส่งงาน → แท็บ ✅ ตรวจรับ ทำ punch list','ผ่าน = จ่ายงวดนั้น · ไม่ผ่าน = ไม่จ่าย ให้แก้ก่อน']},
+   {p:4,t:'จบงาน + ประกัน',d:['รับมอบครบ (code / เอกสาร / ข้อมูล)','หมด warranty ไม่มีปัญหา → คืนเงินประกัน (retention)']}],
+  pit:['จ่ายล่วงหน้าก้อนใหญ่ก่อนเห็นงาน','เริ่มงานก่อนขอบเขตชัด','รับงานเพราะเกรงใจ ทั้งที่ยังไม่ครบ','เซ็นสัญญาที่ vendor ยึด data/IP'],
+  chk:['SOW + เกณฑ์รับงานชัด (วัดได้)','สัญญาครบ critical ก่อนเซ็น','จ่ายเฉพาะงวดที่ตรวจรับผ่าน','คืน retention ตอนหมดประกัน']},
+ {ic:'🔩',t:'ซื้อของ & ต่อรอง',w:'ซื้อของ/ชิ้นส่วน อยากรู้ราคาที่ควรจะเป็น ก่อนต่อรองกับ supplier',
+  steps:[
+   {p:1,t:'คิด Should-cost',d:['แท็บ 🔩 ใส่ ราคาวัสดุ (บาท/กก) + น้ำหนัก + เผื่อเศษ','ใส่กระบวนการ (rate × เวลา)','ใส่ overhead + กำไร supplier','ดูส่วนต่างกับราคาที่เสนอมา']},
+   {p:2,t:'เตรียมเจรจา',d:['แท็บ 🤝 ใส่ target + walk-away + BATNA','ติ๊ก levers (ปริมาณ/เงื่อนไขจ่าย/หลายปี)','กดสร้าง brief พิมพ์เข้าห้อง']},
+   {p:3,t:'ถ้า supplier ขอขึ้นราคา',d:['วัสดุที่อ้างเป็นกี่ % ของต้นทุน?','× % ที่ขึ้น = ควรขึ้นเท่าไหร่จริง','เช่น เหล็ก 50% × ขึ้น 8% = 4% ไม่ใช่ 10%','ขอหลักฐาน + ใช้ BATNA กดดัน']}],
+  pit:['ต่อรองโดยไม่มี should-cost','เชื่อ "ขึ้นราคา" ตามที่อ้าง','เอา rate ประมาณ (EST) ไปตัดสินจริง','บอกราคาเจ้าอื่นให้ supplier ฟัง'],
+  chk:['คิด should-cost แล้ว','rate เป็นราคาจริง (ไม่ใช่ EST)','มี target + walk-away + BATNA','ราคาสุดท้าย ผู้มีอำนาจอนุมัติ']},
+ {ic:'🏭',t:'จัดการ Supplier',w:'ขึ้นทะเบียน / ประเมิน / เช็คความเสี่ยงของบริษัทผู้ขาย',
+  steps:[
+   {p:1,t:'ขึ้นทะเบียน',d:['ขอเอกสาร: DBD, เลขภาษี, บัญชีธนาคาร, ปพ.20, ISO','ค้นในระบบกันซ้ำก่อนสร้าง (ชื่อคล้ายก็ต้องเช็ค)','สร้าง vendor ใน SAP = อนุมัติ 2 ฝ่าย (จัดซื้อ+บัญชี)']},
+   {p:2,t:'ประเมิน (Audit)',d:['7 หมวด: บริษัท / คุณภาพ⛔ / ความสามารถผลิต⛔ / ส่งมอบ / การเงิน / sub / จริยธรรม','gate คุณภาพ+ความสามารถ ต้องผ่าน','ผล: qualified / conditional / fail']},
+   {p:3,t:'เช็คความเสี่ยง',d:['ดู single-source (เสี่ยงสุด — เจ้าเดียวมีปัญหา งานหยุด)','เสี่ยงสูง → แจ้งขึ้น + หา supplier รายที่ 2']}],
+  pit:['รับเพราะราคาถูก ทั้งที่ระบบคุณภาพไม่ผ่าน','สร้าง vendor ซ้ำ (ชื่อคล้าย)','ปล่อย single-source ไว้เฉยๆ','บันทึกผล audit ที่ไม่ได้ตรวจจริง'],
+  chk:['เอกสารครบ (DBD/ภาษี/ธนาคาร/ปพ.20)','audit ผ่าน gate คุณภาพ','เช็ค single-source risk','SAP อนุมัติ 2 ฝ่าย']},
+ {ic:'📑',t:'เอกสาร & อนุมัติ',w:'ทำ PR/PO, รู้ว่ายอดเท่านี้ใครเซ็น, NDA/สัญญา',
+  steps:[
+   {p:1,t:'ยอดเท่านี้ ใครเซ็น?',d:['จัดซื้อตรง: ≤10k → DM · ≤20k → VP · >20k → President','เทียบราคา: ≤100k DM · ≤500k Div.Mgr · ≤1M Proc.Mgr · ≤2M VP · >2M President','> 1 ล้าน = ต้องเปิดประมูล','⚠️ คิดต่อ PO หรือ ต่อปี — รอ KRDA ยืนยัน']},
+   {p:2,t:'PR / PO',d:['ใส่ครบ: vendor/ของ/จำนวน/ราคา/วันส่ง/VAT/cost center','ห้าม post จริงก่อนอนุมัติ','ค้น vendor/material กันซ้ำก่อนสร้าง']},
+   {p:3,t:'NDA / สัญญา',d:['NDA มีผลก่อนส่งข้อมูลลับ (แบบ/spec/ราคา)','ผู้มีอำนาจเซ็น (คุณเตรียมได้ ไม่เซ็นเอง)','สัญญา: เช็ค IP/data/งวด/escrow ก่อนเซ็น']}],
+  pit:['เซ็น/สั่งเองเกินอำนาจ','post PO ก่อนอนุมัติ','ส่งแบบให้ supplier ก่อน NDA','ปล่อยฟิลด์ TBD ใน PO'],
+  chk:['รู้ว่ายอดนี้ใครเซ็น','เอกสารครบ ไม่มี TBD','NDA มีผลก่อนส่งข้อมูล','ผู้มีอำนาจอนุมัติแล้ว']},
+ {ic:'🚨',t:'แก้ปัญหาเฉพาะหน้า',w:'ของช้า / ของเสีย / supplier ขอขึ้นราคา / vendor มีปัญหา',
+  steps:[
+   {p:1,t:'ของส่งช้า',d:['วัดก่อน: สต็อกเหลือกี่วัน สายหยุดวันไหน','เร่ง: ส่งบางส่วน/air freight/เลื่อน','ค่า expedite = ผู้มีอำนาจอนุมัติก่อนจ่าย','single-source + สายจะหยุด → แจ้งด่วน']},
+   {p:2,t:'ของเสีย / คุณภาพ',d:['จัดระดับ: critical = กักทันที+แจ้ง · major = กัก+CAPA · minor = บันทึก','ห้ามใช้ของที่ยังไม่ disposition (ความปลอดภัยต้องแจ้งขึ้น)','หา root cause + ให้ supplier แก้']},
+   {p:3,t:'ขอขึ้นราคา / vendor มีปัญหา',d:['ขึ้นราคา: คิดจากสัดส่วนต้นทุนจริง (ดูคู่มือซื้อของ)','vendor ส่งงานไม่ตรง → punch list ไม่จ่าย','vendor จะเจ๊ง → อย่าจ่ายเพิ่ม + เช็ค escrow + หาสำรอง']}],
+  pit:['ตื่นตูม/เฉยเกินไป โดยไม่วัด','ใช้ของที่ยังไม่ผ่าน disposition','จ่ายเพิ่มให้ vendor ที่จะเจ๊ง','ยอมเพิ่มงานฟรี (ต้อง change order)'],
+  chk:['จัดระดับความรุนแรงแล้ว','กัน/แก้เฉพาะหน้าแล้ว','commitment (เงิน) ผ่านอนุมัติ','บันทึกบทเรียน']}
+];
+function renderHowtoHome(){const el=document.getElementById('htHome');if(!el)return;
+  document.getElementById('htHome').style.display='block';document.getElementById('htDetail').style.display='none';
+  el.innerHTML='<div class="grid g3">'+GUIDES.map((g,i)=>`<div class="gcard" onclick="showGuide(${i})">
+    <div class="gi">${g.ic}</div><div class="gt">${g.t}</div><div class="gw">${g.w}</div></div>`).join('')+'</div>';
+}
+function showGuide(i){const g=GUIDES[i];
+  document.getElementById('htHome').style.display='none';
+  const el=document.getElementById('htDetail');el.style.display='block';
+  const steps=g.steps.map(s=>`<div class="gstep"><div class="gnum gp${s.p}">${s.p}</div><div class="gsbody"><div class="gst">${s.t}</div><ul>${s.d.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`).join('');
+  el.innerHTML=`<button class="backbtn no-print" onclick="renderHowtoHome()">${t('ht.back')}</button>
+   <h2 style="margin-top:6px">${g.ic} ${g.t}</h2>
+   <p class="sub"><b>${t('ht.when')}:</b> ${g.w}</p>
+   <div class="gsec-h">🪜 ${t('ht.steps')}</div>${steps}
+   <div class="gsec-h">${t('ht.pit')}</div><ul class="badlist">${g.pit.map(x=>`<li>${x}</li>`).join('')}</ul>
+   <div class="gsec-h">${t('ht.chk')}</div><ul class="chklist">${g.chk.map(x=>`<li>☐ ${x}</li>`).join('')}</ul>`;
+  window.scrollTo(0,0);
+}
+
 /* ============ init ============ */
-applyI18n();renderProc();calcSC();calcTCO();renderAccept();renderModules();renderCT();renderMS();renderNGL();renderTerms();renderGlossary();window._extraRender=true;
+applyI18n();renderProc();calcSC();calcTCO();renderAccept();renderModules();renderCT();renderMS();renderNGL();renderTerms();renderGlossary();renderHowtoHome();window._extraRender=true;
 </script>
 </body>
 </html>
